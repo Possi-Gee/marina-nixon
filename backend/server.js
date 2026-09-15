@@ -249,9 +249,12 @@ async function start() {
   });
 }
 
-start().catch((err) => {
-  console.error('Failed to start server:', err);
-  process.exitCode = 1;
-});
+if (require.main === module) {
+  start().catch((err) => {
+    console.error('Failed to start server:', err);
+    process.exitCode = 1;
+  });
+}
 
-module.exports = { app };
+module.exports = { app, start };
+
