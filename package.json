@@ -1,0 +1,8 @@
+{
+  "name": "marina-nixon",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  }
+}

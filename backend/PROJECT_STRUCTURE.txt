@@ -1,0 +1,212 @@
+Marina Nixon Backend - Project Structure
+
+backend/
+├── server.js                    # Main Express server & database setup
+├── package.json                 # Dependencies & npm scripts
+├── seed.js                      # Database seeding script
+├── .env.example                 # Environment variables template
+├── .gitignore                   # Git ignore rules
+├── README.md                    # Complete API documentation
+├── QUICK_START.md              # Quick start guide
+├── FRONTEND_INTEGRATION.js     # Frontend-to-backend integration code
+│
+├── middleware/
+│   └── auth.js                  # JWT & admin authentication middleware
+│
+└── routes/
+    ├── auth.js                  # Register, login, token verification
+    ├── products.js              # Product listing, search, wishlist
+    ├── orders.js                # Order CRUD & management
+    ├── users.js                 # User profile & settings
+    ├── payments.js              # Payment processing
+    └── admin.js                 # Admin dashboard & analytics
+
+DATABASE SCHEMA
+
+users
+├── id (PRIMARY KEY)
+├── first_name
+├── last_name
+├── email (UNIQUE)
+├── phone
+├── password (hashed)
+├── address
+├── city
+├── region
+└── created_at
+
+products
+├── id (PRIMARY KEY)
+├── name
+├── category
+├── label
+├── price
+├── old_price
+├── badge
+├── stock
+├── description
+├── sizes (JSON)
+└── created_at
+
+orders
+├── id (PRIMARY KEY)
+├── user_id (FOREIGN KEY)
+├── order_number (UNIQUE)
+├── total
+├── shipping_cost
+├── discount
+├── status
+├── payment_method
+├── delivery_method
+└── created_at
+
+order_items
+├── id (PRIMARY KEY)
+├── order_id (FOREIGN KEY)
+├── product_id (FOREIGN KEY)
+├── quantity
+├── price
+└── size
+
+wishlist
+├── id (PRIMARY KEY)
+├── user_id (FOREIGN KEY)
+├── product_id (FOREIGN KEY)
+├── created_at
+└── UNIQUE(user_id, product_id)
+
+payments
+├── id (PRIMARY KEY)
+├── order_id (FOREIGN KEY)
+├── amount
+├── payment_method
+├── transaction_id
+├── status
+└── created_at
+
+API ENDPOINTS SUMMARY
+
+Authentication:
+POST   /api/auth/register           # Create new user account
+POST   /api/auth/login              # Login & get JWT token
+POST   /api/auth/verify             # Verify token validity
+
+Products:
+GET    /api/products                # Get all products (with filters)
+GET    /api/products/:id            # Get single product
+GET    /api/products/search/:query  # Search products
+POST   /api/products/:id/wishlist   # Add to wishlist
+GET    /api/products/wishlist/all/items  # Get wishlist
+DELETE /api/products/:id/wishlist   # Remove from wishlist
+
+Orders:
+POST   /api/orders                  # Create order
+GET    /api/orders                  # Get user's orders
+GET    /api/orders/:orderId         # Get order details
+PATCH  /api/orders/:orderId/status  # Update order status
+POST   /api/orders/:orderId/cancel  # Cancel order
+
+Users:
+GET    /api/users/profile/me        # Get user profile
+PUT    /api/users/profile/me        # Update profile
+POST   /api/users/change-password   # Change password
+GET    /api/users/stats/dashboard   # Get dashboard stats
+
+Payments:
+POST   /api/payments/process        # Process payment
+GET    /api/payments/history        # Get payment history
+GET    /api/payments/:paymentId     # Get payment details
+
+Admin:
+POST   /api/admin/products          # Add product
+PUT    /api/admin/products/:id      # Update product
+DELETE /api/admin/products/:id      # Delete product
+GET    /api/admin/orders            # Get all orders
+PATCH  /api/admin/orders/:id/status # Update order status
+GET    /api/admin/stats/dashboard   # Dashboard stats
+GET    /api/admin/reports/sales     # Sales report
+GET    /api/admin/reports/top-products  # Top products
+
+AUTHENTICATION
+
+All protected endpoints require:
+Authorization: Bearer <jwt_token>
+
+Token obtained from /api/auth/login or /api/auth/register
+Token expires in 7 days
+
+FEATURES
+
+✅ User Management
+   - Registration & login
+   - Profile management
+   - Password change
+   - Dashboard statistics
+
+✅ Product Management
+   - Full CRUD operations
+   - Category filtering
+   - Price sorting
+   - Search functionality
+   - Wishlist management
+   - Stock tracking
+
+✅ Order Management
+   - Order creation
+   - Order tracking
+   - Status updates
+   - Order cancellation
+   - Order history
+
+✅ Payment Processing
+   - Payment recording
+   - Transaction tracking
+   - Payment history
+   - Order status synchronization
+
+✅ Admin Dashboard
+   - Product management
+   - Order management
+   - Sales analytics
+   - Revenue reports
+   - Top products
+   - User statistics
+
+✅ Security
+   - JWT authentication
+   - Password hashing (bcryptjs)
+   - Admin authorization
+   - Input validation
+
+TECHNOLOGIES USED
+
+Backend:
+- Node.js & Express.js
+- SQLite3
+- JWT (jsonwebtoken)
+- bcryptjs (password hashing)
+- dotenv (environment variables)
+- CORS (cross-origin requests)
+- Body Parser
+
+Optional (for production):
+- Stripe (payment processing)
+- Nodemailer (email notifications)
+- Helmet (security headers)
+- Morgan (logging)
+
+DEVELOPMENT SCRIPTS
+
+npm start                # Start production server
+npm run dev             # Start with nodemon (auto-reload)
+npm test               # Run tests (when configured)
+
+GETTING STARTED
+
+1. Install: npm install
+2. Configure: cp .env.example .env
+3. Seed: node seed.js
+4. Start: npm start
+5. Test: See QUICK_START.md
+
+Happy coding! 🎉
