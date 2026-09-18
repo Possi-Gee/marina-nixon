@@ -10183,6 +10183,10 @@ function renderHeroCarousel() {
         ? `filterGo('${linkTarget}')`
         : `go('${linkTarget}')`;
 
+    const defaultImg = DEFAULT_HERO_SLIDES[idx % DEFAULT_HERO_SLIDES.length]?.image || 'images/WhatsApp Image 2026-08-05 at 1.36.06 PM.jpeg';
+    const slideImg = (s.image && String(s.image).trim()) ? String(s.image).trim() : defaultImg;
+    const safeImgUrl = encodeURI(slideImg);
+
     return `
       <div class="hero-car-slide" style="width: ${slidePct}%; flex: 0 0 ${slidePct}%; background: ${bgGradient}">
         <div class="hero-slide-pattern"></div>
@@ -10199,7 +10203,7 @@ function renderHeroCarousel() {
             </div>
           </div>
           <div class="hero-slide-media">
-            ${s.image ? `<img src="${s.image}" alt="${escapeHtml(s.title)}" class="hero-slide-img">` : ''}
+            <img src="${safeImgUrl}" alt="${escapeHtml(s.title || 'Marina Nixon')}" class="hero-slide-img" onerror="this.onerror=null;this.src='images/noir_gown.png'">
           </div>
         </div>
       </div>
