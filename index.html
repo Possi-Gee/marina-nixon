@@ -2808,23 +2808,26 @@ html, body {
 
 /* ── Hero Slider Banner (Inspired by reference) ── */
 .hero-slider-container {
-  max-width: 1320px;
+  max-width: 1280px;
   margin: 1.25rem auto 1.5rem;
   padding: 0 1rem;
 }
 .hero-carousel-viewport {
   position: relative;
-  border-radius: 18px;
+  border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 12px 35px rgba(20, 15, 10, 0.12);
   background: #111;
-  min-height: 420px;
+  height: 420px;
+  max-height: 440px;
+  min-height: 380px;
 }
 .hero-carousel-track {
   display: flex;
   transition: transform 0.55s cubic-bezier(0.25, 1, 0.5, 1);
   will-change: transform;
   width: 100%;
+  height: 100%;
 }
 .hero-car-slide {
   min-width: 100%;
@@ -2833,27 +2836,30 @@ html, body {
   position: relative;
   display: flex;
   align-items: center;
-  min-height: 420px;
+  height: 100%;
+  max-height: 440px;
   overflow: hidden;
   box-sizing: border-box;
 }
 .hero-slide-grid {
   display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
   width: 100%;
   height: 100%;
-  min-height: 420px;
+  max-height: 440px;
   position: relative;
   z-index: 2;
 }
 .hero-slide-content {
-  padding: 3.5rem 3.5rem 3.5rem 4rem;
+  padding: 2.5rem 3rem 2.5rem 3.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
   color: #FFF;
   z-index: 3;
+  min-width: 0;
+  overflow: hidden;
 }
 .hero-slide-badge {
   display: inline-flex;
@@ -2865,30 +2871,30 @@ html, body {
   letter-spacing: 2px;
   text-transform: uppercase;
   color: #FFE57F;
-  margin-bottom: 0.85rem;
+  margin-bottom: 0.75rem;
   background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(8px);
-  padding: 5px 12px;
+  padding: 4px 12px;
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.18);
 }
 .hero-slide-title {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 2.85rem;
+  font-size: clamp(1.85rem, 3.2vw, 2.6rem);
   font-weight: 700;
-  line-height: 1.12;
-  margin-bottom: 0.85rem;
+  line-height: 1.15;
+  margin-bottom: 0.75rem;
   color: #FFFFFF;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.3px;
   text-shadow: 0 2px 10px rgba(0,0,0,0.25);
 }
 .hero-slide-sub {
   font-family: 'Jost', Arial, sans-serif;
-  font-size: 1.05rem;
+  font-size: 0.98rem;
   color: rgba(255, 255, 255, 0.9);
-  line-height: 1.5;
-  margin-bottom: 1.75rem;
-  max-width: 520px;
+  line-height: 1.45;
+  margin-bottom: 1.5rem;
+  max-width: 480px;
 }
 .hero-slide-cta-row {
   display: flex;
@@ -2900,11 +2906,11 @@ html, body {
   background: #FFFFFF;
   color: #111111;
   font-family: 'Jost', Arial, sans-serif;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 700;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  padding: 0.85rem 2rem;
+  padding: 0.75rem 1.85rem;
   border-radius: 30px;
   border: none;
   cursor: pointer;
@@ -2931,13 +2937,17 @@ html, body {
   align-items: center;
   justify-content: center;
   height: 100%;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
   overflow: hidden;
 }
 .hero-slide-img {
   width: 100%;
   height: 100%;
+  max-height: 440px;
   object-fit: cover;
-  object-position: center center;
+  object-position: center top;
   transition: transform 0.8s ease;
 }
 .hero-slide-pattern {
@@ -3072,24 +3082,45 @@ html, body {
   .top-strip-left, .top-strip-right {
     justify-content: center;
   }
+  .hero-slider-container {
+    margin: 0.75rem auto 1rem;
+    padding: 0 0.75rem;
+  }
+  .hero-carousel-viewport {
+    height: 360px;
+    max-height: 380px;
+    min-height: 320px;
+  }
   .hero-slide-grid {
     grid-template-columns: 1fr;
-    min-height: 380px;
+    height: 100%;
+    min-height: 320px;
   }
   .hero-slide-content {
-    padding: 2.5rem 1.5rem;
+    padding: 2rem 1.25rem;
+    z-index: 3;
+    position: relative;
   }
   .hero-slide-title {
-    font-size: 2rem;
+    font-size: 1.75rem;
+  }
+  .hero-slide-sub {
+    font-size: 0.88rem;
+    margin-bottom: 1.2rem;
   }
   .hero-slide-media {
     position: absolute;
     inset: 0;
     opacity: 0.35;
     z-index: 1;
+    width: 100%;
+    height: 100%;
   }
   .hero-slide-img {
-    filter: brightness(0.8);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.75);
   }
 }
 
