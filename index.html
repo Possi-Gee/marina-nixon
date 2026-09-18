@@ -4195,8 +4195,8 @@ nav {
   .prod-name{font-size:12.5px !important;line-height:1.25 !important;margin-bottom:3px !important}
   .prod-price{font-size:13px !important}
   .prod-old{font-size:10.5px !important}
-  .prod-sizes{display:flex !important;gap:2px !important;padding-top:4px !important}
-  .sz{font-size:8px !important;padding:2px 4px !important}
+  .prod-sizes{display:flex !important;gap:4px !important;padding-top:6px !important;flex-wrap:wrap !important}
+  .sz{font-size:10px !important;padding:5px 8px !important;min-height:30px !important;min-width:28px !important;border-width:1.5px !important}
   .prod-actions{
     position:static !important;
     opacity:1 !important;
@@ -8470,8 +8470,9 @@ function productCard(p) {
   const safeCat  = escapeHtml(p.label || p.category_name || 'Haute Couture');
 
   const fallbackHtml = `<div class="prod-placeholder"><div class="prod-placeholder-mark">◈</div><div class="prod-placeholder-title">${safeName}</div><div class="prod-placeholder-sub">${safeCat}</div></div>`;
+  const multiSize = displaySizes.length > 1 && !(displaySizes.length === 1 && displaySizes[0] === 'One Size');
 
-  return `<div class="prod-card" data-pid="${p.id}">
+  return `<div class="prod-card" data-pid="${p.id}" data-selected-size="${defaultSz}">
     <div class="prod-img" onclick="quickView('${p.id}')">
       <div class="prod-img-inner">
         ${imgSrc
@@ -8484,8 +8485,8 @@ function productCard(p) {
       </button>
       ${p.badge ? `<div class="prod-badge b-${p.badge}">${p.badge==='new'?'New Season':p.badge==='sale'?'Archive Sale':'Atelier Choice'}</div>` : ''}
       <div class="prod-actions" onclick="event.stopPropagation()">
-        <button class="prod-add-btn" onclick="const card = this.closest('.prod-card'); const sz = card?.dataset?.selectedSize || card?.querySelector('.sz.picked')?.textContent?.trim() || '${defaultSz}'; addToCart('${p.id}', sz)">
-          <i class="ti ti-shopping-bag" style="font-size:12px;margin-right:4px"></i> Add to Bag
+        <button class="prod-add-btn" onclick="addToCartFromCard(this,'${p.id}',${multiSize})">
+          <i class="ti ti-shopping-bag" style="font-size:12px;margin-right:4px"></i> ${multiSize ? 'Select Size' : 'Add to Bag'}
         </button>
         <button class="prod-view-btn" onclick="quickView('${p.id}')" aria-label="Quick view" title="Quick View">
           <i class="ti ti-eye" aria-hidden="true"></i>
@@ -8504,14 +8505,32 @@ function productCard(p) {
         ${oldP ? `<span class="prod-old">${fmtPrice(oldP)}</span>` : ''}
       </div>
       <div class="prod-sizes" onclick="event.stopPropagation()">
-        <span style="font-size:9.5px;text-transform:uppercase;letter-spacing:1px;color:var(--cbl);font-weight:600;margin-right:2px">Size:</span>
-        ${displaySizes.map((s, idx)=>`<button type="button" class="sz ${idx===0?'picked active':''}" onclick="event.stopPropagation();pickSize(this, '${s}')" title="Select size ${s}">${s}</button>`).join('')}
+        <span style="font-size:9.5px;text-transform:uppercase;letter-spacing:1px;color:var(--cbl);font-weight:600;margin-right:4px">Size:</span>
+        ${displaySizes.map((s, idx)=>`<button type="button" class="sz ${idx===0?'picked active':''}" onclick="event.stopPropagation();pickSize(this, '${s}', '${p.id}')" title="Select size ${s}">${s}</button>`).join('')}
       </div>
     </div>
   </div>`;
 }
 
-function pickSize(el, size) {
+// Add to cart from product grid card — opens quickView for multi-size items
+function addToCartFromCard(btn, id, multiSize) {
+  const card = btn.closest('.prod-card');
+  const selectedSize = card?.dataset?.selectedSize;
+  const pickedBtn = card?.querySelector('.sz.picked');
+  const pickedSize = pickedBtn?.textContent?.trim();
+  
+  // If it's a multi-size product and the user hasn't actively chosen a size yet
+  // (i.e., only default is selected — no explicit click on a sz button),
+  // open the quickView so they can properly select their size
+  if (multiSize && !card?.dataset?.userPickedSize) {
+    quickView(id);
+    return;
+  }
+  const sz = selectedSize || pickedSize || 'One Size';
+  addToCart(id, sz);
+}
+
+function pickSize(el, size, pid) {
   const container = el.closest('.prod-sizes');
   if (container) {
     container.querySelectorAll('.sz').forEach(s => {
@@ -8522,10 +8541,16 @@ function pickSize(el, size) {
     el.classList.add('active');
   }
   const card = el.closest('.prod-card');
-  if (card && size) {
+  if (card) {
     card.dataset.selectedSize = size;
+    card.dataset.userPickedSize = '1'; // mark that user explicitly chose a size
+    // Update the Add to Bag button label
+    const addBtn = card.querySelector('.prod-add-btn');
+    if (addBtn) {
+      addBtn.innerHTML = `<i class="ti ti-shopping-bag" style="font-size:12px;margin-right:4px"></i> Add ${size}`;
+    }
   }
-  showToast(`Selected size ${size}`);
+  showToast(`Size ${size} selected — tap Add ${size} to bag`);
 }
 
 // ── Render shop ───────────────────────────────────────────────
