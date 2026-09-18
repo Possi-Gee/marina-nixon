@@ -3285,9 +3285,6 @@ nav {
     height: 30px;
     max-width: 110px;
   }
-  .nav-links.open .mob-menu-brand {
-    display: block !important;
-  }
 }
 
 .nav-links {
@@ -4339,20 +4336,28 @@ html{scroll-behavior:smooth}
 body{background:radial-gradient(1200px 600px at 50% -120px,#F7F1E6 0%,#F5F0E8 55%)}
 ::selection{background:rgba(201,169,110,.35);color:var(--cdark)}
 
-/* Sticky nav — glass, refined */
-nav{background:rgba(253,250,245,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);height:66px;border-bottom:1px solid rgba(201,169,110,.25)}
-.nav-logo{font-family:var(--serif);font-weight:600;font-size:17px;letter-spacing:5px;color:#241B12;transition:color .3s}
-.nav-logo:hover{color:#5A4C3A}
-.nav-links a{font-weight:500;position:relative;color:#4A4034}
-.nav-links a:hover{color:#241B12}
+/* Sticky nav — deep luxury tone, clear logo contrast */
+nav{background:rgba(20,14,10,.96);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);height:66px;border-bottom:1px solid rgba(201,169,110,.3)}
+.nav-logo{font-family:var(--serif);font-weight:600;font-size:17px;letter-spacing:5px;background:#18120D !important;border:1px solid rgba(201,169,110,0.5) !important;border-radius:8px !important;padding:5px 14px !important;box-shadow:0 4px 14px rgba(0,0,0,0.25) !important;transition:all .25s ease !important}
+.nav-logo:hover{border-color:#C9A96E !important;box-shadow:0 6px 20px rgba(201,169,110,.3) !important;transform:translateY(-1px) !important}
+.nav-links a{font-weight:500;position:relative;color:rgba(240,230,210,.85)}
+.nav-links a:hover{color:#C9A96E}
 .nav-links a::after{content:'';position:absolute;left:0;bottom:-5px;width:0;height:1px;background:var(--ca);transition:width .35s ease}
 .nav-links a:hover::after,.nav-links a.active::after{width:100%}
-.nav-links a.active{color:#241B12}
-.nav-search{border-radius:999px;padding:6px 14px;gap:8px;background:#FAF6EE;transition:box-shadow .3s ease,border-color .3s ease}
-.nav-search:focus-within{border-color:var(--ca);box-shadow:0 0 0 3px rgba(201,169,110,.16)}
-.nav-icon{transition:transform .3s ease,color .3s ease}
-.nav-icon:hover{transform:translateY(-2px);color:#241B12}
-.nav-right .nav-icon{color:#4A4034}
+.nav-links a.active{color:#C9A96E}
+.nav-search{border-radius:999px;padding:6px 14px;gap:8px;background:rgba(255,255,255,.08);border-color:rgba(201,169,110,.3) !important;transition:box-shadow .3s ease,border-color .3s ease}
+.nav-search input{color:#F0E6D2 !important;background:transparent}
+.nav-search input::placeholder{color:rgba(201,169,110,.5)}
+.nav-search:focus-within{border-color:var(--ca) !important;box-shadow:0 0 0 3px rgba(201,169,110,.16)}
+.nav-icon{transition:transform .3s ease,color .3s ease;color:rgba(201,169,110,.85) !important}
+.nav-icon:hover{transform:translateY(-2px);color:#C9A96E !important}
+.nav-right .nav-icon{color:rgba(201,169,110,.85) !important}
+.nav-user-pill{background:rgba(255,255,255,.08) !important;border:1px solid rgba(201,169,110,.35) !important}
+.nav-user-pill:hover{background:rgba(201,169,110,.2) !important;border-color:var(--ca) !important}
+.nav-user-name{color:rgba(240,230,210,.9) !important}
+.nav-user-pill.guest{background:rgba(201,169,110,.18) !important;border:1px solid rgba(201,169,110,.45) !important}
+.nav-user-pill.guest:hover{background:var(--ca) !important}
+.nav-user-pill.guest:hover .nav-user-name{color:#140E0A !important}
 
 /* Buttons — consistent refined base */
 .btn-gold,.btn-dark,.btn-solid{font-family:var(--sans);border-radius:var(--radius-sm);letter-spacing:2.5px;transition:transform .3s ease,box-shadow .3s ease,background .3s ease,color .3s ease,border-color .3s ease}
@@ -6464,9 +6469,6 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
     <img src="images/logo.png" alt="Marina Nixon — Wear Rina" class="nav-brand-img">
   </div>
   <div class="nav-links" id="navLinks">
-    <div class="mob-menu-brand" style="padding:1.25rem 1rem 0.75rem;text-align:center;border-bottom:1px solid rgba(201,169,110,0.18);margin-bottom:0.75rem">
-      <img src="images/logo.png" alt="Marina Nixon" style="height:44px;width:auto;display:inline-block;border-radius:4px">
-    </div>
     <a onclick="go('home');closeMenu()" id="nl-home" class="active">Home</a>
     <a onclick="go('shop');closeMenu()" id="nl-shop">Shop</a>
     <a onclick="go('lookbook');closeMenu()" id="nl-look">Lookbook</a>
