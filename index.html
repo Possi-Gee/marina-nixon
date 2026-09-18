@@ -2840,25 +2840,27 @@ html, body {
   max-height: 440px;
   overflow: hidden;
   box-sizing: border-box;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
-.hero-slide-grid {
-  display: flex;
-  align-items: stretch;
-  width: 100%;
-  height: 100%;
-  position: relative;
-  z-index: 2;
+.hero-slide-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(14,10,7,0.88) 0%, rgba(14,10,7,0.65) 45%, rgba(14,10,7,0.2) 75%, transparent 100%);
+  z-index: 1;
+  pointer-events: none;
 }
 .hero-slide-content {
-  flex: 0 0 56%;
-  width: 56%;
-  padding: 2.5rem 3rem 2.5rem 3.5rem;
+  position: relative;
+  z-index: 2;
+  max-width: 620px;
+  padding: 3rem 3.5rem 3rem 4rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
   color: #FFF;
-  z-index: 3;
   box-sizing: border-box;
 }
 .hero-slide-badge {
@@ -2866,35 +2868,31 @@ html, body {
   align-items: center;
   gap: 6px;
   font-family: 'Jost', Arial, sans-serif;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 2px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
   text-transform: uppercase;
   color: #FFE57F;
-  margin-bottom: 0.75rem;
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(8px);
-  padding: 4px 12px;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  margin-bottom: 0.85rem;
 }
 .hero-slide-title {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: clamp(1.85rem, 3.2vw, 2.6rem);
+  font-size: clamp(2rem, 3.8vw, 3.2rem);
   font-weight: 700;
-  line-height: 1.15;
-  margin-bottom: 0.75rem;
+  line-height: 1.12;
+  margin-bottom: 0.85rem;
   color: #FFFFFF;
-  letter-spacing: -0.3px;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.25);
+  letter-spacing: -0.5px;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.4);
 }
 .hero-slide-sub {
   font-family: 'Jost', Arial, sans-serif;
-  font-size: 0.98rem;
-  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.92);
   line-height: 1.45;
-  margin-bottom: 1.5rem;
-  max-width: 480px;
+  margin-bottom: 1.75rem;
+  max-width: 500px;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.3);
 }
 .hero-slide-cta-row {
   display: flex;
@@ -2906,15 +2904,15 @@ html, body {
   background: #FFFFFF;
   color: #111111;
   font-family: 'Jost', Arial, sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   font-weight: 700;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  padding: 0.75rem 1.85rem;
+  padding: 0.85rem 2rem;
   border-radius: 30px;
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
   display: inline-flex;
   align-items: center;
@@ -2922,41 +2920,14 @@ html, body {
 }
 .hero-slide-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
   background: #F8F5EE;
 }
 .hero-slide-footnote {
   font-family: 'Jost', Arial, sans-serif;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.75);
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.8);
   letter-spacing: 0.5px;
-}
-.hero-slide-media {
-  flex: 0 0 44%;
-  width: 44%;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  overflow: hidden;
-  box-sizing: border-box;
-}
-.hero-slide-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center top;
-  display: block;
-  transition: transform 0.8s ease;
-}
-.hero-slide-pattern {
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
-  background-size: 24px 24px;
-  pointer-events: none;
-  opacity: 0.6;
 }
 
 /* Arrows */
@@ -3089,41 +3060,21 @@ html, body {
   .hero-carousel-viewport {
     height: 360px;
     max-height: 380px;
-    min-height: 320px;
+    min-height: 300px;
   }
-  .hero-slide-grid {
-    flex-direction: column;
-    height: 100%;
-    min-height: 320px;
+  .hero-slide-overlay {
+    background: linear-gradient(180deg, rgba(14,10,7,0.7) 0%, rgba(14,10,7,0.85) 100%);
   }
   .hero-slide-content {
-    flex: 1 1 auto;
-    width: 100%;
-    padding: 2rem 1.25rem;
-    z-index: 3;
-    position: relative;
+    max-width: 100%;
+    padding: 2rem 1.5rem;
   }
   .hero-slide-title {
-    font-size: 1.75rem;
+    font-size: 1.85rem;
   }
   .hero-slide-sub {
-    font-size: 0.88rem;
-    margin-bottom: 1.2rem;
-  }
-  .hero-slide-media {
-    flex: none;
-    position: absolute;
-    inset: 0;
-    opacity: 0.35;
-    z-index: 1;
-    width: 100%;
-    height: 100%;
-  }
-  .hero-slide-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: brightness(0.75);
+    font-size: 0.92rem;
+    margin-bottom: 1.25rem;
   }
 }
 
@@ -10054,9 +10005,7 @@ const DEFAULT_HERO_SLIDES = [
     cta_text: "Shop Now →",
     cta_link: "shop",
     footnote: "T&Cs apply · Same-day Accra dispatch",
-    image: "images/WhatsApp Image 2026-08-05 at 1.36.06 PM.jpeg",
-    bg_theme: "blue",
-    bg_color: "#0D47A1"
+    image: "images/WhatsApp Image 2026-08-05 at 1.36.06 PM.jpeg"
   },
   {
     id: "slide_2",
@@ -10067,9 +10016,7 @@ const DEFAULT_HERO_SLIDES = [
     cta_text: "Discover Gowns →",
     cta_link: "evening",
     footnote: "Atelier Made · Free Delivery in Greater Accra",
-    image: "images/noir_gown.png",
-    bg_theme: "black",
-    bg_color: "#181412"
+    image: "images/WhatsApp Image 2026-06-28 at 8.58.42 PM (3).jpeg"
   },
   {
     id: "slide_3",
@@ -10080,9 +10027,7 @@ const DEFAULT_HERO_SLIDES = [
     cta_text: "Shop Men's Edit →",
     cta_link: "men",
     footnote: "Sizes S to XXL Available",
-    image: "images/catalog/m2.jpg",
-    bg_theme: "green",
-    bg_color: "#0F382E"
+    image: "images/catalog/m2.jpg"
   }
 ];
 
@@ -10156,26 +10101,27 @@ function renderHeroCarousel() {
   const dotsContainer = document.getElementById('heroCarouselDots');
   if (!track || !dotsContainer) return;
 
-  const slides = Array.isArray(siteSettings.hero_slides) && siteSettings.hero_slides.length > 0 
+  // Always make sure we have at least all 3 default slides
+  let slides = (Array.isArray(siteSettings.hero_slides) && siteSettings.hero_slides.length >= 2)
     ? siteSettings.hero_slides.filter(s => s.active !== false)
     : DEFAULT_HERO_SLIDES;
 
-  if (!slides.length) {
-    track.innerHTML = '<div style="padding:4rem 2rem;text-align:center;color:#fff">No active hero slides.</div>';
-    dotsContainer.innerHTML = '';
-    return;
+  if (!slides || !slides.length) {
+    slides = DEFAULT_HERO_SLIDES;
   }
 
   if (heroCurrentIndex >= slides.length) heroCurrentIndex = 0;
 
-  // Set explicit width for track and each slide based on count
+  // Set track width based on slide count
   const slideCount = slides.length;
   track.style.width = (slideCount * 100) + '%';
   const slidePct = 100 / slideCount;
 
-  // Render slides
+  // Render slides matching Jumia reference with full-bleed image and editorial overlay
   track.innerHTML = slides.map((s, idx) => {
-    const bgGradient = getGradientForTheme(s.bg_theme, s.bg_color);
+    const defaultImg = DEFAULT_HERO_SLIDES[idx % DEFAULT_HERO_SLIDES.length]?.image || 'images/WhatsApp Image 2026-08-05 at 1.36.06 PM.jpeg';
+    const slideImg = (s.image && String(s.image).trim()) ? String(s.image).trim() : defaultImg;
+    const safeImgUrl = encodeURI(slideImg);
     const linkTarget = s.cta_link || 'shop';
     const clickHandler = linkTarget.startsWith('http') 
       ? `window.open('${linkTarget}', '_blank')` 
@@ -10183,27 +10129,18 @@ function renderHeroCarousel() {
         ? `filterGo('${linkTarget}')`
         : `go('${linkTarget}')`;
 
-    const defaultImg = DEFAULT_HERO_SLIDES[idx % DEFAULT_HERO_SLIDES.length]?.image || 'images/WhatsApp Image 2026-08-05 at 1.36.06 PM.jpeg';
-    const slideImg = (s.image && String(s.image).trim()) ? String(s.image).trim() : defaultImg;
-    const safeImgUrl = encodeURI(slideImg);
-
     return `
-      <div class="hero-car-slide" style="width: ${slidePct}%; flex: 0 0 ${slidePct}%; background: ${bgGradient}">
-        <div class="hero-slide-pattern"></div>
-        <div class="hero-slide-grid">
-          <div class="hero-slide-content">
-            ${s.badge ? `<div class="hero-slide-badge"><span style="color:#FFE814">✦</span> ${escapeHtml(s.badge)}</div>` : ''}
-            <h1 class="hero-slide-title">${escapeHtml(s.title || 'Marina Nixon')}</h1>
-            ${s.subtitle ? `<p class="hero-slide-sub">${escapeHtml(s.subtitle)}</p>` : ''}
-            <div class="hero-slide-cta-row">
-              <button class="hero-slide-btn" onclick="${clickHandler}">
-                <span>${escapeHtml(s.cta_text || 'Shop Now →')}</span>
-              </button>
-              ${s.footnote ? `<span class="hero-slide-footnote">${escapeHtml(s.footnote)}</span>` : ''}
-            </div>
-          </div>
-          <div class="hero-slide-media">
-            <img src="${safeImgUrl}" alt="${escapeHtml(s.title || 'Marina Nixon')}" class="hero-slide-img" onerror="this.onerror=null;this.src='images/noir_gown.png'">
+      <div class="hero-car-slide" style="width: ${slidePct}%; flex: 0 0 ${slidePct}%; background-image: url('${safeImgUrl}');">
+        <div class="hero-slide-overlay"></div>
+        <div class="hero-slide-content">
+          ${s.badge ? `<div class="hero-slide-badge">• ${escapeHtml(s.badge)}</div>` : ''}
+          <h2 class="hero-slide-title">${escapeHtml(s.title || 'Marina Nixon')}</h2>
+          ${s.subtitle ? `<p class="hero-slide-sub">${escapeHtml(s.subtitle)}</p>` : ''}
+          <div class="hero-slide-cta-row">
+            <button class="hero-slide-btn" onclick="${clickHandler}">
+              <span>${escapeHtml(s.cta_text || 'Shop Now →')}</span>
+            </button>
+            ${s.footnote ? `<span class="hero-slide-footnote">${escapeHtml(s.footnote)}</span>` : ''}
           </div>
         </div>
       </div>
@@ -10476,9 +10413,15 @@ async function loadSiteSettings() {
       siteSettings = { ...siteSettings, ...data };
       localStorage.setItem('mn_site_settings', JSON.stringify(siteSettings));
     }
+    if (!Array.isArray(siteSettings.hero_slides) || siteSettings.hero_slides.length < 2) {
+      siteSettings.hero_slides = DEFAULT_HERO_SLIDES;
+    }
     applySiteSettingsToDOM();
   } catch (err) {
     console.warn('Could not load site settings from API:', err);
+    if (!Array.isArray(siteSettings.hero_slides) || siteSettings.hero_slides.length < 2) {
+      siteSettings.hero_slides = DEFAULT_HERO_SLIDES;
+    }
     applySiteSettingsToDOM();
   }
 }
