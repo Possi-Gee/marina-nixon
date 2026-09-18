@@ -94,5 +94,81 @@ module.exports = () => {
     res.json({ message: 'Removed from wishlist' });
   });
 
+  // Get product reviews
+  router.get('/:id/reviews', async (req, res) => {
+    const db = getDb();
+    const productId = String(req.params.id);
+    try {
+      const snap = await db.collection('reviews').where('product_id', '==', productId).get();
+      const reviews = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+        .sort((a, b) => String(b.created_at || '').localeCompare(String(a.created_at || '')));
+
+      const count = reviews.length;
+      const avg = count > 0 
+        ? Math.round((reviews.reduce((acc, r) => acc + (Number(r.rating) || 5), 0) / count) * 10) / 10
+        : 5.0;
+
+      res.json({ reviews, count, avg_rating: avg });
+    } catch (err) {
+      console.error('Error fetching reviews:', err);
+      res.status(500).json({ error: 'Failed to fetch reviews', reviews: [], count: 0, avg_rating: 5.0 });
+    }
+  });
+
+  // Submit product review & rating
+  router.post('/:id/reviews', async (req, res) => {
+    const db = getDb();
+    const productId = String(req.params.id);
+    const { rating, name, comment } = req.body || {};
+
+    const numericRating = Math.min(5, Math.max(1, Number(rating) || 5));
+    const reviewerName = String(name || 'Client').trim().slice(0, 80);
+    const reviewComment = String(comment || '').trim().slice(0, 1000);
+
+    if (!reviewComment) {
+      return res.status(400).json({ error: 'Review comment cannot be empty' });
+    }
+
+    try {
+      const newReview = {
+        product_id: productId,
+        rating: numericRating,
+        name: reviewerName,
+        comment: reviewComment,
+        verified: true,
+        created_at: new Date().toISOString()
+      };
+
+      const ref = await db.collection('reviews').add(newReview);
+      
+      // Calculate updated stats
+      const snap = await db.collection('reviews').where('product_id', '==', productId).get();
+      const reviews = snap.docs.map(d => d.data());
+      const count = reviews.length;
+      const avg = Math.round((reviews.reduce((acc, r) => acc + (Number(r.rating) || 5), 0) / count) * 10) / 10;
+
+      // Update product rating if product exists
+      const prodRef = db.collection('products').doc(productId);
+      const prodSnap = await prodRef.get();
+      if (prodSnap.exists) {
+        await prodRef.update({
+          stars: Math.round(avg),
+          avg_rating: avg,
+          reviews_count: count
+        });
+      }
+
+      res.status(201).json({
+        message: 'Review submitted successfully',
+        review: { id: ref.id, ...newReview },
+        avg_rating: avg,
+        reviews_count: count
+      });
+    } catch (err) {
+      console.error('Error saving review:', err);
+      res.status(500).json({ error: 'Failed to submit review' });
+    }
+  });
+
   return router;
 };

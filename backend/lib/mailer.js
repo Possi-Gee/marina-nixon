@@ -27,8 +27,8 @@ function renderOrderHtml(order, items) {
     </tr>`).join('');
 
   return `
-  <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;color:#3A3028">
-    <h2 style="color:#C9A96E;letter-spacing:2px;text-transform:uppercase;font-size:18px">Marina Nixon</h2>
+    <h2 style="color:#C9A96E;letter-spacing:2.5px;text-transform:uppercase;font-size:18px">Marina Nixon · Wear Rina</h2>
+    <p style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#8C7B6B;margin-top:-6px;margin-bottom:14px">A Signature of Luxury</p>
     <p>Thank you for your order!</p>
     <p><strong>Order:</strong> ${order.order_number}<br>
     <strong>Status:</strong> ${order.payment_status === 'paid' ? 'Paid' : 'Payment pending'}</p>

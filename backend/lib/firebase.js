@@ -1,10 +1,28 @@
+const fs = require('fs');
+const path = require('path');
 const admin = require('firebase-admin');
 
 let initialized = false;
 
 function parseServiceAccount() {
   if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
-    return JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
+    try {
+      return JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
+    } catch (_) {}
+  }
+
+  const credPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+  if (credPath && fs.existsSync(credPath)) {
+    try {
+      return JSON.parse(fs.readFileSync(credPath, 'utf8'));
+    } catch (_) {}
+  }
+
+  const localJsonPath = path.join(__dirname, '..', 'marina-nixon-c8be0-firebase-adminsdk-fbsvc-b39c960506.json');
+  if (fs.existsSync(localJsonPath)) {
+    try {
+      return JSON.parse(fs.readFileSync(localJsonPath, 'utf8'));
+    } catch (_) {}
   }
 
   const projectId = process.env.FIREBASE_PROJECT_ID;

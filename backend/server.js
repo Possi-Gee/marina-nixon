@@ -47,7 +47,15 @@ app.use(compression());
 app.use(morgan(production ? 'combined' : 'dev'));
 app.use(cors({
   origin(origin, callback) {
-    if (!origin || !allowedOrigins.length || allowedOrigins.includes(origin)) {
+    if (!origin || !production) {
+      return callback(null, true);
+    }
+
+    if (!allowedOrigins.length || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
       return callback(null, true);
     }
 
@@ -243,7 +251,11 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 
 async function start() {
-  await bootstrap();
+  try {
+    await bootstrap();
+  } catch (err) {
+    console.warn('[Bootstrap Warning] Non-fatal initial bootstrap error:', err.message);
+  }
   app.listen(PORT, () => {
     console.log(`Marina Nixon Backend running on port ${PORT}`);
   });

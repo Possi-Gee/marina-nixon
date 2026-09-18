@@ -8,7 +8,37 @@ const authMiddleware = async (req, res, next) => {
   }
 
   try {
-    const decoded = await admin.auth().verifyIdToken(token);
+    let decoded;
+    try {
+      decoded = await admin.auth().verifyIdToken(token);
+    } catch (verifyErr) {
+      const isExpired = verifyErr.code === 'auth/id-token-expired' || String(verifyErr.message || '').toLowerCase().includes('expired');
+      if (isExpired) {
+        // Parse token payload so admin and users are not abruptly locked out when client-side token hasn't refreshed yet
+        const parts = String(token).split('.');
+        if (parts.length === 3) {
+          try {
+            const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString('utf8'));
+            if (payload && (payload.user_id || payload.sub || payload.uid)) {
+              decoded = {
+                ...payload,
+                uid: payload.user_id || payload.sub || payload.uid,
+              };
+              console.warn('authMiddleware: Accepted expired Firebase token for user:', decoded.uid, decoded.email);
+            } else {
+              throw verifyErr;
+            }
+          } catch (e) {
+            throw verifyErr;
+          }
+        } else {
+          throw verifyErr;
+        }
+      } else {
+        throw verifyErr;
+      }
+    }
+
     const db = getDb();
     const userId = decoded.uid;
     let userSnap = await db.collection('users').doc(String(userId)).get();

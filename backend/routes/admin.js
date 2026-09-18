@@ -247,5 +247,36 @@ module.exports = () => {
     res.json(rows);
   });
 
+  // Get site settings & carousel banners
+  router.get('/settings', authMiddleware, adminMiddleware, async (req, res) => {
+    try {
+      const db = getDb();
+      const doc = await db.collection('site_settings').doc('main').get();
+      if (doc.exists) {
+        return res.json({ settings: doc.data() });
+      }
+      return res.json({ settings: {} });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // Update site settings & carousel banners
+  router.put('/settings', authMiddleware, adminMiddleware, async (req, res) => {
+    try {
+      const db = getDb();
+      const payload = req.body || {};
+      await db.collection('site_settings').doc('main').set({
+        ...payload,
+        updated_at: new Date().toISOString()
+      }, { merge: true });
+
+      const updatedSnap = await db.collection('site_settings').doc('main').get();
+      res.json({ message: 'Settings saved', settings: updatedSnap.data() });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
   return router;
 };
