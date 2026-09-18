@@ -2842,15 +2842,16 @@ html, body {
   box-sizing: border-box;
 }
 .hero-slide-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  display: flex;
+  align-items: stretch;
   width: 100%;
   height: 100%;
-  max-height: 440px;
   position: relative;
   z-index: 2;
 }
 .hero-slide-content {
+  flex: 0 0 56%;
+  width: 56%;
   padding: 2.5rem 3rem 2.5rem 3.5rem;
   display: flex;
   flex-direction: column;
@@ -2858,8 +2859,7 @@ html, body {
   align-items: flex-start;
   color: #FFF;
   z-index: 3;
-  min-width: 0;
-  overflow: hidden;
+  box-sizing: border-box;
 }
 .hero-slide-badge {
   display: inline-flex;
@@ -2932,22 +2932,22 @@ html, body {
   letter-spacing: 0.5px;
 }
 .hero-slide-media {
+  flex: 0 0 44%;
+  width: 44%;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
-  width: 100%;
-  min-width: 0;
-  min-height: 0;
   overflow: hidden;
+  box-sizing: border-box;
 }
 .hero-slide-img {
   width: 100%;
   height: 100%;
-  max-height: 440px;
   object-fit: cover;
   object-position: center top;
+  display: block;
   transition: transform 0.8s ease;
 }
 .hero-slide-pattern {
@@ -3092,11 +3092,13 @@ html, body {
     min-height: 320px;
   }
   .hero-slide-grid {
-    grid-template-columns: 1fr;
+    flex-direction: column;
     height: 100%;
     min-height: 320px;
   }
   .hero-slide-content {
+    flex: 1 1 auto;
+    width: 100%;
     padding: 2rem 1.25rem;
     z-index: 3;
     position: relative;
@@ -3109,6 +3111,7 @@ html, body {
     margin-bottom: 1.2rem;
   }
   .hero-slide-media {
+    flex: none;
     position: absolute;
     inset: 0;
     opacity: 0.35;
@@ -7951,9 +7954,140 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
           </div>
         </div>
 
+        <!-- Panel 3: Add / Edit Product Form -->
+        <div id="admin-panel-product-form" style="display:none">
+          <div style="background:var(--cw);border:1px solid #EDE8DF;border-radius:10px;padding:1.5rem;margin-bottom:1.5rem">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;border-bottom:1px solid #EDE8DF;padding-bottom:10px">
+              <div>
+                <h3 style="font-size:15px;letter-spacing:2px;text-transform:uppercase;color:var(--cbd);font-weight:600;margin-bottom:4px" id="adminFormTitle">Add New Product</h3>
+                <p style="font-family:'Jost',Arial,sans-serif;font-size:12px;color:var(--cbl)">Create a new luxury piece or edit existing product details, sizes, pricing, and imagery.</p>
+              </div>
+              <button class="btn-dark" id="adminProdCancelBtnTop" onclick="resetAdminForm();switchAdminTab('catalog');" style="display:none;padding:8px 16px;font-size:11px">Cancel &amp; Back</button>
+            </div>
 
-        <!-- Panel 4: Banners & Storefront Content (Admin Controlled) -->
-        
+            <input type="hidden" id="adminProdId" value="">
+
+            <!-- Basic Info -->
+            <div class="fg-row">
+              <div class="fg" style="flex:2">
+                <label>Product Name *</label>
+                <input type="text" id="adminProdName" placeholder="e.g. Royal Emerald Velvet Corset Gown">
+              </div>
+              <div class="fg" style="flex:1">
+                <label>Price (GH₵) *</label>
+                <input type="number" id="adminProdPrice" min="0" step="0.01" placeholder="e.g. 850">
+              </div>
+              <div class="fg" style="flex:1">
+                <label>Original Price (Optional)</label>
+                <input type="number" id="adminProdOldPrice" min="0" step="0.01" placeholder="e.g. 1100">
+              </div>
+            </div>
+
+            <!-- Category & Badge Selection -->
+            <div class="fg-row" style="margin-top:1rem">
+              <div class="fg" style="flex:1">
+                <label>Category *</label>
+                <div class="admin-chip-group" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+                  <button type="button" class="admin-chip-btn" onclick="selectAdminCategory('evening','Evening Edit',this)">Evening Edit</button>
+                  <button type="button" class="admin-chip-btn" onclick="selectAdminCategory('casual','Casual Atelier',this)">Casual Atelier</button>
+                  <button type="button" class="admin-chip-btn" onclick="selectAdminCategory('heritage','Heritage Couture',this)">Heritage Couture</button>
+                  <button type="button" class="admin-chip-btn" onclick="selectAdminCategory('men','Men’s Edit',this)">Men’s Edit</button>
+                  <button type="button" class="admin-chip-btn" onclick="selectAdminCategory('new','New Arrivals',this)">New Arrivals</button>
+                </div>
+                <input type="text" id="adminProdCategory" placeholder="category key (e.g. evening, men, casual)" style="margin-bottom:6px">
+                <input type="text" id="adminProdLabel" placeholder="Category display label (e.g. Evening Edit)">
+              </div>
+
+              <div class="fg" style="flex:1">
+                <label>Product Badge</label>
+                <div class="admin-badge-group" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+                  <button type="button" class="admin-chip-btn" onclick="selectAdminBadge('new',this)">New Drop</button>
+                  <button type="button" class="admin-chip-btn" onclick="selectAdminBadge('bestseller',this)">Bestseller</button>
+                  <button type="button" class="admin-chip-btn" onclick="selectAdminBadge('sale',this)">Special Edit</button>
+                  <button type="button" class="admin-chip-btn" onclick="selectAdminBadge('atelier',this)">Atelier Exclusive</button>
+                  <button type="button" class="admin-chip-btn" onclick="selectAdminBadge('',this)">None</button>
+                </div>
+                <input type="text" id="adminProdBadge" placeholder="badge key (e.g. new, bestseller, sale)">
+                <div style="margin-top:8px">
+                  <label>Inventory Stock</label>
+                  <input type="number" id="adminProdStock" min="0" step="1" value="50" placeholder="50">
+                </div>
+              </div>
+            </div>
+
+            <!-- Size Selection Pills & Presets -->
+            <div style="margin-top:1.2rem;background:#FAF6EE;border:1px solid #E5DFD3;border-radius:8px;padding:1rem">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px">
+                <div>
+                  <label style="font-weight:700;font-size:12px;color:var(--cbd);text-transform:uppercase;letter-spacing:1px">Sizes Available for Customers *</label>
+                  <div id="adminSizeSummary" style="font-family:'Jost',Arial,sans-serif;font-size:11.5px;color:var(--ca);font-weight:600;margin-top:2px">XS, S, M, L, XL (5 sizes)</div>
+                </div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap">
+                  <button type="button" class="admin-quick-sz-btn" onclick="adminSelectPresetSizes(['XS','S','M','L','XL'])">XS–XL Standard</button>
+                  <button type="button" class="admin-quick-sz-btn" onclick="adminSelectPresetSizes(['S','M','L','XL','XXL'])">S–XXL Men</button>
+                  <button type="button" class="admin-quick-sz-btn" onclick="adminSelectPresetSizes(['XS','S','M','L','XL','XXL'])">All Sizes</button>
+                  <button type="button" class="admin-quick-sz-btn" onclick="adminSelectPresetSizes(['One Size'])">One Size</button>
+                  <button type="button" class="admin-quick-sz-btn" onclick="adminClearSizes()" style="color:#C62828">Clear</button>
+                </div>
+              </div>
+
+              <!-- Interactive Size Pills Wrap -->
+              <div id="adminSizePillsWrap" style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0">
+                <button type="button" class="admin-sz-pill active" data-size="XS" onclick="toggleAdminSize('XS')">XS</button>
+                <button type="button" class="admin-sz-pill active" data-size="S" onclick="toggleAdminSize('S')">S</button>
+                <button type="button" class="admin-sz-pill active" data-size="M" onclick="toggleAdminSize('M')">M</button>
+                <button type="button" class="admin-sz-pill active" data-size="L" onclick="toggleAdminSize('L')">L</button>
+                <button type="button" class="admin-sz-pill active" data-size="XL" onclick="toggleAdminSize('XL')">XL</button>
+                <button type="button" class="admin-sz-pill" data-size="XXL" onclick="toggleAdminSize('XXL')">XXL</button>
+                <button type="button" class="admin-sz-pill" data-size="One Size" onclick="toggleAdminSize('One Size')">One Size</button>
+              </div>
+
+              <!-- Add Custom Size -->
+              <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+                <input type="text" id="adminCustomSizeInput" placeholder="Add custom size (e.g. 38, 40, Bespoke)" style="width:240px;height:32px;font-size:11px">
+                <button type="button" class="btn-dark" onclick="addAdminCustomSize()" style="padding:6px 14px;font-size:10px;height:32px">+ Add Size</button>
+              </div>
+              <input type="hidden" id="adminProdSizes" value="XS, S, M, L, XL">
+            </div>
+
+            <!-- Description -->
+            <div class="fg" style="margin-top:1.2rem">
+              <label>Product Description &amp; Fabric Notes</label>
+              <textarea id="adminProdDescription" rows="3" placeholder="Handcrafted in Accra. Premium silk &amp; velour blend with custom gold detailing..."></textarea>
+            </div>
+
+            <!-- Image Upload & Preview -->
+            <div style="margin-top:1.2rem;border-top:1px solid #EDE8DF;padding-top:1.2rem">
+              <label style="font-weight:700;font-size:12px;color:var(--cbd);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;display:block">Product Imagery</label>
+              <div class="fg-row">
+                <div class="fg">
+                  <label>Upload Image File</label>
+                  <input type="file" id="adminProdImageFile" accept="image/*" onchange="previewAdminImageFile(this)">
+                </div>
+                <div class="fg">
+                  <label>Or Web Image URL</label>
+                  <input type="text" id="adminProdImageUrl" placeholder="https://res.cloudinary.com/... or images/catalog/w1.jpg" oninput="previewAdminImageUrl(this.value)">
+                </div>
+              </div>
+
+              <!-- Live Image Preview Box -->
+              <div id="adminProdImgPreviewBox" style="display:none;align-items:center;gap:14px;background:#FAF6EE;border:1px solid #E5DFD3;border-radius:8px;padding:10px;margin-top:10px;width:fit-content">
+                <img id="adminProdImgPreview" src="" alt="Preview" style="width:60px;height:75px;object-fit:cover;border-radius:4px;border:1px solid #D6CCB8">
+                <div>
+                  <div id="adminProdImgPreviewName" style="font-family:'Jost',Arial,sans-serif;font-size:12px;font-weight:600;color:var(--cbd)">Image Selected</div>
+                  <button type="button" class="btn-dark" onclick="clearAdminProdImage()" style="padding:4px 10px;font-size:9px;margin-top:4px;color:#C62828;border-color:#C62828">Remove Image</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div style="display:flex;gap:1rem;margin-top:1.5rem;border-top:1px solid #EDE8DF;padding-top:1.2rem">
+              <button class="btn-solid" id="adminProdSubmitBtn" onclick="createAdminProduct(this)" style="padding:10px 28px;letter-spacing:2px">Save Product</button>
+              <button class="btn-dark" id="adminProdCancelBtn" onclick="resetAdminForm();switchAdminTab('catalog');" style="display:none;padding:10px 20px">Cancel</button>
+            </div>
+          </div>
+        </div>
+
         <!-- Panel 4: Banners & Storefront Content (Admin Controlled) -->
         <div id="admin-panel-banners" style="display:none">
           <div style="background:var(--cw);border:1px solid #EDE8DF;border-radius:10px;padding:1.5rem;margin-bottom:1.5rem">
