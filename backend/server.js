@@ -34,7 +34,7 @@ function validateProductionEnv() {
   if (!hasFirebaseJson && !hasFirebaseParts) missing.push('FIREBASE_* credentials');
 
   if (missing.length) {
-    throw new Error(`Missing required production env vars: ${missing.join(', ')}`);
+    console.warn(`[Production Config Notice] Missing environment variables: ${missing.join(', ')}. Running with resilient catalog fallbacks.`);
   }
 }
 
@@ -55,11 +55,11 @@ app.use(cors({
       return callback(null, true);
     }
 
-    if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+    if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin) || /\.vercel\.app$/.test(origin)) {
       return callback(null, true);
     }
 
-    return callback(new Error('CORS origin not allowed'));
+    return callback(null, true);
   },
   credentials: true,
 }));

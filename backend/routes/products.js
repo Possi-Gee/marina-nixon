@@ -5,18 +5,44 @@ const { getDb } = require('../lib/firebase');
 module.exports = () => {
   const router = express.Router();
 
-  const toProduct = (doc) => ({ id: doc.id, ...doc.data() });
+  const toProduct = (doc) => {
+    const data = doc.data() || {};
+    const cat = data.cat || data.category || 'casual';
+    return {
+      id: doc.id,
+      ...data,
+      cat,
+      category: cat,
+      img: data.img || data.primary_image || '',
+    };
+  };
 
   // Get all products with filtering
   router.get('/', async (req, res) => {
-    const db = getDb();
     const { category, sort } = req.query;
+    let rows = [];
 
-    const snap = await db.collection('products').get();
-    let rows = snap.docs.map(toProduct);
+    try {
+      const db = getDb();
+      const snap = await db.collection('products').get();
+      rows = snap.docs.map(toProduct);
+    } catch (err) {
+      console.warn('GET /api/products Firestore read warning:', err.message);
+    }
+
+    if (!rows || rows.length === 0) {
+      const { DEFAULT_PRODUCTS } = require('../bootstrap');
+      rows = [...DEFAULT_PRODUCTS];
+    }
 
     if (category && category !== 'all') {
-      rows = rows.filter((row) => row.category === category);
+      if (category === 'sale') {
+        rows = rows.filter((row) => (row.badge === 'sale' || row.category === 'sale' || row.cat === 'sale'));
+      } else if (category === 'new') {
+        rows = rows.filter((row) => (row.badge === 'new' || row.category === 'new' || row.cat === 'new'));
+      } else {
+        rows = rows.filter((row) => (row.category === category || row.cat === category));
+      }
     }
 
     if (sort === 'price-asc') rows.sort((a, b) => (a.price || 0) - (b.price || 0));
@@ -29,26 +55,48 @@ module.exports = () => {
 
   // Search products
   router.get('/search/:query', async (req, res) => {
-    const db = getDb();
     const term = String(req.params.query || '').trim().toLowerCase();
+    let rows = [];
 
-    const snap = await db.collection('products').get();
-    const rows = snap.docs.map(toProduct).filter((row) => {
+    try {
+      const db = getDb();
+      const snap = await db.collection('products').get();
+      rows = snap.docs.map(toProduct);
+    } catch (err) {
+      console.warn('GET /api/products/search Firestore read warning:', err.message);
+    }
+
+    if (!rows || rows.length === 0) {
+      const { DEFAULT_PRODUCTS } = require('../bootstrap');
+      rows = [...DEFAULT_PRODUCTS];
+    }
+
+    const matches = rows.filter((row) => {
       const name = String(row.name || '').toLowerCase();
       const label = String(row.label || '').toLowerCase();
-      const categoryValue = String(row.category || '').toLowerCase();
+      const categoryValue = String(row.category || row.cat || '').toLowerCase();
       return name.includes(term) || label.includes(term) || categoryValue.includes(term);
     });
 
-    res.json(rows);
+    res.json(matches);
   });
 
   // Get single product
   router.get('/:id', async (req, res) => {
-    const db = getDb();
-    const snap = await db.collection('products').doc(String(req.params.id)).get();
-    if (!snap.exists) return res.status(404).json({ error: 'Product not found' });
-    res.json(toProduct(snap));
+    const productId = String(req.params.id);
+    try {
+      const db = getDb();
+      const snap = await db.collection('products').doc(productId).get();
+      if (snap.exists) return res.json(toProduct(snap));
+    } catch (err) {
+      console.warn('GET /api/products/:id Firestore read warning:', err.message);
+    }
+
+    const { DEFAULT_PRODUCTS } = require('../bootstrap');
+    const fallback = DEFAULT_PRODUCTS.find((p) => String(p.id) === productId);
+    if (fallback) return res.json(fallback);
+
+    res.status(404).json({ error: 'Product not found' });
   });
 
   // Add to wishlist

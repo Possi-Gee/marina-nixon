@@ -3244,30 +3244,49 @@ nav {
 }
 
 .nav-logo {
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
   cursor: pointer;
   white-space: nowrap;
-  padding: 2px 0;
+  padding: 5px 14px;
   text-decoration: none;
+  background: #18120D;
+  border: 1px solid rgba(201, 169, 110, 0.45);
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  transition: all 0.25s ease;
+}
+.nav-logo:hover {
+  border-color: #C9A96E;
+  box-shadow: 0 6px 18px rgba(201, 169, 110, 0.25);
+  transform: translateY(-1px);
 }
 .nav-brand-img {
-  height: 42px;
+  height: 38px;
   max-width: 145px;
   object-fit: contain;
   display: block;
   transition: transform 0.25s ease, opacity 0.25s ease;
-  border-radius: 4px;
 }
 .nav-logo:hover .nav-brand-img {
-  transform: scale(1.03);
-  opacity: 0.95;
+  transform: scale(1.02);
+  opacity: 0.98;
+}
+.mob-menu-brand {
+  display: none !important;
 }
 @media(max-width: 768px) {
+  .nav-logo {
+    padding: 4px 10px;
+  }
   .nav-brand-img {
-    height: 34px;
-    max-width: 115px;
+    height: 30px;
+    max-width: 110px;
+  }
+  .nav-links.open .mob-menu-brand {
+    display: block !important;
   }
 }
 
@@ -8409,15 +8428,15 @@ if (currentUser && !currentUser.full_name) {
 }
 
 function filterProducts(filter, sort, search) {
-  let list = [...PRODUCTS_EMBEDDED];
+  let list = (Array.isArray(PRODUCTS) && PRODUCTS.length) ? [...PRODUCTS] : [...PRODUCTS_EMBEDDED];
   if (filter && filter !== 'all') {
-    if      (filter === 'sale') list = list.filter(p => p.badge === 'sale');
-    else if (filter === 'new')  list = list.filter(p => p.badge === 'new');
-    else                        list = list.filter(p => p.cat   === filter);
+    if      (filter === 'sale') list = list.filter(p => p.badge === 'sale' || p.category === 'sale' || p.cat === 'sale');
+    else if (filter === 'new')  list = list.filter(p => p.badge === 'new' || p.category === 'new' || p.cat === 'new');
+    else                        list = list.filter(p => (p.cat === filter || p.category === filter));
   }
   if (search) {
     const q = search.toLowerCase();
-    list = list.filter(p => p.name.toLowerCase().includes(q) || (p.label||'').toLowerCase().includes(q));
+    list = list.filter(p => (p.name||'').toLowerCase().includes(q) || (p.label||'').toLowerCase().includes(q) || (p.category||'').toLowerCase().includes(q) || (p.cat||'').toLowerCase().includes(q));
   }
   if      (sort === 'price_asc' || sort === 'price-asc')  list.sort((a,b) => (a.price||0)-(b.price||0));
   else if (sort === 'price_desc' || sort === 'price-desc') list.sort((a,b) => (b.price||0)-(a.price||0));
@@ -8437,6 +8456,9 @@ function productCard(p) {
   if (!imgSrc) {
     const found = PRODUCTS_EMBEDDED.find(e => String(e.id) === String(p.id) || e.name.toLowerCase() === (p.name || '').toLowerCase());
     if (found && found.img) imgSrc = found.img;
+  }
+  if (imgSrc && !imgSrc.startsWith('http') && !imgSrc.startsWith('data:') && !imgSrc.startsWith('/') && !isLocalFile) {
+    imgSrc = '/' + imgSrc;
   }
 
   const rawSizes = Array.isArray(p.sizes) ? p.sizes : (p.sizes ? String(p.sizes).split(',') : []);
@@ -8541,9 +8563,17 @@ async function renderHome() {
   const grid = document.getElementById('homeNewGrid');
   if (!grid) return;
   let items = [];
-  const data = await apiGet('/products?category=new');
-  if (Array.isArray(data) && data.length) { items = data; }
-  if (!items.length) items = PRODUCTS_EMBEDDED.filter(p => p.badge === 'new').slice(0,4);
+  try {
+    const data = await apiGet('/products?category=new');
+    if (Array.isArray(data) && data.length) { items = data; }
+  } catch (_) {}
+  if (!items.length) {
+    const pool = (Array.isArray(PRODUCTS) && PRODUCTS.length) ? PRODUCTS : PRODUCTS_EMBEDDED;
+    items = pool.filter(p => p.badge === 'new' || p.cat === 'new' || p.category === 'new');
+  }
+  if (!items.length) {
+    items = PRODUCTS_EMBEDDED.slice(0, 8);
+  }
   grid.innerHTML = items.map(productCard).join('');
 }
 
@@ -8800,8 +8830,8 @@ function filterGo(f) {
 
 // ── Cart & Slide-Over Drawer ──────────────────────────────────
 function getProd(id) {
-  return PRODUCTS_EMBEDDED.find(x=>String(x.id)===String(id))
-      || PRODUCTS.find(x=>String(x.id)===String(id))
+  return (Array.isArray(PRODUCTS) ? PRODUCTS.find(x => String(x.id) === String(id)) : null)
+      || PRODUCTS_EMBEDDED.find(x => String(x.id) === String(id))
       || null;
 }
 
@@ -9946,6 +9976,11 @@ function renderHeroCarousel() {
 
   if (heroCurrentIndex >= slides.length) heroCurrentIndex = 0;
 
+  // Set explicit width for track and each slide based on count
+  const slideCount = slides.length;
+  track.style.width = (slideCount * 100) + '%';
+  const slidePct = 100 / slideCount;
+
   // Render slides
   track.innerHTML = slides.map((s, idx) => {
     const bgGradient = getGradientForTheme(s.bg_theme, s.bg_color);
@@ -9957,7 +9992,7 @@ function renderHeroCarousel() {
         : `go('${linkTarget}')`;
 
     return `
-      <div class="hero-car-slide" style="background: ${bgGradient}">
+      <div class="hero-car-slide" style="width: ${slidePct}%; flex: 0 0 ${slidePct}%; background: ${bgGradient}">
         <div class="hero-slide-pattern"></div>
         <div class="hero-slide-grid">
           <div class="hero-slide-content">
@@ -9981,7 +10016,7 @@ function renderHeroCarousel() {
 
   // Render dots
   dotsContainer.innerHTML = slides.map((_, idx) => 
-    `<div class="hero-car-dot ${idx === heroCurrentIndex ? 'active' : ''}" onclick="goToHeroSlide(${idx})"></div>`
+    `<div class="hero-car-dot ${idx === heroCurrentIndex ? 'active' : ''}" onclick="goToHeroSlide(${idx});startHeroAutoPlay()"></div>`
   ).join('');
 
   // Update position
@@ -10016,7 +10051,9 @@ function goToHeroSlide(index, animate = true) {
   if (!track || !slides.length) return;
 
   heroCurrentIndex = (index + slides.length) % slides.length;
-  track.style.transform = `translateX(-${heroCurrentIndex * 100}%)`;
+  const step = 100 / slides.length;
+  track.style.transition = animate ? 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)' : 'none';
+  track.style.transform = `translateX(-${heroCurrentIndex * step}%)`;
 
   dots.forEach((d, idx) => {
     d.classList.toggle('active', idx === heroCurrentIndex);
@@ -10025,17 +10062,19 @@ function goToHeroSlide(index, animate = true) {
 
 function nextHeroSlide() {
   goToHeroSlide(heroCurrentIndex + 1);
+  startHeroAutoPlay();
 }
 
 function prevHeroSlide() {
   goToHeroSlide(heroCurrentIndex - 1);
+  startHeroAutoPlay();
 }
 
 function startHeroAutoPlay() {
   stopHeroAutoPlay();
   heroAutoPlayTimer = setInterval(() => {
-    nextHeroSlide();
-  }, 5000);
+    goToHeroSlide(heroCurrentIndex + 1);
+  }, 4500);
 }
 
 function stopHeroAutoPlay() {

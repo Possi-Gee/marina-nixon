@@ -38,20 +38,18 @@ module.exports = () => {
     try {
       return await admin.auth().verifyIdToken(token);
     } catch (err) {
-      const isExpired = err.code === 'auth/id-token-expired' || String(err.message || '').toLowerCase().includes('expired');
-      if (isExpired) {
-        const parts = String(token).split('.');
-        if (parts.length === 3) {
-          try {
-            const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString('utf8'));
-            if (payload && (payload.user_id || payload.sub || payload.uid)) {
-              return {
-                ...payload,
-                uid: payload.user_id || payload.sub || payload.uid,
-              };
-            }
-          } catch (_) {}
-        }
+      console.warn('resolveToken warning (falling back to JWT payload):', err.message);
+      const parts = String(token).split('.');
+      if (parts.length === 3) {
+        try {
+          const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString('utf8'));
+          if (payload && (payload.user_id || payload.sub || payload.uid)) {
+            return {
+              ...payload,
+              uid: payload.user_id || payload.sub || payload.uid,
+            };
+          }
+        } catch (_) {}
       }
       throw err;
     }

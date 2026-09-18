@@ -10,95 +10,112 @@ module.exports = () => {
 
   // Add product
   router.post('/products', authMiddleware, adminMiddleware, async (req, res) => {
-    const db = getDb();
-    const { name, category, label, price, old_price, badge, stock, description, sizes } = req.body;
+    try {
+      const db = getDb();
+      const { name, category, label, price, old_price, badge, stock, description, sizes } = req.body;
 
-    if (!name || !category || !price) {
-      return res.status(400).json({ error: 'Name, category, and price required' });
+      if (!name || !category || !price) {
+        return res.status(400).json({ error: 'Name, category, and price required' });
+      }
+
+      const imageInput = req.body.image || req.body.image_url || req.body.img || null;
+      let uploadedImage = null;
+      if (imageInput && (imageInput.startsWith('data:') || imageInput.startsWith('http'))) {
+        uploadedImage = await uploadImage(imageInput).catch((err) => {
+          console.warn('Cloudinary upload non-fatal warning:', err.message);
+          return null;
+        });
+      }
+
+      const ref = db.collection('products').doc();
+      await ref.set({
+        name,
+        category,
+        label: label || null,
+        price,
+        old_price: old_price || null,
+        badge: badge || null,
+        stock: stock || 50,
+        description: description || null,
+        sizes: Array.isArray(sizes) ? sizes : (sizes ? String(sizes).split(',').map((s) => s.trim()).filter(Boolean) : []),
+        img: uploadedImage ? uploadedImage.url : (imageInput || null),
+        image_public_id: uploadedImage ? uploadedImage.public_id : null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      });
+
+      res.status(201).json({ message: 'Product added', product_id: ref.id });
+    } catch (err) {
+      console.error('Failed to add product:', err);
+      res.status(500).json({ error: 'Failed to add product', message: err.message });
     }
-
-    const imageInput = req.body.image || req.body.image_url || req.body.img || null;
-    const uploadedImage = imageInput ? await uploadImage(imageInput).catch((err) => ({ error: err.message })) : null;
-
-    if (uploadedImage && uploadedImage.error) {
-      return res.status(400).json({ error: uploadedImage.error });
-    }
-
-    const ref = db.collection('products').doc();
-    await ref.set({
-      name,
-      category,
-      label: label || null,
-      price,
-      old_price: old_price || null,
-      badge: badge || null,
-      stock: stock || 50,
-      description: description || null,
-      sizes: Array.isArray(sizes) ? sizes : (sizes ? String(sizes).split(',').map((s) => s.trim()).filter(Boolean) : []),
-      img: uploadedImage ? uploadedImage.url : req.body.img || null,
-      image_public_id: uploadedImage ? uploadedImage.public_id : null,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    });
-
-    res.status(201).json({ message: 'Product added', product_id: ref.id });
   });
 
   // Update product
   router.put('/products/:productId', authMiddleware, adminMiddleware, async (req, res) => {
-    const db = getDb();
-    const productId = req.params.productId;
-    const { name, category, label, price, old_price, badge, stock, description, sizes } = req.body;
-    const ref = db.collection('products').doc(String(productId));
-    const snap = await ref.get();
-    if (!snap.exists) return res.status(404).json({ error: 'Product not found' });
+    try {
+      const db = getDb();
+      const productId = req.params.productId;
+      const { name, category, label, price, old_price, badge, stock, description, sizes } = req.body;
+      const ref = db.collection('products').doc(String(productId));
+      const snap = await ref.get();
+      if (!snap.exists) return res.status(404).json({ error: 'Product not found' });
 
-    const imageInput = req.body.image || req.body.image_url || req.body.img || null;
-    let uploadedImage = null;
-    if (imageInput) {
-      uploadedImage = await uploadImage(imageInput).catch((err) => ({ error: err.message }));
-      if (uploadedImage && uploadedImage.error) {
-        return res.status(400).json({ error: uploadedImage.error });
+      const imageInput = req.body.image || req.body.image_url || req.body.img || null;
+      let uploadedImage = null;
+      if (imageInput && (imageInput.startsWith('data:') || imageInput.startsWith('http'))) {
+        uploadedImage = await uploadImage(imageInput).catch((err) => {
+          console.warn('Cloudinary upload non-fatal warning:', err.message);
+          return null;
+        });
       }
+
+      const previous = snap.data();
+      if (uploadedImage && previous.image_public_id) {
+        await deleteImage(previous.image_public_id).catch(() => null);
+      }
+
+      await ref.update({
+        name,
+        category,
+        label: label || null,
+        price,
+        old_price: old_price || null,
+        badge: badge || null,
+        stock,
+        description: description || null,
+        sizes: Array.isArray(sizes) ? sizes : (sizes ? String(sizes).split(',').map((s) => s.trim()).filter(Boolean) : []),
+        ...(uploadedImage ? { img: uploadedImage.url, image_public_id: uploadedImage.public_id } : {}),
+        updated_at: new Date().toISOString(),
+      });
+
+      res.json({ message: 'Product updated' });
+    } catch (err) {
+      console.error('Failed to update product:', err);
+      res.status(500).json({ error: 'Failed to update product', message: err.message });
     }
-
-    const previous = snap.data();
-    if (uploadedImage && previous.image_public_id) {
-      await deleteImage(previous.image_public_id).catch(() => null);
-    }
-
-    await ref.update({
-      name,
-      category,
-      label: label || null,
-      price,
-      old_price: old_price || null,
-      badge: badge || null,
-      stock,
-      description: description || null,
-      sizes: Array.isArray(sizes) ? sizes : (sizes ? String(sizes).split(',').map((s) => s.trim()).filter(Boolean) : []),
-      ...(uploadedImage ? { img: uploadedImage.url, image_public_id: uploadedImage.public_id } : {}),
-      updated_at: new Date().toISOString(),
-    });
-
-    res.json({ message: 'Product updated' });
   });
 
   // Delete product
   router.delete('/products/:productId', authMiddleware, adminMiddleware, async (req, res) => {
-    const db = getDb();
-    const productId = req.params.productId;
-    const ref = db.collection('products').doc(String(productId));
-    const snap = await ref.get();
-    if (!snap.exists) return res.status(404).json({ error: 'Product not found' });
+    try {
+      const db = getDb();
+      const productId = req.params.productId;
+      const ref = db.collection('products').doc(String(productId));
+      const snap = await ref.get();
+      if (!snap.exists) return res.status(404).json({ error: 'Product not found' });
 
-    const data = snap.data();
-    if (data.image_public_id) {
-      await deleteImage(data.image_public_id).catch(() => null);
+      const data = snap.data();
+      if (data.image_public_id) {
+        await deleteImage(data.image_public_id).catch(() => null);
+      }
+
+      await ref.delete();
+      res.json({ message: 'Product deleted' });
+    } catch (err) {
+      console.error('Failed to delete product:', err);
+      res.status(500).json({ error: 'Failed to delete product', message: err.message });
     }
-
-    await ref.delete();
-    res.json({ message: 'Product deleted' });
   });
 
   // Get all orders (admin)
