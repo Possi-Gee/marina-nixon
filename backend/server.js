@@ -110,6 +110,58 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'API is running', timestamp: new Date().toISOString() });
 });
 
+// ── Temporary diagnostic endpoint (safe – no secrets exposed) ──
+app.get('/api/debug-config', async (req, res) => {
+  const hasSAJson    = !!process.env.FIREBASE_SERVICE_ACCOUNT_JSON;
+  const hasGACred    = !!process.env.GOOGLE_APPLICATION_CREDENTIALS;
+  const hasProjectId = !!process.env.FIREBASE_PROJECT_ID;
+  const hasEmail     = !!process.env.FIREBASE_CLIENT_EMAIL;
+  const hasKey       = !!process.env.FIREBASE_PRIVATE_KEY;
+  const hasAdminEmail = !!process.env.ADMIN_EMAIL;
+  const nodeEnv      = process.env.NODE_ENV || 'not set';
+
+  let jsonParseOk = false;
+  let jsonParseError = null;
+  let detectedProjectId = null;
+  if (hasSAJson) {
+    try {
+      const parsed = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
+      jsonParseOk = true;
+      detectedProjectId = parsed.project_id || null;
+    } catch (e) {
+      jsonParseError = e.message;
+    }
+  }
+
+  let firestoreOk = false;
+  let firestoreError = null;
+  try {
+    const { getDb } = require('./lib/firebase');
+    const db = getDb();
+    await db.collection('_debug').doc('ping').get();
+    firestoreOk = true;
+  } catch (e) {
+    firestoreError = e.message;
+  }
+
+  res.json({
+    env: nodeEnv,
+    credentials: {
+      FIREBASE_SERVICE_ACCOUNT_JSON: hasSAJson,
+      json_parses_ok: jsonParseOk,
+      json_parse_error: jsonParseError,
+      detected_project_id: detectedProjectId,
+      GOOGLE_APPLICATION_CREDENTIALS: hasGACred,
+      FIREBASE_PROJECT_ID: hasProjectId,
+      FIREBASE_CLIENT_EMAIL: hasEmail,
+      FIREBASE_PRIVATE_KEY: hasKey,
+      ADMIN_EMAIL: hasAdminEmail,
+    },
+    firestore_ping: firestoreOk,
+    firestore_error: firestoreError,
+  });
+});
+
 app.post('/api/promo', (req, res) => {
   const code = String(req.body?.code || '').trim().toUpperCase();
 
