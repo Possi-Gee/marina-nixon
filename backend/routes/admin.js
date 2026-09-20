@@ -20,31 +20,42 @@ module.exports = () => {
 
       const imageInput = req.body.image || req.body.image_url || req.body.img || null;
       let uploadedImage = null;
-      if (imageInput && (imageInput.startsWith('data:') || imageInput.startsWith('http'))) {
+      let img = null;
+      if (imageInput && (String(imageInput).startsWith('data:') || String(imageInput).startsWith('http'))) {
         uploadedImage = await uploadImage(imageInput).catch((err) => {
           console.warn('Cloudinary upload non-fatal warning:', err.message);
           return null;
         });
       }
+      if (uploadedImage) {
+        img = uploadedImage.url;
+      } else if (imageInput && String(imageInput).startsWith('data:image/') && String(imageInput).length < 750000) {
+        img = imageInput;
+      } else if (imageInput && !String(imageInput).startsWith('data:')) {
+        img = imageInput;
+      }
 
-      const ref = db.collection('products').doc();
-      await ref.set({
+      const product = {
         name,
         category,
+        cat: category,
         label: label || null,
-        price,
+        price: Number(price),
         old_price: old_price || null,
-        badge: badge || null,
+        badge: badge || 'new',
         stock: stock || 50,
         description: description || null,
         sizes: Array.isArray(sizes) ? sizes : (sizes ? String(sizes).split(',').map((s) => s.trim()).filter(Boolean) : []),
-        img: uploadedImage ? uploadedImage.url : (imageInput || null),
+        img,
         image_public_id: uploadedImage ? uploadedImage.public_id : null,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
-      });
+      };
 
-      res.status(201).json({ message: 'Product added', product_id: ref.id });
+      const ref = db.collection('products').doc();
+      await ref.set(product);
+
+      res.status(201).json({ message: 'Product added', product_id: ref.id, product: { id: ref.id, ...product } });
     } catch (err) {
       console.error('Failed to add product:', err);
       res.status(500).json({ error: 'Failed to add product', message: err.message });
@@ -75,9 +86,16 @@ module.exports = () => {
         await deleteImage(previous.image_public_id).catch(() => null);
       }
 
+      const nextImg = uploadedImage
+        ? uploadedImage.url
+        : (imageInput && String(imageInput).startsWith('data:image/') && String(imageInput).length < 750000
+          ? imageInput
+          : (imageInput && !String(imageInput).startsWith('data:') ? imageInput : previous.img));
+
       await ref.update({
         name,
         category,
+        cat: category,
         label: label || null,
         price,
         old_price: old_price || null,
@@ -85,7 +103,8 @@ module.exports = () => {
         stock,
         description: description || null,
         sizes: Array.isArray(sizes) ? sizes : (sizes ? String(sizes).split(',').map((s) => s.trim()).filter(Boolean) : []),
-        ...(uploadedImage ? { img: uploadedImage.url, image_public_id: uploadedImage.public_id } : {}),
+        img: nextImg || previous.img || null,
+        ...(uploadedImage ? { image_public_id: uploadedImage.public_id } : {}),
         updated_at: new Date().toISOString(),
       });
 

@@ -17,6 +17,26 @@ module.exports = () => {
     };
   };
 
+  const mergeCatalog = (firestoreRows) => {
+    const { DEFAULT_PRODUCTS } = require('../bootstrap');
+    const byId = new Map();
+    DEFAULT_PRODUCTS.forEach((product) => {
+      byId.set(String(product.id), { ...product });
+    });
+    (firestoreRows || []).forEach((product) => {
+      const id = String(product.id);
+      const prev = byId.get(id) || {};
+      byId.set(id, {
+        ...prev,
+        ...product,
+        cat: product.cat || product.category || prev.cat,
+        category: product.category || product.cat || prev.category,
+        img: product.img || product.primary_image || prev.img || '',
+      });
+    });
+    return Array.from(byId.values());
+  };
+
   // Get all products with filtering
   router.get('/', async (req, res) => {
     const { category, sort } = req.query;
@@ -25,9 +45,11 @@ module.exports = () => {
     try {
       const db = getDb();
       const snap = await db.collection('products').get();
-      rows = snap.docs.map(toProduct);
+      rows = mergeCatalog(snap.docs.map(toProduct));
     } catch (err) {
       console.warn('GET /api/products Firestore read warning:', err.message);
+      const { DEFAULT_PRODUCTS } = require('../bootstrap');
+      rows = [...DEFAULT_PRODUCTS];
     }
 
     if (!rows || rows.length === 0) {
@@ -61,9 +83,11 @@ module.exports = () => {
     try {
       const db = getDb();
       const snap = await db.collection('products').get();
-      rows = snap.docs.map(toProduct);
+      rows = mergeCatalog(snap.docs.map(toProduct));
     } catch (err) {
       console.warn('GET /api/products/search Firestore read warning:', err.message);
+      const { DEFAULT_PRODUCTS } = require('../bootstrap');
+      rows = [...DEFAULT_PRODUCTS];
     }
 
     if (!rows || rows.length === 0) {
