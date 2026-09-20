@@ -2809,53 +2809,63 @@ html, body {
 /* ── Hero Slider Banner (Inspired by reference) ── */
 .hero-slider-container {
   max-width: 1280px;
-  margin: 1.25rem auto 1.5rem;
+  margin: 1rem auto 1.25rem;
   padding: 0 1rem;
 }
 .hero-carousel-viewport {
   position: relative;
-  border-radius: 16px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 12px 35px rgba(20, 15, 10, 0.12);
-  background: #111;
-  height: 420px;
-  max-height: 440px;
-  min-height: 380px;
+  box-shadow: 0 8px 28px rgba(20, 15, 10, 0.1);
+  background: #1a1510;
+  height: 340px;
 }
 .hero-carousel-track {
   display: flex;
-  transition: transform 0.55s cubic-bezier(0.25, 1, 0.5, 1);
+  flex-wrap: nowrap;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
   will-change: transform;
   width: 100%;
   height: 100%;
 }
 .hero-car-slide {
-  min-width: 100%;
+  flex: 0 0 100%;
   width: 100%;
+  min-width: 100%;
+  max-width: 100%;
   flex-shrink: 0;
   position: relative;
   display: flex;
   align-items: center;
   height: 100%;
-  max-height: 440px;
   overflow: hidden;
   box-sizing: border-box;
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
+  background: #1a1510;
+}
+.hero-slide-media {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.hero-slide-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 68% 22%;
+  display: block;
 }
 .hero-slide-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(14,10,7,0.88) 0%, rgba(14,10,7,0.65) 45%, rgba(14,10,7,0.2) 75%, transparent 100%);
-  z-index: 1;
+  background: linear-gradient(90deg, rgba(18,13,10,0.78) 0%, rgba(18,13,10,0.42) 38%, rgba(18,13,10,0.12) 62%, transparent 100%);
+  z-index: 2;
   pointer-events: none;
 }
 .hero-slide-content {
   position: relative;
-  z-index: 2;
-  max-width: 620px;
-  padding: 3rem 3.5rem 3rem 4rem;
+  z-index: 3;
+  max-width: 420px;
+  padding: 2rem 1.75rem 2rem 2.75rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -2868,66 +2878,68 @@ html, body {
   align-items: center;
   gap: 6px;
   font-family: 'Jost', Arial, sans-serif;
-  font-size: 11.5px;
-  font-weight: 700;
-  letter-spacing: 2.5px;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 3px;
   text-transform: uppercase;
-  color: #FFE57F;
-  margin-bottom: 0.85rem;
+  color: var(--ca, #C9A96E);
+  margin-bottom: 0.55rem;
 }
 .hero-slide-title {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: clamp(2rem, 3.8vw, 3.2rem);
-  font-weight: 700;
-  line-height: 1.12;
-  margin-bottom: 0.85rem;
+  font-size: clamp(1.45rem, 2.4vw, 2.05rem);
+  font-weight: 500;
+  line-height: 1.18;
+  margin-bottom: 0.5rem;
   color: #FFFFFF;
-  letter-spacing: -0.5px;
-  text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+  letter-spacing: 0.5px;
+  text-transform: none;
 }
 .hero-slide-sub {
   font-family: 'Jost', Arial, sans-serif;
-  font-size: 1.05rem;
-  color: rgba(255, 255, 255, 0.92);
-  line-height: 1.45;
-  margin-bottom: 1.75rem;
-  max-width: 500px;
-  text-shadow: 0 1px 6px rgba(0,0,0,0.3);
+  font-size: 0.8rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.5;
+  margin-bottom: 1.1rem;
+  max-width: 340px;
 }
 .hero-slide-cta-row {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: 0.9rem;
   flex-wrap: wrap;
 }
 .hero-slide-btn {
-  background: #FFFFFF;
-  color: #111111;
+  background: transparent;
+  color: #F5E6C8;
   font-family: 'Jost', Arial, sans-serif;
-  font-size: 0.88rem;
-  font-weight: 700;
-  letter-spacing: 1.5px;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  padding: 0.85rem 2rem;
-  border-radius: 30px;
-  border: none;
+  padding: 0.55rem 1.15rem;
+  border-radius: 0;
+  border: 1px solid rgba(201, 169, 110, 0.75);
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  box-shadow: none;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   display: inline-flex;
   align-items: center;
   gap: 8px;
 }
 .hero-slide-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-  background: #F8F5EE;
+  transform: none;
+  background: #C9A96E;
+  color: #1A1510;
+  border-color: #C9A96E;
+  box-shadow: none;
 }
 .hero-slide-footnote {
   font-family: 'Jost', Arial, sans-serif;
-  font-size: 11.5px;
-  color: rgba(255, 255, 255, 0.8);
-  letter-spacing: 0.5px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.4px;
 }
 
 /* Arrows */
@@ -2935,22 +2947,22 @@ html, body {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 44px;
-  height: 44px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(6px);
   color: #1A1A1A;
   border: none;
-  font-size: 22px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 500;
   line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 10;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.16);
   transition: background 0.2s ease, transform 0.2s ease;
 }
 .hero-car-arrow:hover {
@@ -2978,6 +2990,8 @@ html, body {
 .hero-car-dot {
   width: 8px;
   height: 8px;
+  padding: 0;
+  border: none;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.45);
   cursor: pointer;
@@ -3058,23 +3072,26 @@ html, body {
     padding: 0 0.75rem;
   }
   .hero-carousel-viewport {
-    height: 360px;
-    max-height: 380px;
-    min-height: 300px;
+    height: 300px;
+  }
+  .hero-slide-media img {
+    object-position: 70% 18%;
   }
   .hero-slide-overlay {
-    background: linear-gradient(180deg, rgba(14,10,7,0.7) 0%, rgba(14,10,7,0.85) 100%);
+    background: linear-gradient(180deg, rgba(18,13,10,0.15) 0%, rgba(18,13,10,0.35) 40%, rgba(18,13,10,0.82) 100%);
   }
   .hero-slide-content {
     max-width: 100%;
-    padding: 2rem 1.5rem;
+    padding: 1.25rem 1.15rem 2.4rem;
+    justify-content: flex-end;
+    height: 100%;
   }
   .hero-slide-title {
-    font-size: 1.85rem;
+    font-size: 1.4rem;
   }
   .hero-slide-sub {
-    font-size: 0.92rem;
-    margin-bottom: 1.25rem;
+    font-size: 0.75rem;
+    margin-bottom: 0.85rem;
   }
 }
 
@@ -3743,29 +3760,30 @@ nav {
 }
 
 /* LUXURY PRODUCT CARDS */
-.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;padding:0 24px 3.5rem;max-width:1440px;margin:0 auto}
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px;padding:0 24px 3.5rem;max-width:1440px;margin:0 auto}
 .prod-card{
   background:var(--cw);
-  border:1px solid rgba(221,213,196,0.55);
-  border-radius:4px;
+  border:1px solid rgba(201,169,110,0.28);
+  border-radius:18px;
   cursor:pointer;
   position:relative;
   display:flex;
   flex-direction:column;
   overflow:hidden;
-  transition:all .45s cubic-bezier(0.16,1,0.3,1);
-  box-shadow:0 2px 12px rgba(42,30,20,0.04);
+  transition:transform .45s cubic-bezier(0.16,1,0.3,1), box-shadow .45s cubic-bezier(0.16,1,0.3,1), border-color .45s ease;
+  box-shadow:0 8px 22px rgba(42,30,20,0.06);
 }
 .prod-card:hover{
-  transform:translateY(-8px);
-  border-color:rgba(201,169,110,0.7);
-  box-shadow:0 24px 48px rgba(42,30,20,0.12),0 0 0 1px rgba(201,169,110,0.2);
+  transform:translateY(-6px);
+  border-color:rgba(201,169,110,0.65);
+  box-shadow:0 18px 40px rgba(42,30,20,0.12),0 0 0 1px rgba(201,169,110,0.18);
 }
 .prod-img{
   aspect-ratio:3/4;
   position:relative;
   overflow:hidden;
   background:linear-gradient(160deg,#EDE6D8 0%,#D8CFBE 100%);
+  border-radius:18px 18px 0 0;
 }
 .prod-img::after{
   content:'';
@@ -3827,13 +3845,13 @@ nav {
   position:absolute;
   top:14px;
   left:14px;
-  padding:4px 10px;
+  padding:4px 11px;
   font-family:'Jost',Arial,sans-serif;
   font-size:8px;
   letter-spacing:2px;
   text-transform:uppercase;
-  font-weight:700;
-  border-radius:1px;
+  font-weight:600;
+  border-radius:999px;
   z-index:3;
 }
 .b-new{background:#1E1814;color:#C9A96E}
@@ -3920,9 +3938,9 @@ nav {
   font-family:'Jost',Arial,sans-serif;
   font-size:9.5px;
   font-weight:600;
-  padding:4px 9px;
+  padding:4px 10px;
   border:1px solid rgba(201,169,110,0.45);
-  border-radius:4px;
+  border-radius:999px;
   cursor:pointer;
   color:#4A3B2C;
   background:#FAF8F5;
@@ -4113,6 +4131,7 @@ nav {
   /* LOOKBOOK */
   .lookbook-grid-women,.lookbook-grid-men,.lookbook-stack{grid-template-columns:1fr}
   .lookbook-grid-men .lb-item:nth-child(1){grid-column:span 1}
+  .lookbook-hero{height:240px;max-height:32vh;min-height:200px}
 
   /* PRODUCTS */
   .prod-grid{grid-template-columns:repeat(2,1fr);gap:14px;padding:0 14px 3.5rem}
@@ -4374,8 +4393,8 @@ nav{background:rgba(20,14,10,.96);backdrop-filter:blur(18px);-webkit-backdrop-fi
 .cat-name{letter-spacing:3px;font-weight:500}
 
 /* Product cards — lifted gallery of pieces */
-.prod-card{border-radius:2px;transition:transform .35s ease,box-shadow .35s ease}
-.prod-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-card)}
+.prod-card{border-radius:18px;transition:transform .35s ease,box-shadow .35s ease,border-color .35s ease}
+.prod-card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(42,30,20,0.12),0 0 0 1px rgba(201,169,110,0.18)}
 .prod-info{position:relative}
 .prod-info::before{content:'';position:absolute;top:0;left:1rem;right:1rem;height:1px;background:linear-gradient(90deg,transparent,rgba(201,169,110,.55),transparent)}
 .prod-name{font-family:var(--serif);letter-spacing:1px;text-transform:none;font-size:15px;color:#3A3028}
@@ -4383,7 +4402,7 @@ nav{background:rgba(20,14,10,.96);backdrop-filter:blur(18px);-webkit-backdrop-fi
 .prod-add-btn{background:linear-gradient(135deg,#3A3028,#5B4A35)}
 .prod-add-btn:hover{background:var(--ca);color:var(--cdark)}
 .prod-wl:hover{color:var(--csale)}
-.sz{border-radius:3px;letter-spacing:1px}
+.sz{border-radius:999px;letter-spacing:1px}
 
 /* Shop bar — refined chips */
 .fbtn{border-radius:999px;padding:8px 20px;letter-spacing:2px}
@@ -4391,6 +4410,70 @@ nav{background:rgba(20,14,10,.96);backdrop-filter:blur(18px);-webkit-backdrop-fi
 .filters .sort-wrap select{border-radius:999px;padding:8px 14px}
 
 /* Lookbook */
+.lookbook-hero {
+  position: relative;
+  height: 360px;
+  max-height: 42vh;
+  min-height: 260px;
+  overflow: hidden;
+  background: #1a1510;
+}
+.lookbook-hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 18%;
+  display: block;
+}
+.lookbook-hero-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(20,14,10,0.28) 0%, rgba(20,14,10,0.12) 40%, rgba(20,14,10,0.72) 100%);
+  pointer-events: none;
+}
+.lookbook-hero-copy {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 1.5rem 2.25rem;
+  text-align: center;
+}
+.lookbook-hero-copy p.lb-kicker {
+  font-family: 'Jost', Arial, sans-serif;
+  font-size: 9px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: #C9A96E;
+  margin-bottom: 0.65rem;
+}
+.lookbook-hero-copy h1 {
+  font-family: var(--serif);
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 500;
+  color: #FDFAF5;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  line-height: 1.05;
+  margin-bottom: 0.7rem;
+}
+.lookbook-hero-copy .lb-rule {
+  width: 48px;
+  height: 1px;
+  background: #C9A96E;
+  margin: 0 auto 0.85rem;
+}
+.lookbook-hero-copy p.lb-sub {
+  font-family: 'Jost', Arial, sans-serif;
+  font-size: 12px;
+  color: rgba(253,250,245,0.72);
+  letter-spacing: 1.2px;
+  max-width: 420px;
+}
 .lb-hero::after{content:'';position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:72px;height:2px;background:linear-gradient(90deg,transparent,var(--ca),transparent)}
 .lb-hero h1{font-family:var(--serif);letter-spacing:4px;font-weight:500}
 .lb-tag{letter-spacing:2.5px;background:rgba(20,14,10,.55);padding:5px 12px;border:1px solid rgba(201,169,110,.45)}
@@ -4399,6 +4482,25 @@ nav{background:rgba(20,14,10,.96);backdrop-filter:blur(18px);-webkit-backdrop-fi
 
 /* About */
 .about-intro-grid h2{font-family:var(--serif);letter-spacing:2px;font-weight:500}
+.about-portrait {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #EDE6D8;
+  border: 1px solid rgba(201, 169, 110, 0.28);
+  box-shadow: 0 16px 40px rgba(42, 30, 20, 0.12);
+}
+.about-portrait img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center 12%;
+  display: block;
+}
 blockquote,.quote-block{font-family:var(--serif)}
 
 /* Contact — inputs polished */
@@ -6596,7 +6698,7 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
   
 <!-- HERO SLIDER BANNER (SLIDERABLE & ADMIN CONTROLLED) -->
 <div class="hero-slider-container" id="heroSliderSection">
-  <div class="hero-carousel-viewport" id="heroCarouselViewport" onmouseenter="stopHeroAutoPlay()" onmouseleave="startHeroAutoPlay()">
+  <div class="hero-carousel-viewport" id="heroCarouselViewport">
     <div class="hero-carousel-track" id="heroCarouselTrack">
       <!-- Dynamically generated slides -->
     </div>
@@ -6706,57 +6808,6 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
       <button onclick="subscribe()">Subscribe</button>
     </div>
   </div>
-
-  <footer>
-    <div class="ft-grid">
-      <div>
-        <div class="ft-logo" onclick="go('home')" style="cursor:pointer;display:inline-block;margin-bottom:14px" title="Marina Nixon — Wear Rina">
-          <img src="images/logo.png" alt="Marina Nixon — Wear Rina · A Signature of Luxury" style="height:56px;max-width:180px;object-fit:contain;display:block;border-radius:4px;border:1px solid rgba(201,169,110,0.3);box-shadow:0 4px 16px rgba(0,0,0,0.3)">
-        </div>
-        <p class="ft-tag">Wear Rina · A Signature of Luxury. Where African heritage craftsmanship meets modern haute couture. Every piece is meticulously tailored in Accra, Ghana.</p>
-        <div class="ft-socials">
-          <a class="ft-soc" href="https://instagram.com" target="_blank" rel="noopener" title="Instagram" aria-label="Instagram"><i class="ti ti-brand-instagram" aria-hidden="true"></i></a>
-          <a class="ft-soc" href="https://facebook.com" target="_blank" rel="noopener" title="Facebook" aria-label="Facebook"><i class="ti ti-brand-facebook" aria-hidden="true"></i></a>
-          <a class="ft-soc" href="https://twitter.com" target="_blank" rel="noopener" title="Twitter" aria-label="Twitter"><i class="ti ti-brand-twitter" aria-hidden="true"></i></a>
-          <a class="ft-soc" href="https://tiktok.com" target="_blank" rel="noopener" title="TikTok" aria-label="TikTok"><i class="ti ti-brand-tiktok" aria-hidden="true"></i></a>
-        </div>
-      </div>
-      <div class="ft-col">
-        <h4>Collections</h4>
-        <a onclick="filterGo('evening')">Evening Wear</a>
-        <a onclick="filterGo('casual')">Casual Luxe</a>
-        <a onclick="filterGo('heritage')">Heritage Line</a>
-        <a onclick="filterGo('men')">Men's Collection</a>
-        <a onclick="filterGo('new')">New Season</a>
-        <a onclick="filterGo('sale')">Archive Sale</a>
-      </div>
-      <div class="ft-col">
-        <h4>The Maison</h4>
-        <a onclick="go('about')">Our Story & Heritage</a>
-        <a onclick="openInfo('size')">Atelier Size Guide</a>
-        <a onclick="openInfo('care')">Fabric & Garment Care</a>
-        <a onclick="openInfo('sustain')">Sustainable Sourcing</a>
-        <a onclick="go('contact')">Private Consultation</a>
-      </div>
-      <div class="ft-col">
-        <h4>Client Services</h4>
-        <a onclick="openInfo('shipping')">Global & Local Shipping</a>
-        <a onclick="openInfo('returns')">Returns & Exchanges</a>
-        <a onclick="go('account');showAccSec('track')">Track Your Order</a>
-        <a onclick="openInfo('faq')">Client FAQs</a>
-        <a onclick="go('account')">Atelier Account</a>
-      </div>
-    </div>
-    <div class="ft-bottom">
-      <div class="ft-copy">© 2026 Marina Nixon Clothing · Haute Couture Atelier · Accra, Ghana</div>
-      <div class="ft-payments">
-        <span class="ft-pm">Visa</span>
-        <span class="ft-pm">Mastercard</span>
-        <span class="ft-pm">MTN MoMo</span>
-        <span class="ft-pm">Telecel Cash</span>
-      </div>
-    </div>
-  </footer>
 </section>
 
 <!-- SHOP -->
@@ -6812,12 +6863,6 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
     <p style="font-family:var(--sans);font-size:12px;letter-spacing:1px;color:var(--cbl);margin-bottom:1rem">Require bespoke sizing or styling consultation?</p>
     <button class="btn-dark" onclick="openWA()" style="padding:12px 32px;letter-spacing:2px"><i class="ti ti-brand-whatsapp" style="font-size:15px;vertical-align:-2px;margin-right:6px"></i> Concierge WhatsApp Order</button>
   </div>
-  <footer>
-    <div class="ft-bottom" style="border-top:1px solid #2A1E14;padding-top:1.2rem">
-      <div class="ft-copy">© 2026 Marina Nixon Clothing · Haute Couture Atelier</div>
-      <div class="ft-payments"><span class="ft-pm">Visa</span><span class="ft-pm">Mastercard</span><span class="ft-pm">MTN MoMo</span><span class="ft-pm">Telecel</span></div>
-    </div>
-  </footer>
 </section>
 
 <!-- CART -->
@@ -7022,14 +7067,14 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
 <section id="lookbook">
 
   <!-- LOOKBOOK HERO BANNER -->
-  <div class="lookbook-hero" style="position:relative;min-height:92vh;min-height:92svh;overflow:hidden">
-    <img src="images/catalog/look1.png" alt="Marina Nixon SS 2026" style="width:100%;height:100%;object-fit:cover;object-position:center top">
-    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(20,14,10,0.3) 0%,rgba(20,14,10,0.15) 40%,rgba(20,14,10,0.7) 100%)"></div>
-    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:4rem;text-align:center">
-      <p style="font-family:'Jost',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:#C9A96E;margin-bottom:1rem">Marina Nixon · SS 2026</p>
-      <h1 style="font-size:clamp(38px,6vw,70px);font-weight:400;color:#FDFAF5;letter-spacing:6px;text-transform:uppercase;line-height:1.05;margin-bottom:1rem">Lookbook</h1>
-      <div style="width:60px;height:1px;background:#C9A96E;margin:0 auto 1.2rem"></div>
-      <p style="font-family:'Jost',Arial,sans-serif;font-size:13px;color:rgba(253,250,245,0.7);letter-spacing:1.5px;max-width:420px">A season of warmth, texture, and understated power</p>
+  <div class="lookbook-hero">
+    <img class="lookbook-hero-img" src="images/catalog/look1.png" alt="Marina Nixon SS 2026">
+    <div class="lookbook-hero-shade"></div>
+    <div class="lookbook-hero-copy">
+      <p class="lb-kicker">Marina Nixon · SS 2026</p>
+      <h1>Lookbook</h1>
+      <div class="lb-rule"></div>
+      <p class="lb-sub">A season of warmth, texture, and understated power</p>
     </div>
   </div>
 
@@ -7233,11 +7278,7 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
       <button onclick="go('shop')" style="padding:13px 40px;border:1px solid #C9A96E;color:#C9A96E;font-family:'Jost',Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;background:transparent;transition:all .3s" onmouseover="this.style.background='#C9A96E';this.style.color='#1E1814'" onmouseout="this.style.background='transparent';this.style.color='#C9A96E'">Shop the Lookbook</button>
     </div>
   </div>
-
-  <footer><div class="ft-bottom" style="background:var(--cdark);padding:1.2rem 2rem;border-top:1px solid #2A1E14"><div class="ft-copy">© 2026 Marina Nixon Clothing</div></div></footer>
 </section>
-
-<!-- ABOUT -->
 <section id="about">
   <div style="background:var(--cdark);padding:5rem 2rem;text-align:center;position:relative;overflow:hidden">
     <div style="position:absolute;inset:0;font-size:280px;font-weight:700;color:rgba(255,255,255,.015);display:flex;align-items:center;justify-content:center;letter-spacing:-10px;pointer-events:none">MN</div>
@@ -7246,7 +7287,9 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
   </div>
   <div style="max-width:820px;margin:0 auto;padding:5rem 2rem">
     <div class="about-intro-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;margin-bottom:5rem">
-      <div style="aspect-ratio:3/4;background:linear-gradient(160deg,#4A3C30,#6E5C48);display:flex;align-items:center;justify-content:center"><span style="font-size:64px;color:rgba(201,169,110,.25);font-weight:700;letter-spacing:-3px">MN</span></div>
+      <div class="about-portrait">
+        <img src="images/marina-nixon-founder.jpg" alt="Marina Nixon, Founder">
+      </div>
       <div>
         <h2 style="font-size:26px;letter-spacing:3px;text-transform:uppercase;color:var(--cbd);margin-bottom:1.5rem;font-weight:400">Born from passion</h2>
         <p style="font-family:'Jost',Arial,sans-serif;font-size:13px;line-height:1.9;color:var(--cbl);margin-bottom:1rem">Marina Nixon Clothing was born from a simple but powerful belief — that every woman deserves to feel extraordinary in what she wears.</p>
@@ -7264,7 +7307,6 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
     <div style="background:var(--cw);padding:2.5rem 1.5rem;text-align:center"><div style="font-size:26px;color:var(--ca);margin-bottom:1rem"><i class="ti ti-clock" aria-hidden="true"></i></div><div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--cbd);margin-bottom:.8rem">Timeless design</div><p style="font-family:'Jost',Arial,sans-serif;font-size:12px;color:var(--cbl);line-height:1.7">We design pieces with longevity in mind — clothes that remain beautiful season after season.</p></div>
     <div style="background:var(--cw);padding:2.5rem 1.5rem;text-align:center"><div style="font-size:26px;color:var(--ca);margin-bottom:1rem"><i class="ti ti-heart" aria-hidden="true"></i></div><div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--cbd);margin-bottom:.8rem">Women first</div><p style="font-family:'Jost',Arial,sans-serif;font-size:12px;color:var(--cbl);line-height:1.7">Every design decision centres on celebrating and empowering the woman who wears our clothes.</p></div>
   </div>
-  <footer><div class="ft-bottom" style="background:var(--cdark);padding:1.2rem 2rem;border-top:1px solid #2A1E14"><div class="ft-copy">© 2026 Marina Nixon Clothing</div></div></footer>
 </section>
 
 <!-- CONTACT -->
@@ -7292,7 +7334,6 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
       <div id="contactOk" style="display:none;background:#E8F5E9;border-left:3px solid #4CAF50;padding:1rem;margin-top:1rem;font-family:'Jost',Arial,sans-serif;font-size:13px;color:#2E7D32"><i class="ti ti-check" aria-hidden="true"></i> Thank you! We'll be in touch within 24 hours.</div>
     </div>
   </div>
-  <footer><div class="ft-bottom" style="background:var(--cdark);padding:1.2rem 2rem;border-top:1px solid #2A1E14"><div class="ft-copy">© 2026 Marina Nixon Clothing</div></div></footer>
 </section>
 
 <!-- ACCOUNT -->
@@ -8331,6 +8372,57 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
     </div><!-- end acc-main -->
   </div><!-- end account-grid -->
 </section>
+
+<footer id="siteFooter">
+  <div class="ft-grid">
+    <div>
+      <div class="ft-logo" onclick="go('home')" style="cursor:pointer;display:inline-block;margin-bottom:14px" title="Marina Nixon — Wear Rina">
+        <img src="images/logo.png" alt="Marina Nixon — Wear Rina · A Signature of Luxury" style="height:56px;max-width:180px;object-fit:contain;display:block;border-radius:4px;border:1px solid rgba(201,169,110,0.3);box-shadow:0 4px 16px rgba(0,0,0,0.3)">
+      </div>
+      <p class="ft-tag">Wear Rina · A Signature of Luxury. Where African heritage craftsmanship meets modern haute couture. Every piece is meticulously tailored in Accra, Ghana.</p>
+      <div class="ft-socials">
+        <a class="ft-soc" href="https://instagram.com" target="_blank" rel="noopener" title="Instagram" aria-label="Instagram"><i class="ti ti-brand-instagram" aria-hidden="true"></i></a>
+        <a class="ft-soc" href="https://facebook.com" target="_blank" rel="noopener" title="Facebook" aria-label="Facebook"><i class="ti ti-brand-facebook" aria-hidden="true"></i></a>
+        <a class="ft-soc" href="https://twitter.com" target="_blank" rel="noopener" title="Twitter" aria-label="Twitter"><i class="ti ti-brand-twitter" aria-hidden="true"></i></a>
+        <a class="ft-soc" href="https://tiktok.com" target="_blank" rel="noopener" title="TikTok" aria-label="TikTok"><i class="ti ti-brand-tiktok" aria-hidden="true"></i></a>
+      </div>
+    </div>
+    <div class="ft-col">
+      <h4>Collections</h4>
+      <a onclick="filterGo('evening')">Evening Wear</a>
+      <a onclick="filterGo('casual')">Casual Luxe</a>
+      <a onclick="filterGo('heritage')">Heritage Line</a>
+      <a onclick="filterGo('men')">Men's Collection</a>
+      <a onclick="filterGo('new')">New Season</a>
+      <a onclick="filterGo('sale')">Archive Sale</a>
+    </div>
+    <div class="ft-col">
+      <h4>The Maison</h4>
+      <a onclick="go('about')">Our Story & Heritage</a>
+      <a onclick="openInfo('size')">Atelier Size Guide</a>
+      <a onclick="openInfo('care')">Fabric & Garment Care</a>
+      <a onclick="openInfo('sustain')">Sustainable Sourcing</a>
+      <a onclick="go('contact')">Private Consultation</a>
+    </div>
+    <div class="ft-col">
+      <h4>Client Services</h4>
+      <a onclick="openInfo('shipping')">Global & Local Shipping</a>
+      <a onclick="openInfo('returns')">Returns & Exchanges</a>
+      <a onclick="go('account');showAccSec('track')">Track Your Order</a>
+      <a onclick="openInfo('faq')">Client FAQs</a>
+      <a onclick="go('account')">Atelier Account</a>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <div class="ft-copy">© 2026 Marina Nixon Clothing · Haute Couture Atelier · Accra, Ghana</div>
+    <div class="ft-payments">
+      <span class="ft-pm">Visa</span>
+      <span class="ft-pm">Mastercard</span>
+      <span class="ft-pm">MTN MoMo</span>
+      <span class="ft-pm">Telecel Cash</span>
+    </div>
+  </div>
+</footer>
 
 <script>
 // ============================================================
@@ -10068,8 +10160,12 @@ let siteSettings = {
 };
 
 let heroCurrentIndex = 0;
+let heroSlideCount = 0;
 let heroAutoPlayTimer = null;
 let heroTouchStartX = 0;
+let heroAnimating = false;
+let heroWrapTimer = null;
+let heroVisibilityBound = false;
 
 function dismissTopCallStrip() {
   const strip = document.getElementById('topCallOrderStrip');
@@ -10096,67 +10192,78 @@ function getGradientForTheme(theme, customColor) {
   }
 }
 
-function renderHeroCarousel() {
-  const track = document.getElementById('heroCarouselTrack');
-  const dotsContainer = document.getElementById('heroCarouselDots');
-  if (!track || !dotsContainer) return;
+function heroSlideMarkup(s, idx) {
+  const defaultImg = DEFAULT_HERO_SLIDES[idx % DEFAULT_HERO_SLIDES.length]?.image
+    || 'images/WhatsApp Image 2026-08-05 at 1.36.06 PM.jpeg';
+  const slideImg = (s.image && String(s.image).trim()) ? String(s.image).trim() : defaultImg;
+  const safeImgUrl = encodeURI(slideImg);
+  const linkTarget = String(s.cta_link || 'shop').replace(/'/g, '');
+  const clickHandler = linkTarget.startsWith('http')
+    ? `window.open('${linkTarget}', '_blank')`
+    : ['evening', 'casual', 'heritage', 'men', 'new'].includes(linkTarget)
+      ? `filterGo('${linkTarget}')`
+      : `go('${linkTarget}')`;
 
-  // Always make sure we have at least all 3 default slides
-  let slides = (Array.isArray(siteSettings.hero_slides) && siteSettings.hero_slides.length >= 2)
-    ? siteSettings.hero_slides.filter(s => s.active !== false)
-    : DEFAULT_HERO_SLIDES;
-
-  if (!slides || !slides.length) {
-    slides = DEFAULT_HERO_SLIDES;
-  }
-
-  if (heroCurrentIndex >= slides.length) heroCurrentIndex = 0;
-
-  // Set track width based on slide count
-  const slideCount = slides.length;
-  track.style.width = (slideCount * 100) + '%';
-  const slidePct = 100 / slideCount;
-
-  // Render slides matching Jumia reference with full-bleed image and editorial overlay
-  track.innerHTML = slides.map((s, idx) => {
-    const defaultImg = DEFAULT_HERO_SLIDES[idx % DEFAULT_HERO_SLIDES.length]?.image || 'images/WhatsApp Image 2026-08-05 at 1.36.06 PM.jpeg';
-    const slideImg = (s.image && String(s.image).trim()) ? String(s.image).trim() : defaultImg;
-    const safeImgUrl = encodeURI(slideImg);
-    const linkTarget = s.cta_link || 'shop';
-    const clickHandler = linkTarget.startsWith('http') 
-      ? `window.open('${linkTarget}', '_blank')` 
-      : ['evening','casual','heritage','men','new'].includes(linkTarget)
-        ? `filterGo('${linkTarget}')`
-        : `go('${linkTarget}')`;
-
-    return `
-      <div class="hero-car-slide" style="width: ${slidePct}%; flex: 0 0 ${slidePct}%; background-image: url('${safeImgUrl}');">
-        <div class="hero-slide-overlay"></div>
-        <div class="hero-slide-content">
-          ${s.badge ? `<div class="hero-slide-badge">• ${escapeHtml(s.badge)}</div>` : ''}
-          <h2 class="hero-slide-title">${escapeHtml(s.title || 'Marina Nixon')}</h2>
-          ${s.subtitle ? `<p class="hero-slide-sub">${escapeHtml(s.subtitle)}</p>` : ''}
-          <div class="hero-slide-cta-row">
-            <button class="hero-slide-btn" onclick="${clickHandler}">
-              <span>${escapeHtml(s.cta_text || 'Shop Now →')}</span>
-            </button>
-            ${s.footnote ? `<span class="hero-slide-footnote">${escapeHtml(s.footnote)}</span>` : ''}
-          </div>
+  return `
+    <div class="hero-car-slide">
+      <div class="hero-slide-media">
+        <img src="${safeImgUrl}" alt="${escapeHtml(s.title || 'Marina Nixon')}">
+      </div>
+      <div class="hero-slide-overlay"></div>
+      <div class="hero-slide-content">
+        ${s.badge ? `<div class="hero-slide-badge">• ${escapeHtml(s.badge)}</div>` : ''}
+        <h2 class="hero-slide-title">${escapeHtml(s.title || 'Marina Nixon')}</h2>
+        ${s.subtitle ? `<p class="hero-slide-sub">${escapeHtml(s.subtitle)}</p>` : ''}
+        <div class="hero-slide-cta-row">
+          <button class="hero-slide-btn" onclick="${clickHandler}">
+            <span>${escapeHtml(s.cta_text || 'Shop Now →')}</span>
+          </button>
+          ${s.footnote ? `<span class="hero-slide-footnote">${escapeHtml(s.footnote)}</span>` : ''}
         </div>
       </div>
-    `;
-  }).join('');
+    </div>
+  `;
+}
 
-  // Render dots
-  dotsContainer.innerHTML = slides.map((_, idx) => 
-    `<div class="hero-car-dot ${idx === heroCurrentIndex ? 'active' : ''}" onclick="goToHeroSlide(${idx});startHeroAutoPlay()"></div>`
-  ).join('');
+function heroDomIndex() {
+  if (heroSlideCount <= 1) return 0;
+  return heroCurrentIndex + 1;
+}
 
-  // Update position
-  goToHeroSlide(heroCurrentIndex, false);
+function setHeroTrackPosition(domIndex, animate) {
+  const track = document.getElementById('heroCarouselTrack');
+  if (!track) return;
+  track.style.transition = animate ? 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)' : 'none';
+  track.style.transform = `translate3d(-${domIndex * 100}%, 0, 0)`;
+  if (!animate) void track.offsetWidth;
+}
 
-  // Setup Touch Swipe
+function visibleHeroIndex() {
+  if (heroSlideCount <= 0) return 0;
+  return ((heroCurrentIndex % heroSlideCount) + heroSlideCount) % heroSlideCount;
+}
+
+function updateHeroDots() {
+  const dots = document.querySelectorAll('#heroCarouselDots .hero-car-dot');
+  const active = visibleHeroIndex();
+  dots.forEach((d, idx) => d.classList.toggle('active', idx === active));
+}
+
+function wrapHeroIfNeeded() {
+  if (heroSlideCount <= 1) return;
+  if (heroCurrentIndex >= heroSlideCount) {
+    heroCurrentIndex = 0;
+    setHeroTrackPosition(1, false);
+  } else if (heroCurrentIndex < 0) {
+    heroCurrentIndex = heroSlideCount - 1;
+    setHeroTrackPosition(heroSlideCount, false);
+  }
+  updateHeroDots();
+}
+
+function bindHeroCarouselEvents() {
   const viewport = document.getElementById('heroCarouselViewport');
+  const track = document.getElementById('heroCarouselTrack');
   if (viewport && !viewport.dataset.touchBound) {
     viewport.dataset.touchBound = 'true';
     viewport.addEventListener('touchstart', (e) => {
@@ -10174,23 +10281,84 @@ function renderHeroCarousel() {
     }, { passive: true });
   }
 
+  if (track && !track.dataset.transitionBound) {
+    track.dataset.transitionBound = 'true';
+    track.addEventListener('transitionend', (e) => {
+      if (e.target !== track || (e.propertyName && e.propertyName !== 'transform')) return;
+      wrapHeroIfNeeded();
+      heroAnimating = false;
+    });
+  }
+
+  if (!heroVisibilityBound) {
+    heroVisibilityBound = true;
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stopHeroAutoPlay();
+      else if (document.getElementById('home')?.classList.contains('active')) startHeroAutoPlay();
+    });
+  }
+}
+
+function renderHeroCarousel() {
+  const track = document.getElementById('heroCarouselTrack');
+  const dotsContainer = document.getElementById('heroCarouselDots');
+  if (!track || !dotsContainer) return;
+
+  let slides = (Array.isArray(siteSettings.hero_slides) && siteSettings.hero_slides.length)
+    ? siteSettings.hero_slides.filter(s => s.active !== false)
+    : DEFAULT_HERO_SLIDES;
+
+  if (!slides || !slides.length) slides = DEFAULT_HERO_SLIDES;
+
+  heroSlideCount = slides.length;
+  if (heroCurrentIndex >= heroSlideCount) heroCurrentIndex = 0;
+  if (heroCurrentIndex < 0) heroCurrentIndex = 0;
+  heroAnimating = false;
+  track.style.width = '100%';
+
+  const realSlidesHtml = slides.map((s, idx) => heroSlideMarkup(s, idx)).join('');
+  if (heroSlideCount > 1) {
+    track.innerHTML = heroSlideMarkup(slides[heroSlideCount - 1], heroSlideCount - 1)
+      + realSlidesHtml
+      + heroSlideMarkup(slides[0], 0);
+    setHeroTrackPosition(heroCurrentIndex + 1, false);
+  } else {
+    track.innerHTML = realSlidesHtml;
+    setHeroTrackPosition(0, false);
+  }
+
+  dotsContainer.innerHTML = slides.map((_, idx) =>
+    `<button type="button" class="hero-car-dot ${idx === visibleHeroIndex() ? 'active' : ''}" onclick="goToHeroSlide(${idx})" aria-label="Go to slide ${idx + 1}"></button>`
+  ).join('');
+
+  bindHeroCarouselEvents();
   startHeroAutoPlay();
 }
 
 function goToHeroSlide(index, animate = true) {
   const track = document.getElementById('heroCarouselTrack');
-  const dots = document.querySelectorAll('.hero-car-dot');
-  const slides = document.querySelectorAll('.hero-car-slide');
-  if (!track || !slides.length) return;
+  if (!track || !heroSlideCount) return;
+  if (heroSlideCount === 1) {
+    heroCurrentIndex = 0;
+    setHeroTrackPosition(0, false);
+    updateHeroDots();
+    return;
+  }
+  if (animate && heroAnimating) return;
 
-  heroCurrentIndex = (index + slides.length) % slides.length;
-  const step = 100 / slides.length;
-  track.style.transition = animate ? 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)' : 'none';
-  track.style.transform = `translateX(-${heroCurrentIndex * step}%)`;
-
-  dots.forEach((d, idx) => {
-    d.classList.toggle('active', idx === heroCurrentIndex);
-  });
+  heroCurrentIndex = index;
+  if (animate) {
+    heroAnimating = true;
+    clearTimeout(heroWrapTimer);
+    heroWrapTimer = setTimeout(() => {
+      wrapHeroIfNeeded();
+      heroAnimating = false;
+    }, 700);
+  } else {
+    wrapHeroIfNeeded();
+  }
+  setHeroTrackPosition(heroDomIndex(), animate);
+  updateHeroDots();
 }
 
 function nextHeroSlide() {
@@ -10205,6 +10373,10 @@ function prevHeroSlide() {
 
 function startHeroAutoPlay() {
   stopHeroAutoPlay();
+  if (heroSlideCount <= 1 || document.hidden) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const home = document.getElementById('home');
+  if (home && !home.classList.contains('active')) return;
   heroAutoPlayTimer = setInterval(() => {
     goToHeroSlide(heroCurrentIndex + 1);
   }, 4500);
@@ -12108,7 +12280,8 @@ function go(id) {
   window.scrollTo(0,0);
   if (id==='shop')    renderShop();
   if (id==='cart')    renderCart();
-  if (id==='home')    loadSiteSettings();
+  if (id==='home') startHeroAutoPlay();
+  else stopHeroAutoPlay();
   renderRecentlyViewed();
   renderHome();
   if (id==='account') {
@@ -12306,9 +12479,13 @@ updateAuthUI();
 const firebaseAuth = window.MN_FIREBASE_AUTH;
 const firebaseSdk = window.MN_FIREBASE_SDK || {};
 
+let appBootstrapped = false;
 const startApp = async () => {
   await restoreSession();
+  updateAuthUI();
   loadProfile();
+  if (appBootstrapped) return;
+  appBootstrapped = true;
   try {
     const cfg = await apiGet('/payments/config');
     if (cfg && cfg.paystack_public_key) {
@@ -12316,12 +12493,15 @@ const startApp = async () => {
       localStorage.setItem('mn_paystack_pub', cfg.paystack_public_key);
     }
   } catch (e) { /* keep local fallback */ }
+  await loadSiteSettings();
   handleHashChange();
   renderHome();
   renderShop();
   const wlStat = document.getElementById('wlStatNum');
   if (wlStat) wlStat.textContent = wishlist.length;
 };
+
+renderHeroCarousel();
 
 if (firebaseAuth && firebaseSdk.onAuthStateChanged) {
   firebaseSdk.onAuthStateChanged(firebaseAuth, async () => {
