@@ -10,7 +10,15 @@ const authMiddleware = async (req, res, next) => {
   try {
     let decoded = null;
     try {
-      decoded = await admin.auth().verifyIdToken(token);
+      // Race verifyIdToken against a 6-second timeout.
+      // On Vercel cold starts, the network call to fetch Google's public keys
+      // can hang indefinitely without this guard, causing the whole request to hang.
+      decoded = await Promise.race([
+        admin.auth().verifyIdToken(token),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('verifyIdToken timed out after 6s')), 6000)
+        ),
+      ]);
     } catch (verifyErr) {
       console.warn('Firebase verifyIdToken warning (falling back to JWT payload):', verifyErr.message);
       // Fallback: decode JWT payload so network glitches or Google public key fetch timeouts never block requests
