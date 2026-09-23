@@ -80,29 +80,27 @@ async function ensureAdminAccount(db = getDb()) {
 async function ensureProducts(db = getDb()) {
   try {
     const snap = await db.collection('products').get();
+
+    // Only seed if the collection is completely empty (first-run / fresh install)
+    // Never re-insert after admin has made changes — deleted products must stay deleted
+    if (snap.size > 0) {
+      return; // Collection already has data — skip seeding
+    }
+
     const batch = db.batch();
     const now = new Date().toISOString();
-    let count = 0;
-
     DEFAULT_PRODUCTS.forEach((product) => {
-      const docId = String(product.id);
-      const existingDoc = snap.docs.find(d => d.id === docId);
-      if (!existingDoc || !existingDoc.data().img) {
-        const ref = db.collection('products').doc(docId);
-        batch.set(ref, {
-          ...product,
-          sizes: Array.isArray(product.sizes) ? product.sizes : [],
-          created_at: existingDoc?.data()?.created_at || now,
-          updated_at: now,
-        }, { merge: true });
-        count++;
-      }
+      const ref = db.collection('products').doc(String(product.id));
+      batch.set(ref, {
+        ...product,
+        sizes: Array.isArray(product.sizes) ? product.sizes : [],
+        created_at: now,
+        updated_at: now,
+      });
     });
 
-    if (count > 0) {
-      await batch.commit();
-      console.log(`[Bootstrap] Synchronized ${count} default products into Firestore with images.`);
-    }
+    await batch.commit();
+    console.log(`[Bootstrap] Seeded ${DEFAULT_PRODUCTS.length} default products into empty Firestore collection.`);
   } catch (err) {
     console.warn('[Bootstrap Warning] ensureProducts Firestore skipped:', err.message);
   }

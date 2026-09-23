@@ -74,11 +74,11 @@ html, body {
 
 
 .acc-admin-link {
+  display: none;
   color: #F5E6C8 !important;
   background: linear-gradient(135deg, rgba(201,169,110,0.18) 0%, rgba(201,169,110,0.06) 100%) !important;
   border: 1px solid rgba(201,169,110,0.5) !important;
   font-weight: 600 !important;
-  display: inline-flex !important;
   align-items: center !important;
   gap: 8px !important;
 }
@@ -1251,8 +1251,8 @@ html, body {
 .chk-left {
   background: var(--cw);
   border: 1px solid rgba(221, 213, 196, 0.75);
-  border-radius: 8px;
-  padding: 2.75rem 2.5rem;
+  border-radius: 10px;
+  padding: 2.5rem 2.25rem;
   box-shadow: 0 4px 24px rgba(42, 30, 20, 0.04);
 }
 
@@ -1264,9 +1264,9 @@ html, body {
 .order-summary {
   background: var(--cw);
   border: 1px solid rgba(221, 213, 196, 0.75);
-  border-radius: 8px;
-  padding: 2rem 2rem 2.25rem;
-  box-shadow: 0 4px 24px rgba(42, 30, 20, 0.04);
+  border-radius: 10px;
+  padding: 2rem 1.75rem 2.25rem;
+  box-shadow: 0 6px 28px rgba(42, 30, 20, 0.05);
 }
 
 .order-summary h3 {
@@ -1277,7 +1277,7 @@ html, body {
   color: var(--cbd);
   border-bottom: 1px solid rgba(201, 169, 110, 0.25);
   padding-bottom: 14px;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 /* CHECKOUT STEPS PROGRESS BAR */
@@ -1301,7 +1301,8 @@ html, body {
   position: relative;
   padding-bottom: 6px;
   transition: all 0.3s ease;
-  cursor: default;
+  cursor: pointer;
+  user-select: none;
 }
 
 .chk-step.active-step {
@@ -1333,36 +1334,308 @@ html, body {
   margin-bottom: 1.5rem;
 }
 
-/* PAYMENT METHODS */
-.payment-methods {
+/* DELIVERY METHOD CARDS */
+.chk-del-group {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 0.5rem;
+}
+
+.chk-del-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 18px;
+  border: 1px solid rgba(201, 169, 110, 0.35);
+  background: #FFFDF9;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  gap: 12px;
+}
+
+.chk-del-card:hover {
+  border-color: var(--ca);
+  background: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(201, 169, 110, 0.12);
+  transform: translateY(-1px);
+}
+
+.chk-del-card.active {
+  border: 1.5px solid var(--ca);
+  background: linear-gradient(135deg, rgba(201, 169, 110, 0.12) 0%, rgba(255, 253, 249, 1) 100%);
+  box-shadow: 0 4px 18px rgba(201, 169, 110, 0.18);
+}
+
+.chk-del-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+}
+
+.chk-del-left input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--ca);
+  cursor: pointer;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.chk-del-title {
+  font-family: 'Jost', Arial, sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--cbd);
+  letter-spacing: 0.3px;
+}
+
+.chk-del-sub {
+  font-family: 'Jost', Arial, sans-serif;
+  font-size: 11.5px;
+  color: var(--cbl);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+.chk-del-price {
+  font-family: 'Jost', Arial, sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--cbd);
+  white-space: nowrap;
+}
+
+.chk-del-badge {
+  font-family: 'Jost', Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--csuc);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ORDER SUMMARY ITEMS & TOTALS */
+.os-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(221, 213, 196, 0.45);
+}
+
+.os-item:last-child {
+  border-bottom: none;
+}
+
+.os-thumb {
+  width: 54px;
+  height: 66px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--cr);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(201, 169, 110, 0.2);
+}
+
+.os-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.os-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.os-name {
+  font-family: 'Jost', Arial, sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--cbd);
+  margin-bottom: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.os-meta {
+  font-family: 'Jost', Arial, sans-serif;
+  font-size: 11.5px;
+  color: var(--cbl);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.os-price {
+  font-family: 'Jost', Arial, sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--cbd);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.os-totals {
+  margin-top: 1.25rem;
+  border-top: 1px solid rgba(201, 169, 110, 0.25);
+  padding-top: 1rem;
+}
+
+.os-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 0;
+  font-family: 'Jost', Arial, sans-serif;
+  font-size: 13px;
+  color: var(--cbl);
+}
+
+.os-row span:last-child {
+  font-weight: 600;
+  color: var(--cbd);
+  font-size: 13.5px;
+}
+
+.os-row.discount span {
+  color: var(--csuc) !important;
+  font-weight: 600;
+}
+
+.os-row.total {
+  border-top: 1px solid rgba(201, 169, 110, 0.35);
+  margin-top: 10px;
+  padding-top: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--cbd);
+}
+
+.os-row.total span:last-child {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--ca);
+  letter-spacing: 0.5px;
+}
+
+/* CART PAGE SUMMARY */
+.cart-summary {
+  background: var(--cw);
+  border: 1px solid rgba(201, 169, 110, 0.35);
+  border-radius: 10px;
+  padding: 1.75rem 1.5rem;
+  box-shadow: 0 4px 20px rgba(42, 30, 20, 0.04);
+}
+
+.cs-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-family: 'Jost', Arial, sans-serif;
+  font-size: 13.5px;
+  color: var(--cbl);
+}
+
+.cs-row span:last-child {
+  font-weight: 600;
+  color: var(--cbd);
+}
+
+.cs-row.total {
+  border-top: 1px solid rgba(201, 169, 110, 0.35);
+  margin-top: 10px;
+  padding-top: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--cbd);
+}
+
+.cs-row.total span:last-child {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--ca);
+}
+
+/* PAYMENT METHODS */
+.pm-options-list {
+  display: grid;
   gap: 12px;
   margin-bottom: 1.5rem;
 }
 
 .pm {
-  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
   border: 1px solid rgba(201, 169, 110, 0.4);
   background: #FFFDF9;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  gap: 14px;
 }
 
 .pm:hover {
   border-color: var(--ca);
-  background: #FFF;
+  background: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(201, 169, 110, 0.12);
+  transform: translateY(-1px);
 }
 
 .pm.active-pm {
-  border-color: var(--cbd);
-  background: #1E1814;
+  border: 1.5px solid var(--ca);
+  background: linear-gradient(135deg, rgba(30, 24, 20, 0.96) 0%, rgba(46, 32, 21, 0.98) 100%);
+  box-shadow: 0 6px 20px rgba(30, 24, 20, 0.15);
+}
+
+.pm.active-pm span,
+.pm.active-pm p {
   color: #FAF6F0 !important;
 }
 
-.pm.active-pm div {
-  color: #FAF6F0 !important;
+.pm.active-pm p {
+  color: rgba(245, 230, 200, 0.8) !important;
+}
+
+.pm-radio-disc {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid rgba(201, 169, 110, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.25s ease;
+}
+
+.pm.active-pm .pm-radio-disc {
+  border-color: var(--ca);
+  background: rgba(201, 169, 110, 0.2);
+}
+
+.pm-radio-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: transparent;
+  transition: all 0.25s ease;
+}
+
+.pm.active-pm .pm-radio-dot {
+  background: var(--ca);
 }
 
 @media(max-width: 900px) {
@@ -1370,6 +1643,7 @@ html, body {
     grid-template-columns: 1fr;
     gap: 2rem;
     margin: 1.5rem auto 4rem;
+    padding: 0 16px;
   }
   .chk-left {
     padding: 1.75rem 1.25rem;
@@ -1377,12 +1651,15 @@ html, body {
   .chk-right {
     position: static;
   }
+  .order-summary {
+    padding: 1.5rem 1.25rem;
+  }
   .fg-row {
     grid-template-columns: 1fr;
     gap: 0;
   }
-  .payment-methods {
-    grid-template-columns: 1fr;
+  .chk-del-card {
+    padding: 12px 14px;
   }
 }
 
@@ -2570,6 +2847,144 @@ html, body {
   }
 }
 
+/* Bulk Action Bar */
+.bulk-action-bar {
+  background: linear-gradient(135deg, #FDF7E7 0%, #FFFDF9 100%);
+  border: 1px solid var(--ca);
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin-bottom: 12px;
+  animation: fadeInBulk 0.2s ease;
+  box-shadow: 0 4px 14px rgba(184, 151, 90, 0.12);
+}
+
+@keyframes fadeInBulk {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Stock Status Pills */
+.stock-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'Jost', Arial, sans-serif;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.stock-status-pill.in-stock {
+  background: #E8F5E9;
+  color: #2E7D32;
+  border: 1px solid #C8E6C9;
+}
+.stock-status-pill.low-stock {
+  background: #FFF8E1;
+  color: #E65100;
+  border: 1px solid #FFE082;
+}
+.stock-status-pill.out-of-stock {
+  background: #FFEBEE;
+  color: #C62828;
+  border: 1px solid #FFCDD2;
+}
+
+/* Low Stock Cards */
+.low-stock-card {
+  background: var(--cw);
+  border: 1px solid #EDE8DF;
+  border-left: 4px solid #E65100;
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.low-stock-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+.low-stock-card.critical {
+  border-left-color: #C62828;
+  background: #FFFDFD;
+}
+.low-stock-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.low-stock-card-header img {
+  width: 44px;
+  height: 52px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #EDE8DF;
+}
+.low-stock-card-header .no-img {
+  width: 44px;
+  height: 52px;
+  background: var(--cr);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(0,0,0,0.3);
+}
+.low-stock-card-info {
+  flex: 1;
+  min-width: 0;
+}
+.low-stock-card-title {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--cbd);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.low-stock-card-meta {
+  font-size: 11px;
+  color: var(--cbl);
+  font-family: 'Jost', Arial, sans-serif;
+}
+.low-stock-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+.low-stock-card-actions input {
+  width: 60px;
+  height: 28px;
+  font-size: 12px;
+  text-align: center;
+  border: 1px solid #DDD5C4;
+  border-radius: 4px;
+  font-family: 'Jost', Arial, sans-serif;
+}
+
+/* Inline Stock Edit in Inventory Table */
+.inline-stock-edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.inline-stock-edit input {
+  width: 65px;
+  height: 28px;
+  font-size: 12px;
+  text-align: center;
+  border: 1px solid var(--ca);
+  border-radius: 4px;
+  font-family: 'Jost', Arial, sans-serif;
+  background: #FFFDF9;
+}
 
 /* ============================================================
    PAYMENT METHOD SELECTION STYLES
@@ -4492,6 +4907,108 @@ nav{background:rgba(20,14,10,.96);backdrop-filter:blur(18px);-webkit-backdrop-fi
 .lb-tag{letter-spacing:2.5px;background:rgba(20,14,10,.55);padding:5px 12px;border:1px solid rgba(201,169,110,.45)}
 .lb-item::after{content:'';position:absolute;inset:6px;border:1px solid rgba(201,169,110,.5);opacity:0;transition:opacity .35s ease;pointer-events:none;z-index:2}
 .lb-item:hover::after{opacity:1}
+
+/* Lookbook skeleton pulse animation */
+@keyframes lb-pulse{0%,100%{opacity:.6}50%{opacity:1}}
+
+/* ── Lookbook Layout: EDITORIAL (3-column magazine grid) ── */
+.lb-layout-editorial{display:grid;gap:3px;background:#F5F0E8;padding:3px}
+.lb-layout-editorial[data-cols="3"]{grid-template-columns:1fr 1.3fr 1fr}
+.lb-layout-editorial .lb-stack{display:flex;flex-direction:column;gap:3px}
+.lb-layout-editorial .lb-img-item{position:relative;overflow:hidden;cursor:pointer}
+.lb-layout-editorial .lb-img-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+.lb-layout-editorial .lb-img-item:hover img{transform:scale(1.04)}
+.lb-item-caption{position:absolute;bottom:0;left:0;right:0;padding:1.2rem;background:linear-gradient(to top,rgba(20,14,10,.85),transparent)}
+.lb-item-cat{font-family:'Jost',Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#C9A96E;margin-bottom:4px}
+.lb-item-name{font-size:14px;letter-spacing:2px;text-transform:uppercase;color:#FDFAF5;font-weight:400}
+.lb-item-price{font-family:'Jost',Arial,sans-serif;font-size:11px;color:rgba(253,250,245,0.65);margin-top:3px}
+.lb-badge-pill{position:absolute;top:1rem;left:1rem;padding:4px 12px;background:#C9A96E;font-family:'Jost',Arial,sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#1E1814;font-weight:700}
+
+/* ── Lookbook Layout: MASONRY ── */
+.lb-layout-masonry{columns:3 auto;column-gap:4px;padding:4px;background:#F5F0E8}
+.lb-layout-masonry .lb-masonry-item{break-inside:avoid;margin-bottom:4px;position:relative;overflow:hidden;cursor:pointer}
+.lb-layout-masonry .lb-masonry-item img{width:100%;display:block;transition:transform .5s}
+.lb-layout-masonry .lb-masonry-item:hover img{transform:scale(1.03)}
+
+/* ── Lookbook Layout: FILM STRIP (horizontal scroll) ── */
+.lb-layout-film{display:flex;overflow-x:auto;gap:4px;padding:4px;background:#F5F0E8;scroll-snap-type:x mandatory;-ms-overflow-style:none;scrollbar-width:none}
+.lb-layout-film::-webkit-scrollbar{display:none}
+.lb-layout-film .lb-film-item{flex:0 0 320px;height:480px;position:relative;overflow:hidden;cursor:pointer;scroll-snap-align:start;border-radius:2px}
+.lb-layout-film .lb-film-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+.lb-layout-film .lb-film-item:hover img{transform:scale(1.04)}
+.lb-film-arrows{display:flex;justify-content:center;gap:12px;padding:1.2rem;background:#F5F0E8}
+.lb-film-arrow-btn{width:36px;height:36px;border:1px solid #C9A96E;background:transparent;color:#C9A96E;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;border-radius:2px}
+.lb-film-arrow-btn:hover{background:#C9A96E;color:#1E1814}
+
+/* ── Lookbook Layout: ALTERNATING (big image + text side by side) ── */
+.lb-layout-alternating{background:#FDFAF5}
+.lb-alt-row{display:grid;grid-template-columns:1fr 1fr;min-height:420px}
+.lb-alt-row:nth-child(even){direction:rtl}
+.lb-alt-row:nth-child(even) > *{direction:ltr}
+.lb-alt-img{position:relative;overflow:hidden}
+.lb-alt-img img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.lb-alt-img:hover img{transform:scale(1.03)}
+.lb-alt-text{display:flex;flex-direction:column;justify-content:center;padding:3.5rem;background:#FDFAF5}
+.lb-alt-text .lb-item-cat{color:#C9A96E;margin-bottom:.8rem}
+.lb-alt-name{font-family:var(--serif);font-size:clamp(20px,2.5vw,30px);letter-spacing:3px;text-transform:uppercase;color:#3A3028;font-weight:400;margin-bottom:1rem}
+.lb-alt-desc{font-family:'Jost',Arial,sans-serif;font-size:13px;color:#8A7A6A;line-height:1.8;margin-bottom:1.5rem}
+.lb-alt-price{font-family:'Jost',Arial,sans-serif;font-size:16px;color:#C9A96E;font-weight:600;margin-bottom:1.5rem}
+.lb-alt-btn{display:inline-block;padding:10px 28px;border:1px solid #C9A96E;color:#3A3028;font-family:'Jost',Arial,sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;background:transparent;transition:all .3s;width:fit-content}
+.lb-alt-btn:hover{background:#C9A96E;color:#1E1814}
+
+/* ── Lookbook Layout: SQUARE GRID ── */
+.lb-layout-square{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:4px;background:#F5F0E8}
+.lb-layout-square .lb-sq-item{position:relative;overflow:hidden;cursor:pointer;aspect-ratio:1}
+.lb-layout-square .lb-sq-item.wide{grid-column:span 2}
+.lb-layout-square .lb-sq-item.tall{grid-row:span 2}
+.lb-layout-square .lb-sq-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+.lb-layout-square .lb-sq-item:hover img{transform:scale(1.05)}
+
+/* Lookbook section label */
+.lb-section-header{text-align:center;padding:4rem 2rem 2.5rem;background:#FDFAF5}
+.lb-section-kicker{font-family:'Jost',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#C9A96E;margin-bottom:.8rem}
+.lb-section-title{font-size:clamp(22px,3vw,34px);font-weight:400;color:#3A3028;letter-spacing:3px;text-transform:uppercase}
+.lb-section-rule{width:46px;height:1px;background:#C9A96E;margin:1rem auto}
+
+/* Lookbook CTA bottom strip */
+.lb-cta-strip{position:relative;overflow:hidden}
+.lb-cta-strip img{width:100%;height:380px;object-fit:cover;object-position:center 30%;display:block}
+.lb-cta-overlay{position:absolute;inset:0;background:rgba(20,14,10,0.58);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem}
+
+/* Lookbook quote divider */
+.lb-quote-block{background:#3A3028;padding:3.5rem 2rem;text-align:center}
+.lb-quote-text{font-size:clamp(16px,2.5vw,24px);color:#FDFAF5;font-style:italic;font-weight:400;max-width:600px;margin:0 auto;line-height:1.7}
+.lb-quote-rule{width:46px;height:1px;background:#C9A96E;margin:1.5rem auto .8rem}
+.lb-quote-attr{font-family:'Jost',Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#C9A96E}
+
+/* Hotspot pins (dynamic) */
+.lb-hotspot{position:absolute;transform:translate(-50%,-50%);z-index:10;cursor:pointer}
+.lb-hotspot-dot{width:28px;height:28px;border-radius:50%;background:rgba(201,169,110,0.92);border:2px solid #fff;box-shadow:0 0 0 4px rgba(201,169,110,0.35);display:flex;align-items:center;justify-content:center;animation:lb-pin-pulse 2.5s ease-in-out infinite}
+.lb-hotspot-dot::after{content:'+';color:#1E1814;font-size:16px;font-weight:700;line-height:1}
+@keyframes lb-pin-pulse{0%,100%{box-shadow:0 0 0 4px rgba(201,169,110,.35)}50%{box-shadow:0 0 0 8px rgba(201,169,110,.15)}}
+.lb-hotspot-card{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#FDFAF5;border:1px solid #EDE8DF;border-radius:8px;padding:10px 14px;min-width:160px;box-shadow:0 8px 24px rgba(0,0,0,0.18);display:none;z-index:20;white-space:nowrap}
+.lb-hotspot:hover .lb-hotspot-card,.lb-hotspot:focus-within .lb-hotspot-card{display:block}
+
+/* Responsive lookbook */
+@media(max-width:768px){
+  .lb-layout-editorial[data-cols="3"]{grid-template-columns:1fr}
+  .lb-layout-masonry{columns:2 auto}
+  .lb-layout-film .lb-film-item{flex:0 0 80vw;height:320px}
+  .lb-alt-row,.lb-alt-row:nth-child(even){grid-template-columns:1fr;direction:ltr}
+  .lb-alt-text{padding:2rem 1.5rem}
+  .lb-layout-square{grid-template-columns:repeat(2,1fr)}
+  .lb-layout-square .lb-sq-item.wide{grid-column:span 1}
+}
+
+/* Admin Lookbook Panel Styles */
+.lb-admin-section-card{background:var(--cw);border:1px solid #EDE8DF;border-radius:10px;margin-bottom:14px;overflow:hidden}
+.lb-admin-section-header{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid #EDE8DF;background:#FAF8F5;cursor:grab}
+.lb-admin-section-header:active{cursor:grabbing}
+.lb-layout-thumb{width:52px;height:36px;border-radius:4px;border:2px solid transparent;cursor:pointer;overflow:hidden;transition:all .2s;background:#EDE8DF}
+.lb-layout-thumb.active{border-color:#C9A96E;box-shadow:0 0 0 2px rgba(201,169,110,.3)}
+.lb-layout-thumb svg{width:100%;height:100%}
+.lb-item-thumb{width:52px;height:52px;object-fit:cover;border-radius:4px;border:1px solid #EDE8DF}
+
 
 /* About */
 .about-intro-grid h2{font-family:var(--serif);letter-spacing:2px;font-weight:500}
@@ -6968,37 +7485,37 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
         
         <div style="margin-top:1.5rem">
           <p style="font-family:'Jost',Arial,sans-serif;font-size:11px;color:var(--cbl);margin-bottom:.8rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600">Select Delivery Method</p>
-          <div style="display:grid;gap:.8rem">
-            <label style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border:1px solid #DDD5C4;background:var(--cw);cursor:pointer;border-radius:6px;transition:border-color .2s">
-              <div style="display:flex;align-items:center;gap:.8rem">
-                <input type="radio" name="delivery" value="standard" checked style="accent-color:var(--ca)">
+          <div class="chk-del-group" id="chkDelGroup">
+            <div class="chk-del-card active" id="del-card-standard" onclick="selDeliveryMethod(this, 'standard')">
+              <div class="chk-del-left">
+                <input type="radio" name="delivery" value="standard" checked>
                 <div>
-                  <div style="font-size:13px;font-weight:600;color:var(--cbd)">Standard Delivery</div>
-                  <div style="font-size:11px;color:var(--cbl)">3–5 business days across Ghana</div>
+                  <div class="chk-del-title">Standard Delivery</div>
+                  <div class="chk-del-sub">3–5 business days across Ghana</div>
                 </div>
               </div>
-              <span style="font-size:13px;font-weight:600;color:var(--cbd)">GH₵ 30</span>
-            </label>
-            <label style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border:1px solid #DDD5C4;background:var(--cw);cursor:pointer;border-radius:6px;transition:border-color .2s">
-              <div style="display:flex;align-items:center;gap:.8rem">
-                <input type="radio" name="delivery" value="express" style="accent-color:var(--ca)">
+              <span class="chk-del-price" id="chkStdPriceLabel">GH₵ 30</span>
+            </div>
+            <div class="chk-del-card" id="del-card-express" onclick="selDeliveryMethod(this, 'express')">
+              <div class="chk-del-left">
+                <input type="radio" name="delivery" value="express">
                 <div>
-                  <div style="font-size:13px;font-weight:600;color:var(--cbd)">Accra Same-Day Express</div>
-                  <div style="font-size:11px;color:var(--cbl)">Orders before 2PM delivered same evening</div>
+                  <div class="chk-del-title">Accra Same-Day Express</div>
+                  <div class="chk-del-sub">Orders before 2PM delivered same evening</div>
                 </div>
               </div>
-              <span style="font-size:13px;font-weight:600;color:var(--cbd)">GH₵ 60</span>
-            </label>
-            <label style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border:1px solid #DDD5C4;background:var(--cw);cursor:pointer;border-radius:6px;transition:border-color .2s">
-              <div style="display:flex;align-items:center;gap:.8rem">
-                <input type="radio" name="delivery" value="pickup" style="accent-color:var(--ca)">
+              <span class="chk-del-price" id="chkExpPriceLabel">GH₵ 60</span>
+            </div>
+            <div class="chk-del-card" id="del-card-pickup" onclick="selDeliveryMethod(this, 'pickup')">
+              <div class="chk-del-left">
+                <input type="radio" name="delivery" value="pickup">
                 <div>
-                  <div style="font-size:13px;font-weight:600;color:var(--cbd)">Atelier Private Fitting &amp; Pickup</div>
-                  <div style="font-size:11px;color:var(--cbl)">Complimentary at Cantonments Flagship Atelier</div>
+                  <div class="chk-del-title">Atelier Private Fitting &amp; Pickup</div>
+                  <div class="chk-del-sub">Complimentary at Cantonments Flagship Atelier</div>
                 </div>
               </div>
-              <span style="font-size:11px;font-weight:700;color:var(--csuc);letter-spacing:1px;text-transform:uppercase">Complimentary</span>
-            </label>
+              <span class="chk-del-badge">Complimentary</span>
+            </div>
           </div>
         </div>
         <button class="btn-solid" style="width:100%;margin-top:2rem;padding:14px;letter-spacing:2px" onclick="nextStep(3)">Continue to Payment</button>
@@ -7076,12 +7593,12 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
       <div class="order-summary">
         <h3>Order summary</h3>
         <div id="chkOrderItems"></div>
-        <div style="margin:.8rem 0">
-          <div style="display:flex;gap:0;margin-bottom:.5rem">
-            <input type="text" placeholder="Promo code" id="promoInp" style="flex:1;padding:8px 10px;border:1px solid #C5B89A;border-right:none;background:transparent;font-family:'Jost',Arial,sans-serif;font-size:12px;outline:none">
-            <button style="padding:8px 14px;background:var(--cbd);color:var(--cw);border:none;font-family:'Jost',Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer" onclick="applyPromo()">Apply</button>
+        <div style="margin:1rem 0;background:#FFFDF9;border:1px solid rgba(201,169,110,0.35);border-radius:8px;padding:10px 12px">
+          <div style="display:flex;gap:6px;align-items:center">
+            <input type="text" placeholder="Promo code (e.g. NIXON10)" id="promoInp" style="flex:1;padding:8px 10px;border:1px solid #D6CCB8;border-radius:4px;background:#FFF;font-family:'Jost',Arial,sans-serif;font-size:12px;outline:none;text-transform:uppercase">
+            <button class="btn-dark" style="padding:8px 14px;font-size:10px;letter-spacing:1px;text-transform:uppercase" onclick="applyPromo()">Apply</button>
           </div>
-          <p style="font-family:'Jost',Arial,sans-serif;font-size:10px;color:var(--cbl)" id="promoMsg"></p>
+          <p style="font-family:'Jost',Arial,sans-serif;font-size:11px;color:var(--cbl);margin-top:5px;margin-bottom:0" id="promoMsg"></p>
         </div>
         <div class="os-totals" id="chkTotals"></div>
       </div>
@@ -7091,217 +7608,23 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
 
 <!-- LOOKBOOK -->
 <section id="lookbook">
-
-  <!-- LOOKBOOK HERO BANNER -->
-  <div class="lookbook-hero">
-    <img class="lookbook-hero-img" src="images/catalog/look1.png" alt="Marina Nixon SS 2026">
-    <div class="lookbook-hero-shade"></div>
-    <div class="lookbook-hero-copy">
-      <p class="lb-kicker">Marina Nixon · SS 2026</p>
-      <h1>Lookbook</h1>
-      <div class="lb-rule"></div>
-      <p class="lb-sub">A season of warmth, texture, and understated power</p>
-    </div>
-  </div>
-
-  <!-- SECTION LABEL -->
-  <div style="text-align:center;padding:4rem 2rem 2.5rem;background:#FDFAF5">
-    <p style="font-family:'Jost',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#C9A96E;margin-bottom:.8rem">Women's Edit</p>
-    <h2 style="font-size:clamp(24px,3vw,36px);font-weight:400;color:#3A3028;letter-spacing:3px;text-transform:uppercase">The Collection</h2>
-    <div style="width:46px;height:1px;background:#C9A96E;margin:1rem auto"></div>
-  </div>
-
-  <!-- WOMEN'S EDITORIAL GRID: 3 columns -->
-  <div class="lookbook-grid-women" style="display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:3px;padding:0 3px;background:#F5F0E8">
-
-    <!-- Col 1: tall gown -->
-    <div class="lb-item" style="position:relative;overflow:hidden;cursor:pointer" onclick="go('shop')">
-      <img src="images/catalog/look2.png" alt="Noir Draped Gown" style="width:100%;height:680px;object-fit:cover;object-position:center top;display:block;transition:transform .5s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-      <div class="hotspot-pin" style="top:44%;left:48%" onclick="event.stopPropagation();quickView('w9')">
-        <div class="hotspot-card">
-          <p style="font-size:9px;color:var(--ca);letter-spacing:1px;text-transform:uppercase">Evening Wear</p>
-          <p style="font-size:12px;font-weight:600;color:var(--cbd);margin:2px 0">Noir Draped Gown</p>
-          <p style="font-size:11px;color:var(--cbl)">GH₵ 780</p>
-          <span style="display:inline-block;margin-top:4px;font-size:10px;color:var(--ca);font-weight:600">Quick View ➔</span>
+  <!-- Dynamic lookbook: rendered by loadLookbook() from Firestore -->
+  <div id="lookbookContainer">
+    <!-- Loading skeleton shown until Firestore data arrives -->
+    <div id="lookbookSkeleton" style="background:#FDFAF5">
+      <div class="lookbook-hero" style="background:#1E1814;display:flex;align-items:center;justify-content:center">
+        <div class="lookbook-hero-copy" style="position:relative;transform:none;opacity:1">
+          <p class="lb-kicker" style="opacity:.5">Marina Nixon</p>
+          <h1 style="color:#F5E6C8">Lookbook</h1>
+          <div class="lb-rule"></div>
+          <p class="lb-sub" style="opacity:.4">Loading collection...</p>
         </div>
       </div>
-      <div style="position:absolute;bottom:0;left:0;right:0;padding:1.5rem;background:linear-gradient(to top,rgba(20,14,10,.85),transparent)">
-        <p style="font-family:'Jost',Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#C9A96E;margin-bottom:4px">Evening Wear</p>
-        <p style="font-size:15px;letter-spacing:2px;text-transform:uppercase;color:#FDFAF5;font-weight:400">Noir Draped Gown</p>
-        <p style="font-family:'Jost',Arial,sans-serif;font-size:12px;color:rgba(253,250,245,0.65);margin-top:4px">GH₵ 780</p>
+      <div style="display:flex;gap:3px;padding:3px;background:#F5F0E8;min-height:300px">
+        <div style="flex:1;background:linear-gradient(135deg,#2A1E14,#1A1209);animation:lb-pulse 1.5s ease-in-out infinite"></div>
+        <div style="flex:1.3;background:linear-gradient(135deg,#1A1209,#2A1E14);animation:lb-pulse 1.5s ease-in-out infinite .2s"></div>
+        <div style="flex:1;background:linear-gradient(135deg,#2A1E14,#1A1209);animation:lb-pulse 1.5s ease-in-out infinite .4s"></div>
       </div>
-    </div>
-
-    <!-- Col 2: tall feature (yellow cape) -->
-    <div class="lb-item" style="position:relative;overflow:hidden;cursor:pointer" onclick="go('shop')">
-      <img src="images/catalog/look3.jpg" alt="Citron Kimono Cape" style="width:100%;height:680px;object-fit:cover;object-position:center top;display:block;transition:transform .5s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-      <div class="hotspot-pin" style="top:36%;left:49%" onclick="event.stopPropagation();quickView('w11')">
-        <div class="hotspot-card">
-          <p style="font-size:9px;color:var(--ca);letter-spacing:1px;text-transform:uppercase">Statement Piece</p>
-          <p style="font-size:12px;font-weight:600;color:var(--cbd);margin:2px 0">Citron Kimono Cape</p>
-          <p style="font-size:11px;color:var(--cbl)">GH₵ 680</p>
-          <span style="display:inline-block;margin-top:4px;font-size:10px;color:var(--ca);font-weight:600">Quick View ➔</span>
-        </div>
-      </div>
-      <div style="position:absolute;top:1.2rem;left:1.2rem;padding:5px 14px;background:#C9A96E">
-        <p style="font-family:'Jost',Arial,sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#1E1814;font-weight:700">New Arrival</p>
-      </div>
-      <div style="position:absolute;bottom:0;left:0;right:0;padding:1.5rem;background:linear-gradient(to top,rgba(20,14,10,.85),transparent)">
-        <p style="font-family:'Jost',Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#C9A96E;margin-bottom:4px">Statement Piece</p>
-        <p style="font-size:15px;letter-spacing:2px;text-transform:uppercase;color:#FDFAF5;font-weight:400">Citron Kimono Cape</p>
-        <p style="font-family:'Jost',Arial,sans-serif;font-size:12px;color:rgba(253,250,245,0.65);margin-top:4px">GH₵ 680</p>
-      </div>
-    </div>
-
-    <!-- Col 3: two stacked -->
-    <div class="lookbook-stack" style="display:flex;flex-direction:column;gap:3px">
-      <div class="lb-item" style="position:relative;overflow:hidden;cursor:pointer;flex:1" onclick="go('shop')">
-        <img src="images/catalog/look4.png" alt="Velour Wrap Dress" style="width:100%;height:338px;object-fit:cover;object-position:center top;display:block;transition:transform .5s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-        <div class="hotspot-pin" style="top:44%;left:47%" onclick="event.stopPropagation();quickView('w2')">
-          <div class="hotspot-card">
-            <p style="font-size:9px;color:var(--ca);letter-spacing:1px;text-transform:uppercase">Evening</p>
-            <p style="font-size:12px;font-weight:600;color:var(--cbd);margin:2px 0">Velour Wrap Dress</p>
-            <p style="font-size:11px;color:var(--cbl)">GH₵ 620</p>
-            <span style="display:inline-block;margin-top:4px;font-size:10px;color:var(--ca);font-weight:600">Quick View ➔</span>
-          </div>
-        </div>
-        <div style="position:absolute;bottom:0;left:0;right:0;padding:1.2rem;background:linear-gradient(to top,rgba(20,14,10,.85),transparent)">
-          <p style="font-family:'Jost',Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#C9A96E;margin-bottom:3px">Evening</p>
-          <p style="font-size:13px;letter-spacing:2px;text-transform:uppercase;color:#FDFAF5">Velour Wrap Dress</p>
-          <p style="font-family:'Jost',Arial,sans-serif;font-size:11px;color:rgba(253,250,245,0.65);margin-top:3px">GH₵ 620</p>
-        </div>
-      </div>
-      <div class="lb-item" style="position:relative;overflow:hidden;cursor:pointer;flex:1" onclick="go('shop')">
-        <img src="images/catalog/look5.png" alt="Linen Blazer Set" style="width:100%;height:338px;object-fit:cover;object-position:center top;display:block;transition:transform .5s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-        <div class="hotspot-pin" style="top:40%;left:52%" onclick="event.stopPropagation();quickView('w3')">
-          <div class="hotspot-card">
-            <p style="font-size:9px;color:var(--ca);letter-spacing:1px;text-transform:uppercase">Casual Luxe</p>
-            <p style="font-size:12px;font-weight:600;color:var(--cbd);margin:2px 0">Linen Blazer Set</p>
-            <p style="font-size:11px;color:var(--cbl)">GH₵ 480</p>
-            <span style="display:inline-block;margin-top:4px;font-size:10px;color:var(--ca);font-weight:600">Quick View ➔</span>
-          </div>
-        </div>
-        <div style="position:absolute;bottom:0;left:0;right:0;padding:1.2rem;background:linear-gradient(to top,rgba(20,14,10,.85),transparent)">
-          <p style="font-family:'Jost',Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#C9A96E;margin-bottom:3px">Casual Luxe</p>
-          <p style="font-size:13px;letter-spacing:2px;text-transform:uppercase;color:#FDFAF5">Linen Blazer Set</p>
-          <p style="font-family:'Jost',Arial,sans-serif;font-size:11px;color:rgba(253,250,245,0.65);margin-top:3px">GH₵ 480</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- FULL WIDTH DIVIDER QUOTE -->
-  <div style="background:#3A3028;padding:3.5rem 2rem;text-align:center">
-    <p style="font-size:clamp(16px,2.5vw,24px);color:#FDFAF5;font-style:italic;font-weight:400;max-width:600px;margin:0 auto;line-height:1.7">"Dress like you mean it — every piece tells your story."</p>
-    <div style="width:46px;height:1px;background:#C9A96E;margin:1.5rem auto .8rem"></div>
-    <p style="font-family:'Jost',Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#C9A96E">— Marina Nixon</p>
-  </div>
-
-  <!-- MEN'S SECTION LABEL -->
-  <div style="text-align:center;padding:4rem 2rem 2.5rem;background:#FDFAF5">
-    <p style="font-family:'Jost',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#C9A96E;margin-bottom:.8rem">Men's Edit</p>
-    <h2 style="font-size:clamp(24px,3vw,36px);font-weight:400;color:#3A3028;letter-spacing:3px;text-transform:uppercase">His Collection</h2>
-    <div style="width:46px;height:1px;background:#C9A96E;margin:1rem auto"></div>
-  </div>
-
-  <!-- MEN'S GRID: 2+1 layout -->
-  <div class="lookbook-grid-men" style="display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:3px;padding:0 3px 3px;background:#F5F0E8">
-
-    <!-- Big left: Black worn (hero shot) -->
-    <div class="lb-item" style="position:relative;overflow:hidden;cursor:pointer" onclick="go('shop')">
-      <img src="images/catalog/look6.jpg" alt="Black Edition Set" style="width:100%;height:600px;object-fit:cover;object-position:center top;display:block;transition:transform .5s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-      <div class="hotspot-pin" style="top:44%;left:52%" onclick="event.stopPropagation();quickView('m1')">
-        <div class="hotspot-card">
-          <p style="font-size:9px;color:var(--ca);letter-spacing:1px;text-transform:uppercase">Men's Collection</p>
-          <p style="font-size:12px;font-weight:600;color:var(--cbd);margin:2px 0">Black Signature Set</p>
-          <p style="font-size:11px;color:var(--cbl)">GH₵ 850</p>
-          <span style="display:inline-block;margin-top:4px;font-size:10px;color:var(--ca);font-weight:600">Quick View ➔</span>
-        </div>
-      </div>
-      <div style="position:absolute;top:1.2rem;left:1.2rem;padding:5px 14px;background:#C9A96E">
-        <p style="font-family:'Jost',Arial,sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#1E1814;font-weight:700">Best Seller</p>
-      </div>
-      <div style="position:absolute;bottom:0;left:0;right:0;padding:1.5rem;background:linear-gradient(to top,rgba(20,14,10,.85),transparent)">
-        <p style="font-family:'Jost',Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#C9A96E;margin-bottom:4px">Men's Collection</p>
-        <p style="font-size:15px;letter-spacing:2px;text-transform:uppercase;color:#FDFAF5;font-weight:400">Black Signature Set</p>
-        <p style="font-family:'Jost',Arial,sans-serif;font-size:12px;color:rgba(253,250,245,0.65);margin-top:4px">GH₵ 850</p>
-      </div>
-    </div>
-
-    <!-- Right col: 3 stacked -->
-    <div class="lookbook-stack" style="display:flex;flex-direction:column;gap:3px">
-      <div class="lb-item" style="position:relative;overflow:hidden;cursor:pointer" onclick="go('shop')">
-        <img src="images/catalog/look7.jpg" alt="Forest Green Set" style="width:100%;height:197px;object-fit:cover;object-position:center top;display:block;transition:transform .5s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-        <div class="hotspot-pin" style="top:42%;left:48%" onclick="event.stopPropagation();quickView('m2')">
-          <div class="hotspot-card">
-            <p style="font-size:9px;color:var(--ca);letter-spacing:1px;text-transform:uppercase">Men's Collection</p>
-            <p style="font-size:12px;font-weight:600;color:var(--cbd);margin:2px 0">Forest Green Set</p>
-            <p style="font-size:11px;color:var(--cbl)">GH₵ 780</p>
-            <span style="display:inline-block;margin-top:4px;font-size:10px;color:var(--ca);font-weight:600">Quick View ➔</span>
-          </div>
-        </div>
-        <div style="position:absolute;bottom:0;left:0;right:0;padding:1rem;background:linear-gradient(to top,rgba(20,14,10,.85),transparent)">
-          <p style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#FDFAF5">Forest Green Set</p>
-          <p style="font-family:'Jost',Arial,sans-serif;font-size:10px;color:rgba(253,250,245,0.6);margin-top:2px">GH₵ 780</p>
-        </div>
-      </div>
-      <div class="lb-item" style="position:relative;overflow:hidden;cursor:pointer" onclick="go('shop')">
-        <img src="images/catalog/look8.jpg" alt="All White Luxe" style="width:100%;height:197px;object-fit:cover;object-position:center top;display:block;transition:transform .5s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-        <div class="hotspot-pin" style="top:42%;left:52%" onclick="event.stopPropagation();quickView('m5')">
-          <div class="hotspot-card">
-            <p style="font-size:9px;color:var(--ca);letter-spacing:1px;text-transform:uppercase">Men's Collection</p>
-            <p style="font-size:12px;font-weight:600;color:var(--cbd);margin:2px 0">All White Luxe Set</p>
-            <p style="font-size:11px;color:var(--cbl)">GH₵ 820</p>
-            <span style="display:inline-block;margin-top:4px;font-size:10px;color:var(--ca);font-weight:600">Quick View ➔</span>
-          </div>
-        </div>
-        <div style="position:absolute;bottom:0;left:0;right:0;padding:1rem;background:linear-gradient(to top,rgba(20,14,10,.85),transparent)">
-          <p style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#FDFAF5">All White Luxe Set</p>
-          <p style="font-family:'Jost',Arial,sans-serif;font-size:10px;color:rgba(253,250,245,0.6);margin-top:2px">GH₵ 820</p>
-        </div>
-      </div>
-      <div style="position:relative;overflow:hidden;cursor:pointer" onclick="go('shop')">
-        <img src="images/catalog/look9.jpg" alt="Heritage Zigzag" style="width:100%;height:197px;object-fit:cover;object-position:center top;display:block;transition:transform .5s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-        <div class="hotspot-pin" style="top:42%;left:48%" onclick="event.stopPropagation();quickView('m7')">
-          <div class="hotspot-card">
-            <p style="font-size:9px;color:var(--ca);letter-spacing:1px;text-transform:uppercase">Men's Collection</p>
-            <p style="font-size:12px;font-weight:600;color:var(--cbd);margin:2px 0">Heritage Zigzag Set</p>
-            <p style="font-size:11px;color:var(--cbl)">GH₵ 950</p>
-            <span style="display:inline-block;margin-top:4px;font-size:10px;color:var(--ca);font-weight:600">Quick View ➔</span>
-          </div>
-        </div>
-        <div style="position:absolute;bottom:0;left:0;right:0;padding:1rem;background:linear-gradient(to top,rgba(20,14,10,.85),transparent)">
-          <p style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#FDFAF5">Heritage Zigzag Set</p>
-          <p style="font-family:'Jost',Arial,sans-serif;font-size:10px;color:rgba(253,250,245,0.6);margin-top:2px">GH₵ 950</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Far right col: flat-lays -->
-    <div style="display:flex;flex-direction:column;gap:3px">
-      <div style="position:relative;overflow:hidden;cursor:pointer" onclick="go('shop')">
-        <img src="images/catalog/look10.jpg" alt="Black Set Flat Lay" style="width:100%;height:295px;object-fit:cover;object-position:center top;display:block;transition:transform .5s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-        <div style="position:absolute;bottom:0;left:0;right:0;padding:1rem;background:linear-gradient(to top,rgba(20,14,10,.85),transparent)">
-          <p style="font-family:'Jost',Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#C9A96E;margin-bottom:2px">New</p>
-          <p style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#FDFAF5">Black Tee Set</p>
-        </div>
-      </div>
-      <div style="position:relative;overflow:hidden;cursor:pointer" onclick="go('shop')">
-        <img src="images/catalog/look11.jpg" alt="Green Set Flat Lay" style="width:100%;height:298px;object-fit:cover;object-position:center top;display:block;transition:transform .5s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-        <div style="position:absolute;bottom:0;left:0;right:0;padding:1rem;background:linear-gradient(to top,rgba(20,14,10,.85),transparent)">
-          <p style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#FDFAF5">Forest Green Set</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- BOTTOM FULL-WIDTH CTA BANNER -->
-  <div style="position:relative;overflow:hidden">
-    <img src="images/catalog/look12.jpg" alt="White Set" style="width:100%;height:420px;object-fit:cover;object-position:center 30%;display:block">
-    <div style="position:absolute;inset:0;background:rgba(20,14,10,0.6);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem">
-      <p style="font-family:'Jost',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#C9A96E;margin-bottom:1rem">The Full Collection</p>
-      <h2 style="font-size:clamp(26px,4vw,42px);font-weight:400;color:#FDFAF5;letter-spacing:4px;text-transform:uppercase;margin-bottom:1.5rem">Shop Every Look</h2>
-      <button onclick="go('shop')" style="padding:13px 40px;border:1px solid #C9A96E;color:#C9A96E;font-family:'Jost',Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;background:transparent;transition:all .3s" onmouseover="this.style.background='#C9A96E';this.style.color='#1E1814'" onmouseout="this.style.background='transparent';this.style.color='#C9A96E'">Shop the Lookbook</button>
     </div>
   </div>
 </section>
@@ -7912,11 +8235,17 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
           <button class="admin-tab-btn" id="tab-admin-catalog" onclick="switchAdminTab('catalog')">
             <i class="ti ti-shirt"></i> <span>Product Catalog</span>
           </button>
+          <button class="admin-tab-btn" id="tab-admin-inventory" onclick="switchAdminTab('inventory')">
+            <i class="ti ti-package"></i> <span>Inventory &amp; Stock</span>
+          </button>
           <button class="admin-tab-btn" id="tab-admin-product-form" onclick="switchAdminTab('product-form')">
             <i class="ti ti-plus"></i> <span>Add Product</span>
           </button>
           <button class="admin-tab-btn" id="tab-admin-banners" onclick="switchAdminTab('banners')">
             <i class="ti ti-sparkles"></i> <span>Banners &amp; Content</span>
+          </button>
+          <button class="admin-tab-btn" id="tab-admin-lookbook" onclick="switchAdminTab('lookbook');loadAdminLookbook()">
+            <i class="ti ti-photo"></i> <span>Lookbook</span>
           </button>
         </div>
 
@@ -7949,13 +8278,31 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
         <!-- Panel 2: Product Catalog -->
         <div id="admin-panel-catalog" style="display:none">
           <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1rem">
-            <p style="font-family:'Jost',Arial,sans-serif;font-size:12px;color:var(--cbl)">Manage all products in the catalog. Edit details or remove pieces from the store.</p>
-            <button class="btn-dark" onclick="loadAdminCatalog()">Refresh Catalog</button>
+            <p style="font-family:'Jost',Arial,sans-serif;font-size:12px;color:var(--cbl)">Manage all products in the catalog. Select multiple to bulk delete, or edit individual pieces.</p>
+            <div style="display:flex;gap:.6rem;flex-wrap:wrap">
+              <button class="btn-dark" onclick="loadAdminCatalog()"><i class="ti ti-refresh"></i> Refresh</button>
+              <button class="btn-solid" onclick="switchAdminTab('product-form')" style="padding:8px 16px;font-size:11px"><i class="ti ti-plus"></i> Add Product</button>
+            </div>
+          </div>
+          <!-- Bulk Action Bar -->
+          <div id="adminBulkBar" class="bulk-action-bar" style="display:none">
+            <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+              <span id="adminBulkCount" style="font-weight:700;font-size:13px;color:var(--cbd)">0 selected</span>
+              <button class="btn-dark" style="border-color:#C62828;color:#C62828;padding:6px 16px;font-size:11px" onclick="deleteSelectedProducts()">
+                <i class="ti ti-trash"></i> Delete Selected
+              </button>
+              <button class="btn-dark" style="padding:6px 14px;font-size:11px" onclick="deselectAllProducts()">
+                <i class="ti ti-x"></i> Deselect All
+              </button>
+            </div>
           </div>
           <div class="admin-table-wrap" style="overflow-x:auto;background:var(--cw);border:1px solid #EDE8DF;border-radius:10px">
             <table class="order-table" id="adminCatalogTable">
               <thead>
                 <tr>
+                  <th style="width:36px;text-align:center">
+                    <input type="checkbox" id="adminSelectAll" onchange="toggleSelectAll(this)" title="Select All" style="width:15px;height:15px;accent-color:var(--ca);cursor:pointer">
+                  </th>
                   <th>Image</th>
                   <th>Name</th>
                   <th>Category &amp; Label</th>
@@ -7966,9 +8313,61 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
                 </tr>
               </thead>
               <tbody id="adminCatalogBody">
-                <tr><td colspan="7" style="padding:1rem;font-family:'Jost',Arial,sans-serif;color:var(--cbl)">Loading products...</td></tr>
+                <tr><td colspan="8" style="padding:1rem;font-family:'Jost',Arial,sans-serif;color:var(--cbl)">Loading products...</td></tr>
               </tbody>
             </table>
+          </div>
+        </div>
+
+        <!-- Panel 3 NEW: Inventory & Stock -->
+        <div id="admin-panel-inventory" style="display:none">
+          <!-- Low Stock Alert Section -->
+          <div style="margin-bottom:1.5rem">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:1rem">
+              <div>
+                <h3 style="font-size:14px;letter-spacing:2px;text-transform:uppercase;color:var(--cbd);font-weight:700;margin-bottom:3px">
+                  <i class="ti ti-alert-triangle" style="color:#E65100;margin-right:6px"></i>Low Stock Alerts
+                </h3>
+                <p style="font-family:'Jost',Arial,sans-serif;font-size:12px;color:var(--cbl)">Products with stock at or below the threshold that need restocking.</p>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <label style="font-family:'Jost',Arial,sans-serif;font-size:12px;color:var(--cbd);font-weight:600">Threshold:</label>
+                <input type="number" id="stockThreshold" value="10" min="1" max="100" style="width:64px;height:32px;font-size:12px;text-align:center;border:1px solid #DDD5C4;border-radius:6px;padding:4px">
+                <button class="btn-dark" onclick="loadAdminInventory()" style="padding:6px 14px;font-size:11px"><i class="ti ti-refresh"></i> Refresh</button>
+              </div>
+            </div>
+            <div id="adminLowStockCards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px">
+              <div style="padding:1.5rem;text-align:center;color:var(--cbl);font-family:'Jost',Arial,sans-serif;font-size:13px;background:var(--cw);border:1px solid #EDE8DF;border-radius:10px">Loading stock data...</div>
+            </div>
+          </div>
+
+          <!-- Full Inventory Table -->
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:1rem">
+              <h3 style="font-size:14px;letter-spacing:2px;text-transform:uppercase;color:var(--cbd);font-weight:700">
+                <i class="ti ti-list" style="margin-right:6px"></i>Full Stock Overview
+              </h3>
+              <div style="display:flex;align-items:center;gap:8px">
+                <input type="text" id="invSearchInput" placeholder="Search products..." oninput="filterInventoryTable(this.value)" style="height:32px;width:200px;font-size:12px;padding:4px 10px;border:1px solid #DDD5C4;border-radius:6px">
+              </div>
+            </div>
+            <div class="admin-table-wrap" style="overflow-x:auto;background:var(--cw);border:1px solid #EDE8DF;border-radius:10px">
+              <table class="order-table" id="adminInventoryTable">
+                <thead>
+                  <tr>
+                    <th>Image</th>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th style="text-align:center">Stock Qty</th>
+                    <th style="text-align:center">Status</th>
+                    <th style="text-align:center">Quick Edit</th>
+                  </tr>
+                </thead>
+                <tbody id="adminInventoryBody">
+                  <tr><td colspan="6" style="padding:1rem;font-family:'Jost',Arial,sans-serif;color:var(--cbl)">Loading inventory...</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
@@ -8395,6 +8794,247 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
           </div>
         </div>
 
+        </div>
+
+        <!-- ADMIN LOOKBOOK PANEL -->
+        <div id="admin-panel-lookbook" style="display:none">
+
+          <!-- Lookbook Hero Editor -->
+          <div style="background:var(--cw);border:1px solid #EDE8DF;border-radius:10px;padding:1.5rem;margin-bottom:1.5rem">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;border-bottom:1px solid #EDE8DF;padding-bottom:10px">
+              <div>
+                <h3 style="font-size:15px;letter-spacing:2px;text-transform:uppercase;color:var(--cbd);font-weight:600;margin-bottom:4px">📸 Lookbook Manager</h3>
+                <p style="font-family:'Jost',Arial,sans-serif;font-size:12px;color:var(--cbl)">Build your Lookbook with your own images. Choose from 5 layout presets per section, add hotspot product pins, and publish to the storefront in real time.</p>
+              </div>
+              <button class="btn-solid" onclick="saveAdminLookbook(this)" style="padding:10px 24px;letter-spacing:2px">💾 Publish Lookbook</button>
+            </div>
+
+            <!-- Hero Banner -->
+            <h4 style="font-family:'Playfair Display',serif;font-size:16px;color:var(--cbd);margin-bottom:12px">1. Hero Banner</h4>
+            <div class="fg-row">
+              <div class="fg">
+                <label>Season Tag / Kicker</label>
+                <input type="text" id="lbHeroKicker" placeholder="e.g. Marina Nixon · SS 2026">
+              </div>
+              <div class="fg">
+                <label>Hero Title</label>
+                <input type="text" id="lbHeroTitle" placeholder="Lookbook">
+              </div>
+            </div>
+            <div class="fg">
+              <label>Hero Subtitle</label>
+              <input type="text" id="lbHeroSub" placeholder="A season of warmth, texture, and understated power">
+            </div>
+            <div class="fg-row">
+              <div class="fg">
+                <label>Hero Background Image URL</label>
+                <input type="text" id="lbHeroImgUrl" placeholder="https://... or images/catalog/look1.png" oninput="previewLbHeroImg(this.value)">
+              </div>
+              <div class="fg">
+                <label>Upload Hero Image</label>
+                <input type="file" id="lbHeroImgFile" accept="image/*" onchange="handleLbHeroImgFile(this)">
+              </div>
+            </div>
+            <div id="lbHeroImgPreviewWrap" style="display:none;margin-top:8px">
+              <img id="lbHeroImgPreview" src="" alt="Hero preview" style="height:80px;border-radius:6px;border:1px solid #EDE8DF;object-fit:cover">
+            </div>
+
+            <!-- Quote Block Editor -->
+            <div style="margin-top:1.5rem;border-top:1px solid #EDE8DF;padding-top:1.25rem">
+              <h4 style="font-family:'Playfair Display',serif;font-size:15px;color:var(--cbd);margin-bottom:10px">2. Inspirational Quote (between sections)</h4>
+              <div class="fg">
+                <label>Quote Text</label>
+                <input type="text" id="lbQuote" placeholder="e.g. Dress like you mean it — every piece tells your story.">
+              </div>
+              <div class="fg">
+                <label>Quote Attribution</label>
+                <input type="text" id="lbQuoteAttr" placeholder="e.g. — Marina Nixon">
+              </div>
+            </div>
+
+            <!-- CTA Bottom Strip -->
+            <div style="margin-top:1.5rem;border-top:1px solid #EDE8DF;padding-top:1.25rem">
+              <h4 style="font-family:'Playfair Display',serif;font-size:15px;color:var(--cbd);margin-bottom:10px">3. Bottom CTA Strip Image</h4>
+              <div class="fg-row">
+                <div class="fg">
+                  <label>CTA Strip Background Image</label>
+                  <input type="text" id="lbCtaImg" placeholder="images/catalog/look12.jpg or URL">
+                </div>
+                <div class="fg">
+                  <label>CTA Headline</label>
+                  <input type="text" id="lbCtaTitle" placeholder="Shop Every Look">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sections Manager -->
+          <div style="background:var(--cw);border:1px solid #EDE8DF;border-radius:10px;padding:1.5rem">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+              <h4 style="font-family:'Playfair Display',serif;font-size:16px;color:var(--cbd)">4. Lookbook Sections</h4>
+              <button class="btn-dark" onclick="openLbSectionModal()" style="padding:8px 16px;font-size:11px">+ Add Section</button>
+            </div>
+            <p style="font-family:'Jost',Arial,sans-serif;font-size:12px;color:var(--cbl);margin-bottom:1rem">Each section can have a different layout preset and multiple images with optional product hotspot pins.</p>
+
+            <!-- Sections list rendered by JS -->
+            <div id="adminLbSections">
+              <div style="text-align:center;padding:3rem;color:var(--cbl);font-family:'Jost',Arial,sans-serif;font-size:13px">Loading lookbook data...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LOOKBOOK SECTION EDIT MODAL -->
+        <div id="lbSectionModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:99999;align-items:center;justify-content:center;padding:1rem">
+          <div style="background:#FFF;border-radius:12px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;padding:24px;box-shadow:0 15px 40px rgba(0,0,0,0.3)">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;border-bottom:1px solid #EDE8DF;padding-bottom:12px">
+              <h3 id="lbSectionModalTitle" style="font-size:17px;font-family:'Playfair Display',serif;color:var(--cbd)">Add Lookbook Section</h3>
+              <button onclick="closeLbSectionModal()" style="background:none;border:none;font-size:24px;cursor:pointer;color:var(--cbl)">×</button>
+            </div>
+            <input type="hidden" id="lbSectionEditId" value="">
+            <div class="fg">
+              <label>Section Title *</label>
+              <input type="text" id="lbSecTitle" placeholder="e.g. Women's Edit">
+            </div>
+            <div class="fg">
+              <label>Section Subtitle (optional)</label>
+              <input type="text" id="lbSecSubtitle" placeholder="e.g. The Collection">
+            </div>
+            <!-- Layout Picker -->
+            <div class="fg">
+              <label style="margin-bottom:10px;display:block">Layout Preset *</label>
+              <div style="display:flex;gap:10px;flex-wrap:wrap" id="lbLayoutPicker">
+                <div style="text-align:center;cursor:pointer" onclick="selectLbLayout('editorial',this)">
+                  <div class="lb-layout-thumb active" data-layout="editorial" title="Editorial Grid" style="background:#C9A96E20;border-color:#C9A96E">
+                    <svg viewBox="0 0 52 36" fill="none"><rect x="1" y="1" width="14" height="34" rx="1" fill="#C9A96E80"/><rect x="17" y="1" width="18" height="34" rx="1" fill="#C9A96E"/><rect x="37" y="1" width="14" height="16" rx="1" fill="#C9A96E60"/><rect x="37" y="19" width="14" height="16" rx="1" fill="#C9A96E60"/></svg>
+                  </div>
+                  <div style="font-size:9px;margin-top:4px;font-family:'Jost',Arial,sans-serif;color:var(--cbd)">Editorial</div>
+                </div>
+                <div style="text-align:center;cursor:pointer" onclick="selectLbLayout('masonry',this)">
+                  <div class="lb-layout-thumb" data-layout="masonry" title="Masonry">
+                    <svg viewBox="0 0 52 36" fill="none"><rect x="1" y="1" width="14" height="22" rx="1" fill="#C9A96E60"/><rect x="1" y="25" width="14" height="10" rx="1" fill="#C9A96E40"/><rect x="17" y="1" width="14" height="12" rx="1" fill="#C9A96E40"/><rect x="17" y="15" width="14" height="20" rx="1" fill="#C9A96E60"/><rect x="33" y="1" width="18" height="16" rx="1" fill="#C9A96E80"/><rect x="33" y="19" width="18" height="16" rx="1" fill="#C9A96E40"/></svg>
+                  </div>
+                  <div style="font-size:9px;margin-top:4px;font-family:'Jost',Arial,sans-serif;color:var(--cbd)">Masonry</div>
+                </div>
+                <div style="text-align:center;cursor:pointer" onclick="selectLbLayout('film',this)">
+                  <div class="lb-layout-thumb" data-layout="film" title="Film Strip">
+                    <svg viewBox="0 0 52 36" fill="none"><rect x="1" y="4" width="12" height="28" rx="1" fill="#C9A96E40"/><rect x="15" y="4" width="12" height="28" rx="1" fill="#C9A96E"/><rect x="29" y="4" width="12" height="28" rx="1" fill="#C9A96E60"/><rect x="43" y="4" width="8" height="28" rx="1" fill="#C9A96E20"/></svg>
+                  </div>
+                  <div style="font-size:9px;margin-top:4px;font-family:'Jost',Arial,sans-serif;color:var(--cbd)">Film Strip</div>
+                </div>
+                <div style="text-align:center;cursor:pointer" onclick="selectLbLayout('alternating',this)">
+                  <div class="lb-layout-thumb" data-layout="alternating" title="Alternating">
+                    <svg viewBox="0 0 52 36" fill="none"><rect x="1" y="1" width="24" height="16" rx="1" fill="#C9A96E"/><rect x="27" y="1" width="24" height="16" rx="1" fill="#C9A96E20"/><rect x="1" y="19" width="24" height="16" rx="1" fill="#C9A96E20"/><rect x="27" y="19" width="24" height="16" rx="1" fill="#C9A96E"/></svg>
+                  </div>
+                  <div style="font-size:9px;margin-top:4px;font-family:'Jost',Arial,sans-serif;color:var(--cbd)">Alternating</div>
+                </div>
+                <div style="text-align:center;cursor:pointer" onclick="selectLbLayout('square',this)">
+                  <div class="lb-layout-thumb" data-layout="square" title="Square Grid">
+                    <svg viewBox="0 0 52 36" fill="none"><rect x="1" y="1" width="16" height="16" rx="1" fill="#C9A96E80"/><rect x="19" y="1" width="16" height="16" rx="1" fill="#C9A96E"/><rect x="37" y="1" width="14" height="16" rx="1" fill="#C9A96E60"/><rect x="1" y="19" width="16" height="16" rx="1" fill="#C9A96E40"/><rect x="19" y="19" width="32" height="16" rx="1" fill="#C9A96E80"/></svg>
+                  </div>
+                  <div style="font-size:9px;margin-top:4px;font-family:'Jost',Arial,sans-serif;color:var(--cbd)">Square Grid</div>
+                </div>
+              </div>
+              <input type="hidden" id="lbSecLayout" value="editorial">
+            </div>
+            <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;border-top:1px solid #EDE8DF;padding-top:14px">
+              <button class="btn-dark" onclick="closeLbSectionModal()" style="padding:8px 18px">Cancel</button>
+              <button class="btn-solid" onclick="saveLbSection()" style="padding:8px 24px;letter-spacing:1px">Save Section</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- LOOKBOOK ITEM EDIT MODAL -->
+        <div id="lbItemModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:99999;align-items:center;justify-content:center;padding:1rem">
+          <div style="background:#FFF;border-radius:12px;max-width:620px;width:100%;max-height:90vh;overflow-y:auto;padding:24px;box-shadow:0 15px 40px rgba(0,0,0,0.3)">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;border-bottom:1px solid #EDE8DF;padding-bottom:12px">
+              <h3 id="lbItemModalTitle" style="font-size:17px;font-family:'Playfair Display',serif;color:var(--cbd)">Add Lookbook Image</h3>
+              <button onclick="closeLbItemModal()" style="background:none;border:none;font-size:24px;cursor:pointer;color:var(--cbl)">×</button>
+            </div>
+            <input type="hidden" id="lbItemEditId" value="">
+            <input type="hidden" id="lbItemSectionId" value="">
+
+            <!-- Image Upload -->
+            <div style="border:2px dashed #EDE8DF;border-radius:8px;padding:1.2rem;margin-bottom:1rem;background:#FAF8F5">
+              <label style="font-weight:700;font-size:12px;color:var(--cbd);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:10px">Image *</label>
+              <div class="fg-row">
+                <div class="fg">
+                  <label>Upload File</label>
+                  <input type="file" id="lbItemImgFile" accept="image/*" onchange="previewLbItemImg(this)">
+                </div>
+                <div class="fg">
+                  <label>Or Image URL</label>
+                  <input type="text" id="lbItemImgUrl" placeholder="https://... or images/catalog/look2.png" oninput="previewLbItemImgUrl(this.value)">
+                </div>
+              </div>
+              <div id="lbItemImgPreviewWrap" style="display:none;margin-top:10px;position:relative">
+                <img id="lbItemImgPreview" src="" alt="Preview" style="width:100%;max-height:200px;object-fit:cover;border-radius:6px;border:1px solid #EDE8DF">
+                <!-- Hotspot placer -->
+                <div id="lbHotspotPlacer" style="position:absolute;inset:0;cursor:crosshair" title="Click to place product hotspot pin" onclick="placeHotspot(event,this)">
+                  <div id="lbHotspotMarker" style="display:none;position:absolute;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:50%;background:#C9A96E;border:2px solid #FFF;box-shadow:0 0 0 3px rgba(201,169,110,.4)"></div>
+                </div>
+              </div>
+              <p id="lbHotspotInstruct" style="font-family:'Jost',Arial,sans-serif;font-size:11px;color:var(--cbl);margin-top:6px;display:none">👆 Click on the image above to place a product hotspot pin.</p>
+            </div>
+
+            <div class="fg-row">
+              <div class="fg">
+                <label>Image Caption / Title</label>
+                <input type="text" id="lbItemTitle" placeholder="e.g. Noir Draped Gown">
+              </div>
+              <div class="fg">
+                <label>Category Label</label>
+                <input type="text" id="lbItemCategory" placeholder="e.g. Evening Wear">
+              </div>
+            </div>
+
+            <div class="fg-row">
+              <div class="fg">
+                <label>Linked Product (optional)</label>
+                <select id="lbItemProductId" style="width:100%;padding:10px;border:1px solid #D6CCB8;border-radius:4px;font-family:'Jost',Arial,sans-serif;font-size:13px">
+                  <option value="">No product link</option>
+                  <!-- Populated by JS from PRODUCTS -->
+                </select>
+              </div>
+              <div class="fg">
+                <label>Badge (optional)</label>
+                <select id="lbItemBadge" style="width:100%;padding:10px;border:1px solid #D6CCB8;border-radius:4px;font-family:'Jost',Arial,sans-serif;font-size:13px">
+                  <option value="">None</option>
+                  <option value="New Arrival">New Arrival</option>
+                  <option value="Best Seller">Best Seller</option>
+                  <option value="Featured">Featured</option>
+                  <option value="Limited">Limited Edition</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="fg-row">
+              <div class="fg">
+                <label>Image Span (for grid layouts)</label>
+                <select id="lbItemSpan" style="width:100%;padding:10px;border:1px solid #D6CCB8;border-radius:4px;font-family:'Jost',Arial,sans-serif;font-size:13px">
+                  <option value="normal">Normal</option>
+                  <option value="wide">Wide (2 columns)</option>
+                  <option value="tall">Tall (2 rows)</option>
+                </select>
+              </div>
+              <div class="fg" id="lbHotspotCoords" style="display:none">
+                <label>Hotspot Pin Position</label>
+                <div style="display:flex;gap:8px;align-items:center">
+                  <input type="number" id="lbItemHotspotX" placeholder="X%" min="0" max="100" style="width:80px;padding:8px" title="X position %">
+                  <span style="color:var(--cbl);font-size:12px">X%</span>
+                  <input type="number" id="lbItemHotspotY" placeholder="Y%" min="0" max="100" style="width:80px;padding:8px" title="Y position %">
+                  <span style="color:var(--cbl);font-size:12px">Y%</span>
+                  <button type="button" onclick="clearLbHotspot()" style="padding:4px 8px;font-size:10px;border:1px solid #DDD;border-radius:4px;background:transparent;cursor:pointer;color:#C62828">✕ Clear</button>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;border-top:1px solid #EDE8DF;padding-top:14px">
+              <button class="btn-dark" onclick="closeLbItemModal()" style="padding:8px 18px">Cancel</button>
+              <button class="btn-solid" onclick="saveLbItem()" style="padding:8px 24px;letter-spacing:1px">Save Image</button>
+            </div>
+          </div>
+        </div>
+
     </div><!-- end acc-main -->
   </div><!-- end account-grid -->
 </section>
@@ -8780,6 +9420,7 @@ function filterProducts(filter, sort, search) {
 
 // ── Product card ───────────────────────────────────────────────
 function productCard(p) {
+  if (!p.name) return '';
   const rating   = Math.round(p.stars || p.avg_rating || 5);
   const stars    = '★'.repeat(rating) + '☆'.repeat(5 - rating);
   const price    = p.price || p.base_price || 0;
@@ -8796,17 +9437,17 @@ function productCard(p) {
   const displaySizes = sizes.length ? sizes : ['One Size'];
   const defaultSz = displaySizes[0];
   const inWL     = wishlist.includes(String(p.id));
-  const safeName = escapeHtml(p.name || 'Luxury Garment');
-  const safeCat  = escapeHtml(p.label || p.category_name || 'Haute Couture');
+  const safeName = p.name ? escapeHtml(p.name) : '';
+  const safeCat  = (p.label || p.category_name) ? escapeHtml(p.label || p.category_name) : '';
 
-  const fallbackHtml = `<div class="prod-placeholder"><div class="prod-placeholder-mark">◈</div><div class="prod-placeholder-title">${safeName}</div><div class="prod-placeholder-sub">${safeCat}</div></div>`;
+  const fallbackHtml = '';
   const multiSize = displaySizes.length > 1 && !(displaySizes.length === 1 && displaySizes[0] === 'One Size');
 
   return `<div class="prod-card" data-pid="${p.id}" data-selected-size="${defaultSz}">
     <div class="prod-img" onclick="quickView('${p.id}')">
       <div class="prod-img-inner">
         ${imgSrc
-          ? `<img src="${imgSrc}" alt="${safeName}" loading="lazy" class="prod-cover-img" onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\\\'prod-placeholder\\\'><div class=\\\'prod-placeholder-mark\\\'>◈</div><div class=\\\'prod-placeholder-title\\\'>${safeName.replace(/'/g, "\\'")}</div><div class=\\\'prod-placeholder-sub\\\'>${safeCat.replace(/'/g, "\\'")}</div></div>';">`
+          ? `<img src="${imgSrc}" alt="${safeName}" loading="lazy" class="prod-cover-img" onerror="this.onerror=null;this.parentElement.innerHTML='';">`
           : fallbackHtml
         }
       </div>
@@ -9525,25 +10166,60 @@ function proceedCheckout() {
 }
 
 function setChkStep(s) {
-  [1,2,3,4].forEach(i=>{
-    const el   = document.getElementById('cs'+i);
-    const step = document.getElementById('chkStep'+i);
-    if (el)   el.className   = i<s?'chk-step done-step':i===s?'chk-step active-step':'chk-step';
-    if (step) step.style.display = i===s?'block':'none';
+  [1, 2, 3, 4].forEach(i => {
+    const el   = document.getElementById('cs' + i);
+    const step = document.getElementById('chkStep' + i);
+    if (el) {
+      el.className = i < s ? 'chk-step done-step' : (i === s ? 'chk-step active-step' : 'chk-step');
+      el.onclick = (i < s) ? () => setChkStep(i) : null;
+      el.style.cursor = (i < s) ? 'pointer' : 'default';
+    }
+    if (step) step.style.display = (i === s) ? 'block' : 'none';
   });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function selDeliveryMethod(el, method) {
+  document.querySelectorAll('#chkDelGroup .chk-del-card').forEach(c => c.classList.remove('active'));
+  if (el) {
+    el.classList.add('active');
+    const radio = el.querySelector('input[type="radio"]');
+    if (radio) radio.checked = true;
+  }
+  checkoutData.delivery_method = method;
+  renderChkOrder();
+}
+
+function getSelectedDeliveryMethod() {
+  const checked = document.querySelector('#chkDelGroup input[name="delivery"]:checked');
+  return checked?.value || checkoutData.delivery_method || 'standard';
+}
+
+function getDeliveryCost(method = null) {
+  const delMethod = (method || getSelectedDeliveryMethod() || 'standard').toLowerCase();
+  const subtotal = cartSubtotal();
+  if (delMethod === 'pickup') {
+    return 0;
+  } else if (delMethod === 'express') {
+    return siteSettings.express_shipping_fee ?? 60;
+  } else {
+    const freeThresh = siteSettings.free_shipping_threshold ?? 500;
+    const isFreeActive = siteSettings.free_shipping_active !== false;
+    const stdFee = siteSettings.standard_shipping_fee ?? 30;
+    return (isFreeActive && subtotal >= freeThresh) ? 0 : stdFee;
+  }
 }
 
 async function nextStep(s) {
   if (s === 3) {
     const inputs = document.querySelectorAll('#chkStep2 input[type="text"]');
     checkoutData.address = {
-      street: inputs[0]?.value||'',
-      city:   inputs[1]?.value||'Accra',
-      region: document.querySelector('#chkStep2 select')?.value||'Greater Accra',
-      notes:  inputs[3]?.value||''
+      street: inputs[0]?.value || '',
+      city:   inputs[1]?.value || 'Accra',
+      region: document.querySelector('#chkStep2 select')?.value || 'Greater Accra',
+      notes:  inputs[3]?.value || ''
     };
-    const delivery = document.querySelector('#chkStep2 input[name="delivery"]:checked');
-    checkoutData.delivery_method = delivery?.value || 'standard';
+    checkoutData.delivery_method = getSelectedDeliveryMethod();
   }
 
   if (s === 4) {
@@ -9557,28 +10233,19 @@ async function nextStep(s) {
     }
 
     const pm = document.querySelector('.pm.active-pm');
-    const pmText = (pm?.dataset?.method || pm?.textContent||'cash').toLowerCase().replace(/\s+/g,'');
-    const pmMap  = { momo:'momo', mtn:'mtn', mtnmoney:'mtn', telecel:'telecel', vodafone:'telecel', visa:'visa', visacard:'visa', card:'visa', cash:'cash', cashondelivery:'cash' };
+    const pmText = (pm?.dataset?.method || pm?.textContent || 'cash').toLowerCase().replace(/\s+/g, '');
+    const pmMap  = { momo: 'momo', mtn: 'mtn', mtnmoney: 'mtn', telecel: 'telecel', vodafone: 'telecel', visa: 'visa', visacard: 'visa', card: 'visa', cash: 'cash', cashondelivery: 'cash' };
     checkoutData.payment_method = pmMap[pmText] || pmText || 'cash';
     checkoutData.payment_phone = document.querySelector('#chkStep3 input[type="tel"]')?.value?.trim() || document.getElementById('chkPhone')?.value?.trim() || null;
 
     {
       const btn = document.querySelector('#chkStep3 .btn-solid');
-      if (btn) { btn.disabled=true; btn.textContent='Placing order...'; }
+      if (btn) { btn.disabled = true; btn.textContent = 'Placing order...'; }
 
       const subtotal = cartSubtotal();
-      const delMethod = (checkoutData.delivery_method || 'standard').toLowerCase();
-      let shipping = 0;
-      if (delMethod === 'pickup') {
-        shipping = 0;
-      } else if (delMethod === 'express') {
-        shipping = siteSettings.express_shipping_fee ?? 60;
-      } else {
-        const freeThresh = siteSettings.free_shipping_threshold ?? 500;
-        const isFreeActive = siteSettings.free_shipping_active !== false;
-        const stdFee = siteSettings.standard_shipping_fee ?? 30;
-        shipping = (isFreeActive && subtotal >= freeThresh) ? 0 : stdFee;
-      }
+      const delMethod = getSelectedDeliveryMethod().toLowerCase();
+      const shipping = getDeliveryCost(delMethod);
+
       const orderPayload = {
         items: cart.map(p => ({
           product_id: Number(p.id) || p.id,
@@ -9591,7 +10258,7 @@ async function nextStep(s) {
         discount: calcPromoAmount(subtotal),
         promo_code: promoCode || null,
         payment_method: checkoutData.payment_method,
-        delivery_method: checkoutData.delivery_method || 'standard',
+        delivery_method: delMethod,
         address: checkoutData.address || {
           street: document.getElementById('chkShipStreet')?.value?.trim() || '',
           city: document.getElementById('chkShipCity')?.value?.trim() || 'Accra',
@@ -9603,16 +10270,16 @@ async function nextStep(s) {
 
       const orderData = await apiPost('/orders', orderPayload);
 
-      if (btn) { btn.disabled=false; btn.textContent='Complete Order'; }
+      if (btn) { btn.disabled = false; btn.textContent = 'Complete Order'; }
 
       if (orderData && orderData.order_id) {
         const isCash = checkoutData.payment_method === 'cash';
-        const online = ['visa','momo','mtn','telecel','vodafone','paystack','card'].includes(checkoutData.payment_method);
+        const online = ['visa', 'momo', 'mtn', 'telecel', 'vodafone', 'paystack', 'card'].includes(checkoutData.payment_method);
 
         if (isCash) {
           document.getElementById('orderRef').textContent = orderData.order_number || 'MN-' + orderData.order_id;
         } else if (online) {
-          if (btn) { btn.disabled=true; btn.textContent='Connecting payment...'; }
+          if (btn) { btn.disabled = true; btn.textContent = 'Connecting payment...'; }
           const initData = await apiPost('/payments/initialize', {
             order_id: orderData.order_id,
             amount: orderPayload.total,
@@ -9621,7 +10288,7 @@ async function nextStep(s) {
             email: document.getElementById('chkEmail')?.value?.trim() || currentUser?.email || ''
           });
 
-          if (btn) { btn.disabled=false; btn.textContent='Complete Order'; }
+          if (btn) { btn.disabled = false; btn.textContent = 'Complete Order'; }
 
           if (!initData || !initData.reference) {
             showToast(initData?.error || 'Could not start Paystack payment.');
@@ -9629,13 +10296,13 @@ async function nextStep(s) {
           }
 
           const Done = () => {
-            cart = []; localStorage.removeItem('mn_cart'); updateCartBadge(); promoDiscount=0; promoFixedAmount=0; promoCode='';
+            cart = []; localStorage.removeItem('mn_cart'); updateCartBadge(); promoDiscount = 0; promoFixedAmount = 0; promoCode = '';
             document.getElementById('orderRef').textContent = orderData.order_number || 'MN-' + orderData.order_id;
             setChkStep(4);
             renderChkOrder();
           };
           const Fail = (msg) => {
-            if (btn) { btn.disabled=false; btn.textContent='Complete Order'; }
+            if (btn) { btn.disabled = false; btn.textContent = 'Complete Order'; }
             showToast(msg);
           };
           const Verify = (ref) => apiGet('/payments/verify/' + encodeURIComponent(ref)).then(r => {
@@ -9689,7 +10356,7 @@ async function nextStep(s) {
       }
     }
 
-    cart = []; localStorage.removeItem('mn_cart'); updateCartBadge(); promoDiscount=0; promoFixedAmount=0; promoCode='';
+    cart = []; localStorage.removeItem('mn_cart'); updateCartBadge(); promoDiscount = 0; promoFixedAmount = 0; promoCode = '';
     s = 4;
   }
   setChkStep(s);
@@ -9699,42 +10366,104 @@ async function nextStep(s) {
 async function applyPromo() {
   const inp = document.getElementById('promoInp');
   const msg = document.getElementById('promoMsg');
-  if (!inp||!msg) return;
+  if (!inp || !msg) return;
   const code = inp.value.trim().toUpperCase();
-  const localCodes = { 'NIXON10':{type:'percent',value:10}, 'WELCOME10':{type:'percent',value:10}, 'WELCOME20':{type:'percent',value:20}, 'FREESHIP':{type:'fixed',value:30} };
+  const localCodes = { 'NIXON10': { type: 'percent', value: 10 }, 'WELCOME10': { type: 'percent', value: 10 }, 'WELCOME20': { type: 'percent', value: 20 }, 'FREESHIP': { type: 'fixed', value: 30 } };
   if (localCodes[code]) {
     const c = localCodes[code];
-    promoDiscount = c.type==='percent' ? c.value/100 : 0;
-    promoFixedAmount = c.type==='fixed' ? c.value : 0;
+    promoDiscount = c.type === 'percent' ? c.value / 100 : 0;
+    promoFixedAmount = c.type === 'fixed' ? c.value : 0;
     promoCode = code;
-    msg.textContent=`✓ ${c.value}${c.type==='percent'?'%':'GH₵'} discount applied!`; msg.style.color='var(--csuc)';
-    renderChkOrder(); return;
+    msg.textContent = `✓ ${c.value}${c.type === 'percent' ? '%' : 'GH₵'} discount applied!`;
+    msg.style.color = 'var(--csuc)';
+    renderChkOrder();
+    return;
   }
-  msg.textContent='Invalid code.'; msg.style.color='var(--csale)';
+  msg.textContent = 'Invalid code.';
+  msg.style.color = 'var(--csale)';
 }
 
 function renderChkOrder() {
   const el  = document.getElementById('chkOrderItems');
   const tel = document.getElementById('chkTotals');
-  if (!el||!tel) return;
-  el.innerHTML = cart.map(p=>{
-    const imgSrc = p.img||p.primary_image||'';
+  if (!el || !tel) return;
+
+  if (!cart.length) {
+    el.innerHTML = `<div style="text-align:center;padding:2.5rem 1rem;font-family:'Jost',Arial,sans-serif;color:var(--cbl)">
+      <div style="font-size:2rem;color:var(--ca);margin-bottom:.5rem">◈</div>
+      <p>Your shopping bag is empty.</p>
+      <button class="btn-dark" style="margin-top:10px" onclick="go('shop')">Explore Collections</button>
+    </div>`;
+    tel.innerHTML = '';
+    return;
+  }
+
+  el.innerHTML = cart.map(p => {
+    const imgSrc = p.img || p.primary_image || '';
+    const itemPrice = parseFloat(p.price || p.base_price || 0);
+    const itemTotal = itemPrice * (p.qty || 1);
+    const sizeBadge = p.size ? `<span style="font-size:10px;background:#F5ECE0;color:#6A5E4E;padding:2px 6px;border-radius:4px;font-weight:600;margin-left:4px">Size: ${escapeHtml(p.size)}</span>` : '';
     return `<div class="os-item">
-      <div class="os-thumb ${p.bg||'c1'}" style="overflow:hidden">
-        ${imgSrc?`<img src="${imgSrc}" style="width:100%;height:100%;object-fit:cover">`:(p.icon||'◈')}
+      <div class="os-thumb ${p.bg || 'c1'}">
+        ${imgSrc ? `<img src="${imgSrc}" alt="${escapeHtml(p.name)}">` : `<span style="font-size:18px;color:rgba(201,169,110,.5)">◈</span>`}
       </div>
-      <div class="os-info"><div class="os-name">${p.name}</div><div class="os-meta">Qty: ${p.qty}</div></div>
-      <span class="os-price">${fmtPrice((p.price||p.base_price||0)*p.qty)}</span>
+      <div class="os-info">
+        <div class="os-name" title="${escapeHtml(p.name)}">${escapeHtml(p.name)}</div>
+        <div class="os-meta">Qty: <strong>${p.qty || 1}</strong> ${sizeBadge}</div>
+      </div>
+      <span class="os-price">${fmtPrice(itemTotal)}</span>
     </div>`;
   }).join('');
-  const sub  = cartSubtotal();
-  const ship = sub>=500?0:30;
+
+  const sub = cartSubtotal();
+  const delMethod = getSelectedDeliveryMethod().toLowerCase();
+  let ship = 0;
+  let shipLabel = 'Free';
+
+  if (delMethod === 'pickup') {
+    ship = 0;
+    shipLabel = '<span style="color:var(--csuc);font-weight:600">Complimentary</span>';
+  } else if (delMethod === 'express') {
+    ship = siteSettings.express_shipping_fee ?? 60;
+    shipLabel = fmtPrice(ship);
+  } else {
+    const freeThresh = siteSettings.free_shipping_threshold ?? 500;
+    const isFreeActive = siteSettings.free_shipping_active !== false;
+    const stdFee = siteSettings.standard_shipping_fee ?? 30;
+    if (isFreeActive && sub >= freeThresh) {
+      ship = 0;
+      shipLabel = '<span style="color:var(--csuc);font-weight:600">Free</span>';
+    } else {
+      ship = stdFee;
+      shipLabel = fmtPrice(ship);
+    }
+  }
+
+  // Update dynamic card prices
+  const stdLabelEl = document.getElementById('chkStdPriceLabel');
+  if (stdLabelEl) {
+    if (sub >= (siteSettings.free_shipping_threshold ?? 500) && siteSettings.free_shipping_active !== false) {
+      stdLabelEl.innerHTML = '<span style="color:var(--csuc);font-weight:700">FREE</span> <span style="text-decoration:line-through;color:var(--cbl);font-size:11px;font-weight:400;margin-left:4px">GH₵ 30</span>';
+    } else {
+      stdLabelEl.textContent = `GH₵ ${siteSettings.standard_shipping_fee ?? 30}`;
+    }
+  }
+
+  const expLabelEl = document.getElementById('chkExpPriceLabel');
+  if (expLabelEl) {
+    expLabelEl.textContent = `GH₵ ${siteSettings.express_shipping_fee ?? 60}`;
+  }
+
   const disc = calcPromoAmount(sub);
+  const grand = Math.max(0, sub + ship - disc);
+
+  const delTitle = delMethod === 'pickup' ? 'Atelier Pickup' : delMethod === 'express' ? 'Same-Day Express' : 'Standard Delivery';
+
   tel.innerHTML = `
     <div class="os-row"><span>Subtotal</span><span>${fmtPrice(sub)}</span></div>
-    <div class="os-row"><span>Delivery</span><span>${ship===0?'Free':fmtPrice(ship)}</span></div>
-    ${disc?`<div class="os-row" style="color:var(--csuc)"><span>Discount</span><span>−${fmtPrice(disc)}</span></div>`:''}
-    <div class="os-row total"><span>Total</span><span>${fmtPrice(sub+ship-disc)}</span></div>`;
+    <div class="os-row"><span>Delivery (${delTitle})</span><span>${shipLabel}</span></div>
+    ${disc ? `<div class="os-row discount"><span>Discount ${promoCode ? `(${escapeHtml(promoCode)})` : ''}</span><span>−${fmtPrice(disc)}</span></div>` : ''}
+    <div class="os-row total"><span>Total</span><span>${fmtPrice(grand)}</span></div>`;
 }
 
 function selPM(el) {
@@ -9898,7 +10627,7 @@ async function socialLogin(providerName) {
       last_name: last_name,
       role: isAdminEmail ? 'admin' : 'customer'
     };
-    if (isAdminEmail) currentUser.role = 'admin';
+    if (isAdminEmail || backend?.user?.role === 'admin') currentUser.role = 'admin';
 
     currentUser.full_name = userDisplayName(currentUser);
     localStorage.setItem('mn_user', JSON.stringify(currentUser));
@@ -9950,7 +10679,7 @@ async function loginUser() {
       last_name: cred.user.displayName?.split(' ').slice(1).join(' ') || (isAdminEmail ? 'Nixon' : ''),
       role: fallbackRole
     };
-    if (isAdminEmail) currentUser.role = 'admin';
+    if (isAdminEmail || backend?.user?.role === 'admin') currentUser.role = 'admin';
 
     currentUser.full_name = userDisplayName(currentUser);
     localStorage.setItem('mn_user', JSON.stringify(currentUser));
@@ -10029,6 +10758,7 @@ async function logoutUser() {
   currentUser = null;
   localStorage.removeItem('mn_user');
   localStorage.removeItem('mn_token');
+  sessionStorage.removeItem('mn_acc_sec');
   updateAuthUI();
   showToast('Logged out successfully');
   go('home');
@@ -10063,7 +10793,7 @@ async function restoreSession() {
           last_name,
           role: isAdminEmail ? 'admin' : 'customer'
         };
-        if (isAdminEmail) currentUser.role = 'admin';
+        if (isAdminEmail || backend?.user?.role === 'admin') currentUser.role = 'admin';
         currentUser.full_name = userDisplayName(currentUser);
         localStorage.setItem('mn_user', JSON.stringify(currentUser));
         localStorage.setItem('mn_token', token);
@@ -10140,7 +10870,19 @@ function updateAuthUI() {
     if (amLogin)    amLogin.style.display    = 'none';
     if (amRegister) amRegister.style.display = 'none';
     if (amLogout)   amLogout.style.display   = 'inline-flex';
-    if (amAdmin)    amAdmin.style.display    = currentUser.role === 'admin' ? 'inline-flex' : 'none';
+    if (amAdmin) {
+      if (currentUser && currentUser.role === 'admin') {
+        amAdmin.style.setProperty('display', 'inline-flex', 'important');
+      } else {
+        amAdmin.style.setProperty('display', 'none', 'important');
+      }
+    }
+
+    // If currently displaying admin panel but user is not admin, kick back to customer dashboard
+    const adminSec = document.getElementById('as-admin');
+    if (adminSec && adminSec.classList.contains('acc-show') && currentUser.role !== 'admin') {
+      showAccSec('dashboard');
+    }
 
     if (tierBadge) {
       if (currentUser.role === 'admin') {
@@ -10184,7 +10926,13 @@ function updateAuthUI() {
     if (amLogin)    amLogin.style.display    = 'inline-flex';
     if (amRegister) amRegister.style.display = 'inline-flex';
     if (amLogout)   amLogout.style.display   = 'none';
-    if (amAdmin)    amAdmin.style.display    = 'none';
+    if (amAdmin)    amAdmin.style.setProperty('display', 'none', 'important');
+
+    // If unauthenticated and on admin panel, send to login
+    const adminSec = document.getElementById('as-admin');
+    if (adminSec && adminSec.classList.contains('acc-show')) {
+      showAccSec('login');
+    }
   }
 }
 
@@ -11031,7 +11779,7 @@ async function saveAdminSettings(btn) {
 }
 
 function switchAdminTab(tab) {
-  ['overview', 'catalog', 'product-form', 'banners'].forEach(t => {
+  ['overview', 'catalog', 'inventory', 'product-form', 'banners', 'lookbook'].forEach(t => {
     const tabEl = document.getElementById('tab-admin-' + t);
     const panelEl = document.getElementById('admin-panel-' + t);
     if (tabEl) {
@@ -11049,7 +11797,9 @@ function switchAdminTab(tab) {
 
   if (tab === 'overview') renderAdminDashboard();
   if (tab === 'catalog') loadAdminCatalog();
+  if (tab === 'inventory') loadAdminInventory();
   if (tab === 'banners') populateAdminSettingsForm();
+  if (tab === 'lookbook') loadAdminLookbook();
 }
 // old switchAdminTab replaced
 function _oldSwitchAdminTab(tab) {
@@ -11233,43 +11983,427 @@ function resetAdminForm() {
 async function loadAdminCatalog() {
   if (!currentUser || currentUser.role !== 'admin') return;
   const body = document.getElementById('adminCatalogBody');
-  if (body) body.innerHTML = '<tr><td colspan="7" style="padding:1rem;font-family:\'Jost\',Arial,sans-serif;color:var(--cbl)">Loading catalog...</td></tr>';
+  if (body) body.innerHTML = '<tr><td colspan="8" style="padding:1rem;font-family:\'Jost\',Arial,sans-serif;color:var(--cbl)">Loading catalog...</td></tr>';
 
-  const data = await apiGet('/products?sort=newest');
-  allAdminProducts = mergeProductLists(Array.isArray(data) ? data : []);
+  // Reset bulk bar & select all checkbox
+  const selectAllCb = document.getElementById('adminSelectAll');
+  if (selectAllCb) { selectAllCb.checked = false; selectAllCb.indeterminate = false; }
+  updateBulkBar();
 
+  try {
+    const data = await apiGet('/admin/products?sort=newest');
+    if (data && (data.error || data.success === false)) {
+      if (body) body.innerHTML = `<tr><td colspan="8" style="padding:2rem;text-align:center;font-family:\'Jost\',Arial,sans-serif;color:#C62828">⚠️ ${escapeHtml(data.error || data.message || 'Failed to load catalog')}. <button class="btn-dark" style="margin-left:10px" onclick="loadAdminCatalog()">Retry</button></td></tr>`;
+      return;
+    }
+    // Use only real Firestore products in admin (no merge with embedded defaults)
+    allAdminProducts = Array.isArray(data) ? data : [];
+
+    if (body) {
+      if (!allAdminProducts.length) {
+        body.innerHTML = '<tr><td colspan="8" style="padding:2rem;text-align:center;font-family:\'Jost\',Arial,sans-serif;color:var(--cbl)">No products in store yet. <button class="btn-dark" onclick="switchAdminTab(\'product-form\')">Add First Product</button></td></tr>';
+        return;
+      }
+
+      body.innerHTML = allAdminProducts.map(p => {
+        const thumb = resolveProductImage(p.img || p.primary_image || '');
+        const imgHtml = thumb
+          ? `<img src="${thumb}" alt="${escapeHtml(p.name || '')}" style="width:40px;height:50px;object-fit:cover;border-radius:6px">`
+          : `<div style="width:40px;height:50px;background:var(--cr);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:rgba(0,0,0,.3)">MN</div>`;
+        const oldPriceText = p.old_price ? `<span style="text-decoration:line-through;color:var(--cbl);font-size:10px;margin-left:5px">${fmtPrice(p.old_price)}</span>` : '';
+        const badgeHtml = p.badge ? `<span class="prod-badge b-${p.badge}" style="position:static;padding:2px 6px;font-size:7px">${p.badge}</span>` : '—';
+        const sizesList = Array.isArray(p.sizes) ? p.sizes.join(', ') : (p.sizes || '—');
+        
+        const stockNum = Number(p.stock ?? 0);
+        let stockColor = '#2E7D32';
+        let stockBadge = '';
+        if (stockNum <= 0) {
+          stockColor = '#C62828';
+          stockBadge = '<span style="font-size:9px;color:#C62828;display:block;font-weight:700">OUT OF STOCK</span>';
+        } else if (stockNum <= 10) {
+          stockColor = '#E65100';
+          stockBadge = '<span style="font-size:9px;color:#E65100;display:block;font-weight:600">LOW STOCK</span>';
+        }
+
+        return `<tr>
+          <td style="text-align:center">
+            <input type="checkbox" class="admin-prod-checkbox" data-id="${p.id}" onchange="updateBulkBar()" style="width:15px;height:15px;accent-color:var(--ca);cursor:pointer">
+          </td>
+          <td style="padding:.5rem 1rem">${imgHtml}</td>
+          <td style="font-weight:600;color:var(--cbd)">
+            ${escapeHtml(p.name)}
+            <div style="font-size:10px;color:var(--cbl);margin-top:2px">Sizes: <strong style="color:var(--ca)">${escapeHtml(sizesList)}</strong></div>
+          </td>
+          <td>${escapeHtml(p.category || '')}${p.label ? `<br><span style="font-size:10px;color:var(--cbl)">${escapeHtml(p.label)}</span>` : ''}</td>
+          <td><strong>${fmtPrice(p.price || 0)}</strong>${oldPriceText}</td>
+          <td>
+            <strong style="color:${stockColor};font-size:13px">${stockNum}</strong>
+            ${stockBadge}
+          </td>
+          <td>${badgeHtml}</td>
+          <td>
+            <div style="display:flex;gap:.4rem">
+              <button class="btn-dark" style="padding:6px 10px;font-size:9px;border-color:var(--ca);color:var(--cbd)" onclick="editAdminProduct('${p.id}')">Edit</button>
+              <button class="btn-dark" style="padding:6px 10px;font-size:9px;border-color:#C62828;color:#C62828" onclick="deleteAdminProduct('${p.id}', this)">Delete</button>
+            </div>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+  } catch (err) {
+    if (body) body.innerHTML = `<tr><td colspan="8" style="padding:2rem;text-align:center;font-family:\'Jost\',Arial,sans-serif;color:#C62828">⚠️ Could not load catalog. <button class="btn-dark" style="margin-left:10px" onclick="loadAdminCatalog()">Retry</button></td></tr>`;
+  }
+}
+
+// ── Bulk Delete & Selection Helpers ──────────────────────────
+function toggleSelectAll(masterCheckbox) {
+  const isChecked = masterCheckbox.checked;
+  const checkboxes = document.querySelectorAll('.admin-prod-checkbox');
+  checkboxes.forEach(cb => { cb.checked = isChecked; });
+  updateBulkBar();
+}
+
+function updateBulkBar() {
+  const checkboxes = document.querySelectorAll('.admin-prod-checkbox');
+  const checked = document.querySelectorAll('.admin-prod-checkbox:checked');
+  const bar = document.getElementById('adminBulkBar');
+  const countEl = document.getElementById('adminBulkCount');
+  const masterCheckbox = document.getElementById('adminSelectAll');
+
+  if (masterCheckbox) {
+    if (checkboxes.length === 0) {
+      masterCheckbox.checked = false;
+      masterCheckbox.indeterminate = false;
+    } else if (checked.length === checkboxes.length) {
+      masterCheckbox.checked = true;
+      masterCheckbox.indeterminate = false;
+    } else if (checked.length > 0) {
+      masterCheckbox.checked = false;
+      masterCheckbox.indeterminate = true;
+    } else {
+      masterCheckbox.checked = false;
+      masterCheckbox.indeterminate = false;
+    }
+  }
+
+  if (bar && countEl) {
+    if (checked.length > 0) {
+      bar.style.display = 'block';
+      countEl.textContent = `${checked.length} product${checked.length > 1 ? 's' : ''} selected`;
+    } else {
+      bar.style.display = 'none';
+    }
+  }
+}
+
+function deselectAllProducts() {
+  const checkboxes = document.querySelectorAll('.admin-prod-checkbox');
+  checkboxes.forEach(cb => { cb.checked = false; });
+  const masterCheckbox = document.getElementById('adminSelectAll');
+  if (masterCheckbox) {
+    masterCheckbox.checked = false;
+    masterCheckbox.indeterminate = false;
+  }
+  updateBulkBar();
+}
+
+async function deleteSelectedProducts() {
+  const checkedBoxes = Array.from(document.querySelectorAll('.admin-prod-checkbox:checked'));
+  const ids = checkedBoxes.map(cb => cb.dataset.id).filter(Boolean);
+
+  if (!ids.length) {
+    showToast('No products selected');
+    return;
+  }
+
+  if (!confirm(`Are you sure you want to delete ${ids.length} selected product${ids.length > 1 ? 's' : ''}? This action cannot be undone.`)) {
+    return;
+  }
+
+  showToast(`Deleting ${ids.length} product(s)...`);
+
+  // Try bulk delete endpoint first
+  const result = await apiRequest('/admin/products/bulk-delete', 'POST', { productIds: ids });
+  
+  if (result && !result.error) {
+    showToast(`✓ Successfully deleted ${result.deletedCount || ids.length} product(s)`);
+  } else {
+    // Fallback to sequential deletion if bulk route is unavailable
+    let successCount = 0;
+    for (const id of ids) {
+      const res = await apiRequest(`/admin/products/${id}`, 'DELETE');
+      if (res && !res.error) successCount++;
+    }
+    showToast(`✓ Deleted ${successCount} of ${ids.length} product(s)`);
+  }
+
+  // Remove deleted items from local caches
+  ids.forEach(id => {
+    deleteExtraProduct(id);
+  });
+
+  loadAdminCatalog();
+  if (document.getElementById('admin-panel-inventory')?.style.display !== 'none') {
+    loadAdminInventory();
+  }
+}
+
+// ── Inventory & Stock Management ─────────────────────────────
+let allInventoryProducts = [];
+
+async function loadAdminInventory() {
+  if (!currentUser || currentUser.role !== 'admin') return;
+  const cardsContainer = document.getElementById('adminLowStockCards');
+  const body = document.getElementById('adminInventoryBody');
+  const threshold = Number(document.getElementById('stockThreshold')?.value || 10);
+
+  if (cardsContainer) {
+    cardsContainer.innerHTML = '<div style="padding:1.5rem;text-align:center;color:var(--cbl);font-family:\'Jost\',Arial,sans-serif;font-size:13px;grid-column:1/-1">Loading stock data...</div>';
+  }
   if (body) {
-    if (!allAdminProducts.length) {
-      body.innerHTML = '<tr><td colspan="7" style="padding:2rem;text-align:center;font-family:\'Jost\',Arial,sans-serif;color:var(--cbl)">No products in store yet. <button class="btn-dark" onclick="switchAdminTab(\'product-form\')">Add First Product</button></td></tr>';
+    body.innerHTML = '<tr><td colspan="6" style="padding:1rem;font-family:\'Jost\',Arial,sans-serif;color:var(--cbl)">Loading inventory...</td></tr>';
+  }
+
+  try {
+    const data = await apiGet('/admin/products?sort=newest');
+    if (data && (data.error || data.success === false)) {
+      if (cardsContainer) cardsContainer.innerHTML = `<div style="color:#C62828;grid-column:1/-1">⚠️ ${escapeHtml(data.error || 'Failed to load stock data')}</div>`;
+      if (body) body.innerHTML = `<tr><td colspan="6" style="padding:1.5rem;text-align:center;color:#C62828">⚠️ Could not load inventory</td></tr>`;
       return;
     }
 
-    body.innerHTML = allAdminProducts.map(p => {
-      const thumb = resolveProductImage(p.img || p.primary_image || '');
-      const imgHtml = thumb
-        ? `<img src="${thumb}" alt="${escapeHtml(p.name || '')}" style="width:40px;height:50px;object-fit:cover;border-radius:6px">`
-        : `<div style="width:40px;height:50px;background:var(--cr);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:rgba(0,0,0,.3)">MN</div>`;
-      const oldPriceText = p.old_price ? `<span style="text-decoration:line-through;color:var(--cbl);font-size:10px;margin-left:5px">${fmtPrice(p.old_price)}</span>` : '';
-      const badgeHtml = p.badge ? `<span class="prod-badge b-${p.badge}" style="position:static;padding:2px 6px;font-size:7px">${p.badge}</span>` : '—';
-      const sizesList = Array.isArray(p.sizes) ? p.sizes.join(', ') : (p.sizes || '—');
-      return `<tr>
-        <td style="padding:.5rem 1rem">${imgHtml}</td>
-        <td style="font-weight:600;color:var(--cbd)">
-          ${p.name}
-          <div style="font-size:10px;color:var(--cbl);margin-top:2px">Sizes: <strong style="color:var(--ca)">${sizesList}</strong></div>
-        </td>
-        <td>${p.category || ''}${p.label ? `<br><span style="font-size:10px;color:var(--cbl)">${p.label}</span>` : ''}</td>
-        <td><strong>${fmtPrice(p.price || 0)}</strong>${oldPriceText}</td>
-        <td>${p.stock ?? 0}</td>
-        <td>${badgeHtml}</td>
-        <td>
-          <div style="display:flex;gap:.4rem">
-            <button class="btn-dark" style="padding:6px 10px;font-size:9px;border-color:var(--ca);color:var(--cbd)" onclick="editAdminProduct('${p.id}')">Edit</button>
-            <button class="btn-dark" style="padding:6px 10px;font-size:9px;border-color:#C62828;color:#C62828" onclick="deleteAdminProduct('${p.id}', this)">Delete</button>
+    allInventoryProducts = Array.isArray(data) ? data : [];
+    renderInventoryView(threshold);
+  } catch (err) {
+    if (cardsContainer) cardsContainer.innerHTML = '<div style="color:#C62828;grid-column:1/-1">⚠️ Error loading inventory data</div>';
+    if (body) body.innerHTML = '<tr><td colspan="6" style="padding:1.5rem;text-align:center;color:#C62828">⚠️ Error loading inventory</td></tr>';
+  }
+}
+
+function renderInventoryView(threshold = 10) {
+  const cardsContainer = document.getElementById('adminLowStockCards');
+  const body = document.getElementById('adminInventoryBody');
+
+  if (!allInventoryProducts.length) {
+    if (cardsContainer) cardsContainer.innerHTML = '<div style="padding:1rem;color:var(--cbl);font-family:\'Jost\',Arial,sans-serif;font-size:13px;grid-column:1/-1">No products found.</div>';
+    if (body) body.innerHTML = '<tr><td colspan="6" style="padding:2rem;text-align:center;color:var(--cbl);font-family:\'Jost\',Arial,sans-serif">No products found in catalog.</td></tr>';
+    return;
+  }
+
+  // 1. Render Low Stock Warning Cards (stock <= threshold)
+  const lowStockItems = allInventoryProducts.filter(p => Number(p.stock ?? 0) <= threshold);
+  // Sort out-of-stock first, then lowest stock
+  lowStockItems.sort((a, b) => Number(a.stock ?? 0) - Number(b.stock ?? 0));
+
+  if (cardsContainer) {
+    if (lowStockItems.length === 0) {
+      cardsContainer.innerHTML = `
+        <div style="padding:1.2rem;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;color:#166534;font-family:\'Jost\',Arial,sans-serif;font-size:13px;grid-column:1/-1;display:flex;align-items:center;gap:10px">
+          <i class="ti ti-circle-check" style="font-size:18px;color:#22C55E"></i>
+          <div><strong>All stock levels healthy!</strong> No products are currently below the threshold of ${threshold} units.</div>
+        </div>`;
+    } else {
+      cardsContainer.innerHTML = lowStockItems.map(p => {
+        const stockNum = Number(p.stock ?? 0);
+        const isOutOfStock = stockNum <= 0;
+        const thumb = resolveProductImage(p.img || p.primary_image || '');
+        const imgHtml = thumb
+          ? `<img src="${thumb}" alt="${escapeHtml(p.name || '')}">`
+          : `<div class="no-img">MN</div>`;
+
+        return `
+          <div class="low-stock-card ${isOutOfStock ? 'critical' : ''}">
+            <div class="low-stock-card-header">
+              ${imgHtml}
+              <div class="low-stock-card-info">
+                <div class="low-stock-card-title" title="${escapeHtml(p.name)}">${escapeHtml(p.name)}</div>
+                <div class="low-stock-card-meta">${escapeHtml(p.category || 'General')} • <strong>${fmtPrice(p.price || 0)}</strong></div>
+                <div style="margin-top:3px">
+                  <span class="stock-status-pill ${isOutOfStock ? 'out-of-stock' : 'low-stock'}">
+                    ${isOutOfStock ? '🔴 Out of Stock' : `🟡 ${stockNum} left`}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="low-stock-card-actions">
+              <span style="font-size:11px;color:var(--cbl);font-family:\'Jost\',Arial,sans-serif">Restock:</span>
+              <input type="number" id="quickStock_${p.id}" min="0" value="${stockNum + 20}" placeholder="Qty">
+              <button class="btn-solid" style="padding:4px 12px;font-size:10px;white-space:nowrap" onclick="quickUpdateStock('${p.id}', document.getElementById('quickStock_${p.id}').value, this)">
+                <i class="ti ti-check"></i> Set Stock
+              </button>
+            </div>
           </div>
+        `;
+      }).join('');
+    }
+  }
+
+  // 2. Render Full Inventory Table
+  renderInventoryTableRows(allInventoryProducts, threshold);
+}
+
+function renderInventoryTableRows(products, threshold = 10) {
+  const body = document.getElementById('adminInventoryBody');
+  if (!body) return;
+
+  if (!products.length) {
+    body.innerHTML = '<tr><td colspan="6" style="padding:1.5rem;text-align:center;color:var(--cbl);font-family:\'Jost\',Arial,sans-serif">No products match your search.</td></tr>';
+    return;
+  }
+
+  body.innerHTML = products.map(p => {
+    const stockNum = Number(p.stock ?? 0);
+    const thumb = resolveProductImage(p.img || p.primary_image || '');
+    const imgHtml = thumb
+      ? `<img src="${thumb}" alt="${escapeHtml(p.name || '')}" style="width:36px;height:46px;object-fit:cover;border-radius:4px">`
+      : `<div style="width:36px;height:46px;background:var(--cr);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:rgba(0,0,0,.3)">MN</div>`;
+
+    let statusPill = `<span class="stock-status-pill in-stock">🟢 In Stock</span>`;
+    if (stockNum <= 0) {
+      statusPill = `<span class="stock-status-pill out-of-stock">🔴 Out of Stock</span>`;
+    } else if (stockNum <= threshold) {
+      statusPill = `<span class="stock-status-pill low-stock">🟡 Low Stock</span>`;
+    }
+
+    return `
+      <tr id="invRow_${p.id}">
+        <td style="padding:.4rem 1rem">${imgHtml}</td>
+        <td style="font-weight:600;color:var(--cbd)">
+          ${escapeHtml(p.name)}
+          <div style="font-size:10px;color:var(--cbl)">${fmtPrice(p.price || 0)}</div>
         </td>
-      </tr>`;
-    }).join('');
+        <td>${escapeHtml(p.category || '—')}</td>
+        <td style="text-align:center" id="invStockCell_${p.id}">
+          <strong style="font-size:14px;color:var(--cbd)" id="invStockVal_${p.id}">${stockNum}</strong>
+        </td>
+        <td style="text-align:center" id="invStatusCell_${p.id}">
+          ${statusPill}
+        </td>
+        <td style="text-align:center" id="invActionCell_${p.id}">
+          <button class="btn-dark" style="padding:5px 10px;font-size:10px" onclick="openInlineStockEdit('${p.id}')">
+            <i class="ti ti-pencil"></i> Quick Edit
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function filterInventoryTable(query) {
+  const q = (query || '').toLowerCase().trim();
+  const threshold = Number(document.getElementById('stockThreshold')?.value || 10);
+  if (!q) {
+    renderInventoryTableRows(allInventoryProducts, threshold);
+    return;
+  }
+  const filtered = allInventoryProducts.filter(p => 
+    (p.name && p.name.toLowerCase().includes(q)) ||
+    (p.category && p.category.toLowerCase().includes(q)) ||
+    (p.label && p.label.toLowerCase().includes(q))
+  );
+  renderInventoryTableRows(filtered, threshold);
+}
+
+function openInlineStockEdit(productId) {
+  const p = allInventoryProducts.find(x => String(x.id) === String(productId));
+  if (!p) return;
+
+  const stockCell = document.getElementById(`invStockCell_${productId}`);
+  const actionCell = document.getElementById(`invActionCell_${productId}`);
+  if (!stockCell || !actionCell) return;
+
+  const currentVal = p.stock ?? 0;
+  stockCell.innerHTML = `
+    <div class="inline-stock-edit">
+      <input type="number" id="inlineInput_${productId}" min="0" value="${currentVal}" style="width:65px;height:28px;text-align:center">
+    </div>
+  `;
+
+  actionCell.innerHTML = `
+    <div style="display:inline-flex;gap:4px">
+      <button class="btn-solid" style="padding:4px 8px;font-size:10px" onclick="saveInlineStockEdit('${productId}')">
+        <i class="ti ti-check"></i>
+      </button>
+      <button class="btn-dark" style="padding:4px 8px;font-size:10px" onclick="cancelInlineStockEdit('${productId}')">
+        <i class="ti ti-x"></i>
+      </button>
+    </div>
+  `;
+
+  const input = document.getElementById(`inlineInput_${productId}`);
+  if (input) {
+    input.focus();
+    input.select();
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') saveInlineStockEdit(productId);
+      if (e.key === 'Escape') cancelInlineStockEdit(productId);
+    });
+  }
+}
+
+function cancelInlineStockEdit(productId) {
+  const p = allInventoryProducts.find(x => String(x.id) === String(productId));
+  if (!p) return;
+  const threshold = Number(document.getElementById('stockThreshold')?.value || 10);
+  
+  const stockCell = document.getElementById(`invStockCell_${productId}`);
+  const actionCell = document.getElementById(`invActionCell_${productId}`);
+  if (stockCell) stockCell.innerHTML = `<strong style="font-size:14px;color:var(--cbd)" id="invStockVal_${productId}">${p.stock ?? 0}</strong>`;
+  if (actionCell) actionCell.innerHTML = `
+    <button class="btn-dark" style="padding:5px 10px;font-size:10px" onclick="openInlineStockEdit('${productId}')">
+      <i class="ti ti-pencil"></i> Quick Edit
+    </button>
+  `;
+}
+
+async function saveInlineStockEdit(productId) {
+  const input = document.getElementById(`inlineInput_${productId}`);
+  if (!input) return;
+  const newQty = Number(input.value);
+  if (isNaN(newQty) || newQty < 0) {
+    showToast('Please enter a valid stock number');
+    return;
+  }
+  await quickUpdateStock(productId, newQty);
+}
+
+async function quickUpdateStock(productId, newQty, btn) {
+  const qty = Math.max(0, parseInt(newQty, 10) || 0);
+  const origText = btn ? btn.textContent : '';
+  if (btn) { btn.disabled = true; btn.textContent = '...'; }
+
+  // Use PATCH for partial update, fallback to PUT
+  let res = await apiRequest(`/admin/products/${productId}`, 'PATCH', { stock: qty });
+  if (res && res.error) {
+    // Try standard PUT with full product data if PATCH failed
+    const p = allInventoryProducts.find(x => String(x.id) === String(productId));
+    if (p) {
+      res = await apiRequest(`/admin/products/${productId}`, 'PUT', { ...p, stock: qty });
+    }
+  }
+
+  if (btn) { btn.disabled = false; btn.textContent = origText; }
+
+  if (!res || !res.error) {
+    showToast(`✓ Stock updated to ${qty}`);
+    
+    // Update memory
+    const updateTarget = (list) => {
+      const item = list.find(x => String(x.id) === String(productId));
+      if (item) item.stock = qty;
+    };
+    updateTarget(allInventoryProducts);
+    updateTarget(allAdminProducts);
+    if (typeof products !== 'undefined' && Array.isArray(products)) {
+      updateTarget(products);
+    }
+    upsertExtraProduct({ id: productId, stock: qty });
+
+    // Refresh inventory view & catalog
+    const threshold = Number(document.getElementById('stockThreshold')?.value || 10);
+    renderInventoryView(threshold);
+  } else {
+    showToast(res.message || res.error || 'Failed to update stock');
   }
 }
 
@@ -11354,7 +12488,11 @@ async function deleteAdminProduct(productId, btn) {
 
   if (result && !result.error) {
     showToast('✓ Product deleted successfully');
+    deleteExtraProduct(productId);
     loadAdminCatalog();
+    if (document.getElementById('admin-panel-inventory')?.style.display !== 'none') {
+      loadAdminInventory();
+    }
   } else {
     showToast(result.message || result.error || 'Failed to delete product');
   }
@@ -11473,44 +12611,56 @@ async function renderAdminDashboard() {
 
   const statsWrap = document.getElementById('adminStats');
   const body = document.getElementById('adminOrdersBody');
-  if (statsWrap) statsWrap.innerHTML = '<div class="stat-card"><div class="stat-num">...</div><div class="stat-lbl">Loading</div></div>';
+  if (statsWrap) statsWrap.innerHTML = '<div class="stat-card"><div class="stat-num">...</div><div class="stat-lbl">Loading stats...</div></div>';
   if (body) body.innerHTML = '<tr><td colspan="6" style="padding:1rem;font-family:var(--sans);color:var(--cbl)">Loading orders...</td></tr>';
 
-  const [stats, orders] = await Promise.all([
-    apiGet('/admin/stats/dashboard'),
-    apiGet('/admin/orders')
-  ]);
+  try {
+    const [stats, orders] = await Promise.all([
+      apiGet('/admin/stats/dashboard'),
+      apiGet('/admin/orders')
+    ]);
 
-  if (statsWrap) {
-    statsWrap.innerHTML = [
-      adminStatCard('👥', stats.total_users ?? 0, 'Users', 'Registered customers', '#F5ECE0'),
-      adminStatCard('🛍', stats.total_products ?? 0, 'Products', 'Catalog items', '#EDF0FA'),
-      adminStatCard('📦', stats.total_orders ?? 0, 'Orders', 'All store orders', '#F0F5E8'),
-      adminStatCard('💰', fmtPrice(stats.total_revenue ?? 0), 'Revenue', 'Paid orders only', '#FFF0F3')
-    ].join('');
-  }
+    if (statsWrap) {
+      if (stats && !stats.error && stats.success !== false) {
+        statsWrap.innerHTML = [
+          adminStatCard('👥', stats.total_users ?? 0, 'Users', 'Registered customers', '#F5ECE0'),
+          adminStatCard('🛍', stats.total_products ?? 0, 'Products', 'Catalog items', '#EDF0FA'),
+          adminStatCard('📦', stats.total_orders ?? 0, 'Orders', 'All store orders', '#F0F5E8'),
+          adminStatCard('💰', fmtPrice(stats.total_revenue ?? 0), 'Revenue', 'Paid orders only', '#FFF0F3')
+        ].join('');
+      } else {
+        statsWrap.innerHTML = `<div style="padding:.9rem 1.2rem;background:#FFF3F3;border:1px solid #FFCDD2;border-radius:8px;color:#C62828;font-size:12px;width:100%;font-family:var(--sans)">⚠️ Stats Notice: ${escapeHtml(stats?.error || stats?.message || 'Unable to fetch dashboard metrics')}</div>`;
+      }
+    }
 
-  const rows = Array.isArray(orders) ? orders : [];
-  if (body) {
-    body.innerHTML = rows.length ? rows.map((o, idx) => {
-      const sid = `adminStatus_${o.id}_${idx}`;
-      return `<tr>
-        <td><a onclick="viewAdminOrderDetails('${o.id}')" style="cursor:pointer;color:var(--ca);text-decoration:underline;font-weight:600">${o.order_number || o.reference || o.id}</a></td>
-        <td>${(o.first_name || '') + ' ' + (o.last_name || '')}<br><span style="font-family:'Jost',Arial,sans-serif;font-size:10px;color:var(--cbl)">${o.email || ''}</span></td>
-        <td>${fmtPrice(o.total || 0)}</td>
-        <td><span class="status-badge s-${(o.status || 'processing').toLowerCase()}">${o.status || 'processing'}</span></td>
-        <td style="font-family:'Jost',Arial,sans-serif;font-size:11px;color:var(--cbl)">${(o.created_at || '').slice(0, 10)}</td>
-        <td>
-          <div style="display:flex;gap:.4rem;align-items:center;flex-wrap:wrap">
-            <select id="${sid}" style="padding:6px 8px;border:1px solid #DDD;background:#fff;font-family:'Jost',Arial,sans-serif;font-size:11px">
-              ${adminStatusOptions(o.status || 'processing')}
-            </select>
-            <button class="btn-dark" style="padding:7px 10px;font-size:9px" onclick="updateAdminOrderStatus('${o.id}', '${sid}')">Save</button>
-            <button class="btn-solid" style="padding:7px 10px;font-size:9px" onclick="viewAdminOrderDetails('${o.id}')">View Details</button>
-          </div>
-        </td>
-      </tr>`;
-    }).join('') : '<tr><td colspan="6" style="padding:1rem;font-family:var(--sans);color:var(--cbl)">No orders yet.</td></tr>';
+    if (body) {
+      if (orders && (orders.error || orders.success === false)) {
+        body.innerHTML = `<tr><td colspan="6" style="padding:2rem;text-align:center;font-family:var(--sans);color:#C62828">⚠️ ${escapeHtml(orders.error || orders.message || 'Failed to load orders')}. <button class="btn-dark" style="margin-left:10px" onclick="renderAdminDashboard()">Retry</button></td></tr>`;
+      } else {
+        const rows = Array.isArray(orders) ? orders : [];
+        body.innerHTML = rows.length ? rows.map((o, idx) => {
+          const sid = `adminStatus_${o.id}_${idx}`;
+          return `<tr>
+            <td><a onclick="viewAdminOrderDetails('${o.id}')" style="cursor:pointer;color:var(--ca);text-decoration:underline;font-weight:600">${escapeHtml(o.order_number || o.reference || o.id)}</a></td>
+            <td>${escapeHtml((o.first_name || '') + ' ' + (o.last_name || ''))}<br><span style="font-family:'Jost',Arial,sans-serif;font-size:10px;color:var(--cbl)">${escapeHtml(o.email || '')}</span></td>
+            <td>${fmtPrice(o.total || 0)}</td>
+            <td><span class="status-badge s-${(o.status || 'processing').toLowerCase()}">${escapeHtml(o.status || 'processing')}</span></td>
+            <td style="font-family:'Jost',Arial,sans-serif;font-size:11px;color:var(--cbl)">${escapeHtml((o.created_at || '').slice(0, 10))}</td>
+            <td>
+              <div style="display:flex;gap:.4rem;align-items:center;flex-wrap:wrap">
+                <select id="${sid}" style="padding:6px 8px;border:1px solid #DDD;background:#fff;font-family:'Jost',Arial,sans-serif;font-size:11px">
+                  ${adminStatusOptions(o.status || 'processing')}
+                </select>
+                <button class="btn-dark" style="padding:7px 10px;font-size:9px" onclick="updateAdminOrderStatus('${o.id}', '${sid}')">Save</button>
+                <button class="btn-solid" style="padding:7px 10px;font-size:9px" onclick="viewAdminOrderDetails('${o.id}')">View Details</button>
+              </div>
+            </td>
+          </tr>`;
+        }).join('') : '<tr><td colspan="6" style="padding:1.5rem;text-align:center;font-family:var(--sans);color:var(--cbl)">No orders placed yet.</td></tr>';
+      }
+    }
+  } catch (err) {
+    if (body) body.innerHTML = `<tr><td colspan="6" style="padding:2rem;text-align:center;font-family:var(--sans);color:#C62828">⚠️ Failed to connect to server. <button class="btn-dark" style="margin-left:10px" onclick="renderAdminDashboard()">Retry</button></td></tr>`;
   }
 }
 
@@ -12447,21 +13597,32 @@ function go(id) {
     if (!currentUser) {
       showAccSec('login');
     } else if (currentUser.role === 'admin') {
-      showAccSec('admin');
-    } else {
       const savedSec = sessionStorage.getItem('mn_acc_sec');
+      showAccSec(savedSec || 'admin');
+    } else {
+      let savedSec = sessionStorage.getItem('mn_acc_sec');
+      if (savedSec === 'admin') savedSec = 'dashboard';
       showAccSec(savedSec || 'dashboard');
       renderUserOrders();
     }
   }
+  if (id === 'lookbook') {
+    // Load from Firestore if not yet loaded
+    if (!_lbData) loadLookbook();
+  }
 }
 
 function showAccSec(sec) {
+  // Guard: Restrict admin section to confirmed admins only
+  if (sec === 'admin' && (!currentUser || currentUser.role !== 'admin')) {
+    sec = currentUser ? 'dashboard' : 'login';
+  }
+
   document.querySelectorAll('.acc-section').forEach(s => s.classList.remove('acc-show'));
   document.querySelectorAll('.acc-menu a').forEach(a => a.classList.remove('acc-active'));
   
   const isAuth = (sec === 'login' || sec === 'register');
-  const isAdminWorkspace = (sec === 'admin');
+  const isAdminWorkspace = (sec === 'admin' && currentUser && currentUser.role === 'admin');
   const sidebar = document.querySelector('.acc-sidebar');
   const accGrid = document.querySelector('.account-grid');
   const accMain = document.querySelector('.acc-main');
@@ -12525,14 +13686,18 @@ function showAccSec(sec) {
   // ── Persist account sub-section for refresh ──
   const nonPersistSecs = ['login', 'register'];
   if (!nonPersistSecs.includes(sec)) {
-    sessionStorage.setItem('mn_acc_sec', sec);
+    if (sec === 'admin' && (!currentUser || currentUser.role !== 'admin')) {
+      sessionStorage.setItem('mn_acc_sec', 'dashboard');
+    } else {
+      sessionStorage.setItem('mn_acc_sec', sec);
+    }
   } else {
     sessionStorage.removeItem('mn_acc_sec');
   }
 
   if (sec === 'wishlist') renderWL();
   if (sec === 'profile')  loadProfile();
-  if (sec === 'admin')    renderAdminDashboard();
+  if (sec === 'admin' && currentUser?.role === 'admin') renderAdminDashboard();
   if (sec === 'orders')   renderUserOrders();
   if (sec === 'dashboard' && currentUser) renderUserOrders();
   
@@ -12667,6 +13832,635 @@ if (firebaseAuth && firebaseSdk.onAuthStateChanged) {
 } else {
   startApp();
 }
+
+// ══════════════════════════════════════════════════════════════════
+//  LOOKBOOK — Dynamic Firestore-Driven with 5 Layout Presets
+// ══════════════════════════════════════════════════════════════════
+
+let _lbData = null; // cached lookbook data
+
+// ── Load lookbook from Firestore via /api/lookbook ─────────────────
+async function loadLookbook() {
+  try {
+    const data = await apiGet('/lookbook');
+    if (data && (data.hero || (Array.isArray(data.sections) && data.sections.length))) {
+      _lbData = data;
+      renderLookbook(data);
+    } else {
+      renderLookbookEmpty();
+    }
+  } catch (err) {
+    console.warn('Lookbook load error:', err);
+    renderLookbookEmpty();
+  }
+}
+
+function renderLookbookEmpty() {
+  const c = document.getElementById('lookbookContainer');
+  if (!c) return;
+  c.innerHTML = `
+    <div class="lookbook-hero" style="background:#1E1814;display:flex;align-items:center;justify-content:center">
+      <div class="lookbook-hero-copy" style="position:relative;transform:none;opacity:1">
+        <p class="lb-kicker">Marina Nixon</p>
+        <h1>Lookbook</h1>
+        <div class="lb-rule"></div>
+        <p class="lb-sub" style="opacity:.65">The lookbook is being curated — check back soon.</p>
+      </div>
+    </div>`;
+}
+
+// ── Main lookbook renderer ─────────────────────────────────────────
+function renderLookbook(data) {
+  const c = document.getElementById('lookbookContainer');
+  if (!c) return;
+  const { hero = {}, sections = [] } = data;
+
+  let html = '';
+
+  // Hero Banner
+  html += renderLookbookHero(hero);
+
+  // Sections + optional quote divider between them
+  sections.forEach((sec, idx) => {
+    html += renderLookbookSectionHeader(sec);
+    html += renderLookbookSection(sec);
+    // Insert quote block between first and second section
+    if (idx === 0 && hero.quote) {
+      html += renderLookbookQuote(hero);
+    }
+  });
+
+  // Bottom CTA strip
+  if (hero.cta_image || hero.cta_title) {
+    html += renderLookbookCTA(hero);
+  }
+
+  c.innerHTML = html;
+}
+
+function renderLookbookHero(hero) {
+  const img = hero.image ? `<img class="lookbook-hero-img" src="${escapeHtml(hero.image)}" alt="${escapeHtml(hero.title || 'Lookbook')}" loading="eager">` : '';
+  return `
+    <div class="lookbook-hero">
+      ${img}
+      <div class="lookbook-hero-shade"></div>
+      <div class="lookbook-hero-copy">
+        <p class="lb-kicker">${escapeHtml(hero.kicker || 'Marina Nixon')}</p>
+        <h1>${escapeHtml(hero.title || 'Lookbook')}</h1>
+        <div class="lb-rule"></div>
+        <p class="lb-sub">${escapeHtml(hero.subtitle || 'A season of warmth, texture, and understated power')}</p>
+      </div>
+    </div>`;
+}
+
+function renderLookbookSectionHeader(sec) {
+  if (!sec.title && !sec.subtitle) return '';
+  return `
+    <div class="lb-section-header">
+      ${sec.subtitle ? `<p class="lb-section-kicker">${escapeHtml(sec.subtitle)}</p>` : ''}
+      ${sec.title ? `<h2 class="lb-section-title">${escapeHtml(sec.title)}</h2>` : ''}
+      <div class="lb-section-rule"></div>
+    </div>`;
+}
+
+function renderLookbookQuote(hero) {
+  if (!hero.quote) return '';
+  return `
+    <div class="lb-quote-block">
+      <p class="lb-quote-text">"${escapeHtml(hero.quote)}"</p>
+      <div class="lb-quote-rule"></div>
+      <p class="lb-quote-attr">${escapeHtml(hero.quote_attr || '— Marina Nixon')}</p>
+    </div>`;
+}
+
+function renderLookbookCTA(hero) {
+  const img = hero.cta_image ? `<img src="${escapeHtml(hero.cta_image)}" alt="Shop the Lookbook" loading="lazy">` : '';
+  const title = hero.cta_title || 'Shop Every Look';
+  return `
+    <div class="lb-cta-strip">
+      ${img}
+      <div class="lb-cta-overlay">
+        <p style="font-family:'Jost',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#C9A96E;margin-bottom:1rem">The Full Collection</p>
+        <h2 style="font-size:clamp(26px,4vw,42px);font-weight:400;color:#FDFAF5;letter-spacing:4px;text-transform:uppercase;margin-bottom:1.5rem">${escapeHtml(title)}</h2>
+        <button onclick="go('shop')" style="padding:13px 40px;border:1px solid #C9A96E;color:#C9A96E;font-family:'Jost',Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;background:transparent;transition:all .3s" onmouseover="this.style.background='#C9A96E';this.style.color='#1E1814'" onmouseout="this.style.background='transparent';this.style.color='#C9A96E'">Shop the Lookbook</button>
+      </div>
+    </div>`;
+}
+
+// ── Dispatch to layout renderers ───────────────────────────────────
+function renderLookbookSection(sec) {
+  const items = Array.isArray(sec.items) ? sec.items : [];
+  if (!items.length) return '';
+  switch (sec.layout) {
+    case 'masonry':     return renderLookbookMasonry(items);
+    case 'film':        return renderLookbookFilmStrip(items);
+    case 'alternating': return renderLookbookAlternating(items);
+    case 'square':      return renderLookbookSquareGrid(items);
+    default:            return renderLookbookEditorial(items);
+  }
+}
+
+// ── Layout 1: Editorial (3-column magazine) ────────────────────────
+function renderLookbookEditorial(items) {
+  if (!items.length) return '';
+  const tall = items[0];
+  const feature = items[1] || null;
+  const stacked = items.slice(2);
+
+  const tallCol = `<div class="lb-img-item" style="min-height:520px" onclick="${tall.product_id ? `quickView('${tall.product_id}')` : "go('shop')"}" role="button">
+    ${tall.image ? `<img src="${escapeHtml(tall.image)}" alt="${escapeHtml(tall.title||'')}" loading="lazy" style="height:100%">` : ''}
+    ${renderLbHotspot(tall)}
+    ${renderLbBadge(tall)}
+    ${renderLbCaption(tall)}
+  </div>`;
+
+  const featureCol = feature ? `<div class="lb-img-item" style="min-height:520px" onclick="${feature.product_id ? `quickView('${feature.product_id}')` : "go('shop')"}" role="button">
+    ${feature.image ? `<img src="${escapeHtml(feature.image)}" alt="${escapeHtml(feature.title||'')}" loading="lazy" style="height:100%">` : ''}
+    ${renderLbHotspot(feature)}
+    ${renderLbBadge(feature)}
+    ${renderLbCaption(feature)}
+  </div>` : '';
+
+  const stackCols = stacked.length ? `<div class="lb-stack">${stacked.map(item => `
+    <div class="lb-img-item" style="flex:1;min-height:${Math.floor(520/Math.max(stacked.length,1))}px" onclick="${item.product_id ? `quickView('${item.product_id}')` : "go('shop')"}" role="button">
+      ${item.image ? `<img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title||'')}" loading="lazy" style="height:100%">` : ''}
+      ${renderLbHotspot(item)}
+      ${renderLbBadge(item)}
+      ${renderLbCaption(item)}
+    </div>`).join('')}</div>` : '';
+
+  return `<div class="lb-layout-editorial" data-cols="3">${tallCol}${featureCol}${stackCols}</div>`;
+}
+
+// ── Layout 2: Masonry ──────────────────────────────────────────────
+function renderLookbookMasonry(items) {
+  const heights = [300, 420, 360, 280, 400, 320, 480, 350];
+  return `<div class="lb-layout-masonry">${items.map((item, i) => `
+    <div class="lb-masonry-item" onclick="${item.product_id ? `quickView('${item.product_id}')` : "go('shop')"}" role="button">
+      ${item.image ? `<img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title||'')}" loading="lazy" style="height:${heights[i % heights.length]}px;object-fit:cover">` : ''}
+      ${renderLbHotspot(item)}
+      ${renderLbBadge(item)}
+      ${renderLbCaption(item)}
+    </div>`).join('')}</div>`;
+}
+
+// ── Layout 3: Film Strip (horizontal scroll) ───────────────────────
+function renderLookbookFilmStrip(items) {
+  const stripId = 'lbFilm_' + Math.random().toString(36).slice(2, 7);
+  return `
+    <div class="lb-layout-film" id="${stripId}">${items.map(item => `
+      <div class="lb-film-item" onclick="${item.product_id ? `quickView('${item.product_id}')` : "go('shop')"}" role="button">
+        ${item.image ? `<img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title||'')}" loading="lazy">` : ''}
+        ${renderLbHotspot(item)}
+        ${renderLbBadge(item)}
+        ${renderLbCaption(item)}
+      </div>`).join('')}
+    </div>
+    <div class="lb-film-arrows">
+      <button class="lb-film-arrow-btn" onclick="document.getElementById('${stripId}').scrollBy({left:-340,behavior:'smooth'})" aria-label="Previous">&#8592;</button>
+      <button class="lb-film-arrow-btn" onclick="document.getElementById('${stripId}').scrollBy({left:340,behavior:'smooth'})" aria-label="Next">&#8594;</button>
+    </div>`;
+}
+
+// ── Layout 4: Alternating (image + text rows) ──────────────────────
+function renderLookbookAlternating(items) {
+  return `<div class="lb-layout-alternating">${items.map(item => {
+    const prod = item.product_id ? PRODUCTS.find(p => String(p.id) === String(item.product_id)) : null;
+    return `<div class="lb-alt-row">
+      <div class="lb-alt-img" onclick="${item.product_id ? `quickView('${item.product_id}')` : "go('shop')"}" role="button" style="cursor:pointer">
+        ${item.image ? `<img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title||'')}" loading="lazy">` : ''}
+        ${renderLbHotspot(item)}
+        ${renderLbBadge(item)}
+      </div>
+      <div class="lb-alt-text">
+        ${item.category ? `<p class="lb-item-cat">${escapeHtml(item.category)}</p>` : ''}
+        <h3 class="lb-alt-name">${escapeHtml(item.title || (prod ? prod.name : 'Luxury Piece'))}</h3>
+        ${prod && prod.description ? `<p class="lb-alt-desc">${escapeHtml(prod.description)}</p>` : '<p class="lb-alt-desc">Handcrafted in Accra. Premium fabrication with bespoke finishing.</p>'}
+        ${prod ? `<p class="lb-alt-price">${fmtPrice(prod.price)}</p>` : ''}
+        <button class="lb-alt-btn" onclick="${item.product_id ? `quickView('${item.product_id}')` : "go('shop')"}">${item.product_id ? 'Quick View →' : 'Shop the Look →'}</button>
+      </div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+// ── Layout 5: Square Grid ──────────────────────────────────────────
+function renderLookbookSquareGrid(items) {
+  return `<div class="lb-layout-square">${items.map(item => `
+    <div class="lb-sq-item${item.span === 'wide' ? ' wide' : item.span === 'tall' ? ' tall' : ''}" onclick="${item.product_id ? `quickView('${item.product_id}')` : "go('shop')"}" role="button">
+      ${item.image ? `<img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title||'')}" loading="lazy">` : ''}
+      ${renderLbHotspot(item)}
+      ${renderLbBadge(item)}
+      ${renderLbCaption(item)}
+    </div>`).join('')}</div>`;
+}
+
+// ── Shared sub-renderers ───────────────────────────────────────────
+function renderLbCaption(item) {
+  if (!item.title && !item.category) return '';
+  const prod = item.product_id ? PRODUCTS.find(p => String(p.id) === String(item.product_id)) : null;
+  return `<div class="lb-item-caption">
+    ${item.category ? `<p class="lb-item-cat">${escapeHtml(item.category)}</p>` : ''}
+    ${item.title ? `<p class="lb-item-name">${escapeHtml(item.title)}</p>` : ''}
+    ${prod ? `<p class="lb-item-price">${fmtPrice(prod.price)}</p>` : ''}
+  </div>`;
+}
+
+function renderLbBadge(item) {
+  if (!item.badge) return '';
+  return `<div class="lb-badge-pill">${escapeHtml(item.badge)}</div>`;
+}
+
+function renderLbHotspot(item) {
+  if (item.hotspot_x == null || item.hotspot_y == null || !item.product_id) return '';
+  const prod = PRODUCTS.find(p => String(p.id) === String(item.product_id));
+  if (!prod) return '';
+  return `<div class="lb-hotspot" style="left:${item.hotspot_x}%;top:${item.hotspot_y}%" onclick="event.stopPropagation();quickView('${item.product_id}')">
+    <div class="lb-hotspot-dot"></div>
+    <div class="lb-hotspot-card">
+      <p style="font-size:9px;color:var(--ca);letter-spacing:1px;text-transform:uppercase">${escapeHtml(prod.label || prod.category || '')}</p>
+      <p style="font-size:12px;font-weight:600;color:var(--cbd);margin:2px 0">${escapeHtml(prod.name)}</p>
+      <p style="font-size:11px;color:var(--cbl)">${fmtPrice(prod.price)}</p>
+      <span style="display:inline-block;margin-top:4px;font-size:10px;color:var(--ca);font-weight:600">Quick View ➔</span>
+    </div>
+  </div>`;
+}
+
+
+
+// ══════════════════════════════════════════════════════════════════
+
+let _adminLbData = { hero: {}, sections: [] };
+let _lbCurrentSectionId = null;
+
+// ── Load lookbook into admin panel ─────────────────────────────────
+async function loadAdminLookbook() {
+  const sectionsEl = document.getElementById('adminLbSections');
+  if (sectionsEl) sectionsEl.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--cbl);font-family:\'Jost\',Arial,sans-serif">Loading...</div>';
+
+  try {
+    const data = await apiGet('/admin/lookbook');
+    if (data && !data.error) {
+      _adminLbData = data;
+      populateLbHeroForm(data.hero || {});
+      renderAdminLbSections(data.sections || []);
+    } else {
+      _adminLbData = { hero: {}, sections: [] };
+      renderAdminLbSections([]);
+    }
+  } catch (err) {
+    console.warn('Admin lookbook load error:', err);
+    renderAdminLbSections([]);
+  }
+}
+
+function populateLbHeroForm(hero) {
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+  set('lbHeroKicker', hero.kicker);
+  set('lbHeroTitle', hero.title);
+  set('lbHeroSub', hero.subtitle);
+  set('lbHeroImgUrl', hero.image);
+  set('lbQuote', hero.quote);
+  set('lbQuoteAttr', hero.quote_attr);
+  set('lbCtaImg', hero.cta_image);
+  set('lbCtaTitle', hero.cta_title);
+
+  const preview = document.getElementById('lbHeroImgPreview');
+  const wrap = document.getElementById('lbHeroImgPreviewWrap');
+  if (hero.image && preview && wrap) {
+    preview.src = hero.image;
+    wrap.style.display = 'block';
+  }
+}
+
+function renderAdminLbSections(sections) {
+  const el = document.getElementById('adminLbSections');
+  if (!el) return;
+
+  if (!sections.length) {
+    el.innerHTML = `<div style="text-align:center;padding:3rem;border:2px dashed #EDE8DF;border-radius:10px">
+      <div style="font-size:36px;color:var(--ca);margin-bottom:1rem">📷</div>
+      <p style="font-family:'Jost',Arial,sans-serif;font-size:13px;color:var(--cbl);margin-bottom:1rem">No lookbook sections yet. Add your first section to get started.</p>
+      <button class="btn-solid" onclick="openLbSectionModal()" style="padding:10px 24px">+ Add First Section</button>
+    </div>`;
+    return;
+  }
+
+  const layoutLabels = { editorial: 'Editorial Grid', masonry: 'Masonry', film: 'Film Strip', alternating: 'Alternating', square: 'Square Grid' };
+  el.innerHTML = sections.map((sec, idx) => {
+    const items = Array.isArray(sec.items) ? sec.items : [];
+    return `<div class="lb-admin-section-card" data-section-id="${sec.id}">
+      <div class="lb-admin-section-header">
+        <span style="font-size:14px;color:var(--cbl);cursor:move" title="Drag to reorder">⠿</span>
+        <div style="flex:1">
+          <div style="font-family:'Playfair Display',serif;font-size:15px;color:var(--cbd);font-weight:600">${escapeHtml(sec.title || 'Untitled Section')}</div>
+          <div style="font-family:'Jost',Arial,sans-serif;font-size:11px;color:var(--cbl);margin-top:2px">Layout: <strong>${layoutLabels[sec.layout] || sec.layout}</strong> · ${items.length} image${items.length !== 1 ? 's' : ''}</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn-dark" onclick="openLbSectionModal('${sec.id}')" style="padding:5px 12px;font-size:10px">✏️ Edit</button>
+          <button class="btn-dark" onclick="openLbItemModal('${sec.id}')" style="padding:5px 12px;font-size:10px">+ Image</button>
+          <button onclick="deleteLbSection('${sec.id}')" style="padding:5px 10px;font-size:10px;border:1px solid #C62828;color:#C62828;background:transparent;border-radius:4px;cursor:pointer">🗑</button>
+        </div>
+      </div>
+      <!-- Items list -->
+      <div style="padding:12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px">
+        ${items.map(item => `
+          <div style="position:relative;border-radius:6px;overflow:hidden;border:1px solid #EDE8DF;background:#FAF8F5">
+            ${item.image ? `<img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title||'')}" class="lb-item-thumb" style="width:100%;height:80px;object-fit:cover;display:block">` : '<div style="width:100%;height:80px;background:#EDE8DF;display:flex;align-items:center;justify-content:center;font-size:24px">🖼</div>'}
+            <div style="padding:6px 8px">
+              <div style="font-size:10px;color:var(--cbd);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(item.title || '—')}</div>
+              ${item.badge ? `<span style="font-size:8px;background:#C9A96E;color:#1E1814;padding:1px 6px;border-radius:2px">${escapeHtml(item.badge)}</span>` : ''}
+            </div>
+            <div style="display:flex;gap:4px;padding:0 8px 8px">
+              <button onclick="openLbItemModal('${sec.id}','${item.id}')" style="flex:1;padding:3px;font-size:9px;border:1px solid #DDD;background:transparent;cursor:pointer;border-radius:3px">Edit</button>
+              <button onclick="deleteLbItem('${sec.id}','${item.id}')" style="padding:3px 6px;font-size:9px;border:1px solid #C62828;color:#C62828;background:transparent;cursor:pointer;border-radius:3px">✕</button>
+            </div>
+          </div>`).join('')}
+        <div style="border:2px dashed #EDE8DF;border-radius:6px;display:flex;align-items:center;justify-content:center;min-height:80px;cursor:pointer;transition:all .2s" onclick="openLbItemModal('${sec.id}')" onmouseover="this.style.borderColor='#C9A96E'" onmouseout="this.style.borderColor='#EDE8DF'">
+          <span style="font-size:22px;color:#C9A96E">+</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Save full lookbook hero ────────────────────────────────────────
+async function saveAdminLookbook(btn) {
+  if (btn) { btn.disabled = true; btn.textContent = 'Saving...'; }
+  try {
+    const get = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+    const heroPayload = {
+      kicker: get('lbHeroKicker'),
+      title: get('lbHeroTitle'),
+      subtitle: get('lbHeroSub'),
+      image: get('lbHeroImgUrl'),
+      quote: get('lbQuote'),
+      quote_attr: get('lbQuoteAttr'),
+      cta_image: get('lbCtaImg'),
+      cta_title: get('lbCtaTitle'),
+    };
+
+    const resp = await apiPut('/admin/lookbook/hero', heroPayload);
+    if (resp && !resp.error) {
+      showToast('✅ Lookbook published to storefront!');
+      loadLookbook(); // refresh storefront preview
+    } else {
+      showToast('⚠️ ' + (resp.error || 'Save failed'));
+    }
+  } catch (err) {
+    showToast('⚠️ Could not save lookbook: ' + err.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '💾 Publish Lookbook'; }
+  }
+}
+
+// ── Section Modal ──────────────────────────────────────────────────
+function openLbSectionModal(sectionId = null) {
+  const modal = document.getElementById('lbSectionModal');
+  if (!modal) return;
+  document.getElementById('lbSectionEditId').value = sectionId || '';
+  document.getElementById('lbSectionModalTitle').textContent = sectionId ? 'Edit Section' : 'Add Lookbook Section';
+
+  if (sectionId) {
+    const sec = (_adminLbData.sections || []).find(s => s.id === sectionId);
+    if (sec) {
+      document.getElementById('lbSecTitle').value = sec.title || '';
+      document.getElementById('lbSecSubtitle').value = sec.subtitle || '';
+      selectLbLayout(sec.layout || 'editorial', null, true);
+    }
+  } else {
+    document.getElementById('lbSecTitle').value = '';
+    document.getElementById('lbSecSubtitle').value = '';
+    selectLbLayout('editorial', null, true);
+  }
+  modal.style.display = 'flex';
+}
+
+function closeLbSectionModal() {
+  const modal = document.getElementById('lbSectionModal');
+  if (modal) modal.style.display = 'none';
+}
+
+async function saveLbSection() {
+  const sectionId = document.getElementById('lbSectionEditId').value;
+  const title = document.getElementById('lbSecTitle').value.trim();
+  const subtitle = document.getElementById('lbSecSubtitle').value.trim();
+  const layout = document.getElementById('lbSecLayout').value || 'editorial';
+
+  if (!title) { showToast('⚠️ Section title is required'); return; }
+
+  let resp;
+  if (sectionId) {
+    resp = await apiPut(`/admin/lookbook/sections/${sectionId}`, { title, subtitle, layout });
+  } else {
+    resp = await apiPost('/admin/lookbook/sections', { title, subtitle, layout });
+  }
+
+  if (resp && !resp.error) {
+    showToast(sectionId ? '✅ Section updated' : '✅ Section added');
+    closeLbSectionModal();
+    loadAdminLookbook();
+    loadLookbook();
+  } else {
+    showToast('⚠️ ' + (resp?.error || 'Save failed'));
+  }
+}
+
+async function deleteLbSection(sectionId) {
+  if (!confirm('Delete this section and all its images? This cannot be undone.')) return;
+  const resp = await apiDelete(`/admin/lookbook/sections/${sectionId}`);
+  if (resp && !resp.error) {
+    showToast('🗑 Section deleted');
+    loadAdminLookbook();
+    loadLookbook();
+  } else {
+    showToast('⚠️ ' + (resp?.error || 'Delete failed'));
+  }
+}
+
+function selectLbLayout(layout, el = null, silent = false) {
+  document.getElementById('lbSecLayout').value = layout;
+  document.querySelectorAll('#lbLayoutPicker .lb-layout-thumb').forEach(thumb => {
+    thumb.classList.toggle('active', thumb.dataset.layout === layout);
+    thumb.style.borderColor = thumb.dataset.layout === layout ? '#C9A96E' : 'transparent';
+    thumb.style.background = thumb.dataset.layout === layout ? '#C9A96E20' : '';
+  });
+}
+
+// ── Item Modal ─────────────────────────────────────────────────────
+function openLbItemModal(sectionId, itemId = null) {
+  const modal = document.getElementById('lbItemModal');
+  if (!modal) return;
+  _lbCurrentSectionId = sectionId;
+  document.getElementById('lbItemSectionId').value = sectionId;
+  document.getElementById('lbItemEditId').value = itemId || '';
+  document.getElementById('lbItemModalTitle').textContent = itemId ? 'Edit Lookbook Image' : 'Add Lookbook Image';
+
+  // Reset form
+  ['lbItemTitle', 'lbItemCategory', 'lbItemImgUrl'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  document.getElementById('lbItemBadge').value = '';
+  document.getElementById('lbItemSpan').value = 'normal';
+  document.getElementById('lbItemHotspotX').value = '';
+  document.getElementById('lbItemHotspotY').value = '';
+  document.getElementById('lbItemImgPreviewWrap').style.display = 'none';
+  document.getElementById('lbHotspotCoords').style.display = 'none';
+  document.getElementById('lbHotspotInstruct').style.display = 'none';
+
+  // Populate product dropdown from current PRODUCTS
+  const sel = document.getElementById('lbItemProductId');
+  if (sel) {
+    sel.innerHTML = '<option value="">No product link</option>' +
+      (Array.isArray(PRODUCTS) ? PRODUCTS : []).map(p =>
+        `<option value="${escapeHtml(String(p.id))}">${escapeHtml(p.name || p.id)}</option>`
+      ).join('');
+  }
+
+  if (itemId) {
+    const sec = (_adminLbData.sections || []).find(s => s.id === sectionId);
+    const item = sec ? (sec.items || []).find(i => i.id === itemId) : null;
+    if (item) {
+      document.getElementById('lbItemTitle').value = item.title || '';
+      document.getElementById('lbItemCategory').value = item.category || '';
+      document.getElementById('lbItemImgUrl').value = item.image || '';
+      document.getElementById('lbItemBadge').value = item.badge || '';
+      document.getElementById('lbItemSpan').value = item.span || 'normal';
+      if (sel && item.product_id) sel.value = item.product_id;
+      if (item.hotspot_x != null) {
+        document.getElementById('lbItemHotspotX').value = item.hotspot_x;
+        document.getElementById('lbItemHotspotY').value = item.hotspot_y;
+        document.getElementById('lbHotspotCoords').style.display = 'block';
+        updateLbHotspotMarker(item.hotspot_x, item.hotspot_y);
+      }
+      if (item.image) {
+        previewLbItemImgUrl(item.image);
+      }
+    }
+  }
+  modal.style.display = 'flex';
+}
+
+function closeLbItemModal() {
+  const modal = document.getElementById('lbItemModal');
+  if (modal) modal.style.display = 'none';
+}
+
+async function previewLbItemImg(input) {
+  if (!input.files || !input.files[0]) return;
+  const dataUrl = await compressImageFile(input.files[0]);
+  if (dataUrl) {
+    document.getElementById('lbItemImgUrl').value = dataUrl;
+    previewLbItemImgUrl(dataUrl);
+  }
+}
+
+function previewLbItemImgUrl(src) {
+  const preview = document.getElementById('lbItemImgPreview');
+  const wrap = document.getElementById('lbItemImgPreviewWrap');
+  const instruct = document.getElementById('lbHotspotInstruct');
+  if (src && preview && wrap) {
+    preview.src = src;
+    wrap.style.display = 'block';
+    if (instruct) instruct.style.display = 'block';
+    // Show hotspot coords if product linked
+    const sel = document.getElementById('lbItemProductId');
+    if (sel && sel.value) document.getElementById('lbHotspotCoords').style.display = 'block';
+  }
+}
+
+function placeHotspot(event, el) {
+  const rect = el.getBoundingClientRect();
+  const x = Math.round(((event.clientX - rect.left) / rect.width) * 100);
+  const y = Math.round(((event.clientY - rect.top) / rect.height) * 100);
+  document.getElementById('lbItemHotspotX').value = x;
+  document.getElementById('lbItemHotspotY').value = y;
+  document.getElementById('lbHotspotCoords').style.display = 'block';
+  updateLbHotspotMarker(x, y);
+}
+
+function updateLbHotspotMarker(x, y) {
+  const marker = document.getElementById('lbHotspotMarker');
+  if (marker) {
+    marker.style.left = x + '%';
+    marker.style.top = y + '%';
+    marker.style.display = 'block';
+  }
+}
+
+function clearLbHotspot() {
+  document.getElementById('lbItemHotspotX').value = '';
+  document.getElementById('lbItemHotspotY').value = '';
+  const marker = document.getElementById('lbHotspotMarker');
+  if (marker) marker.style.display = 'none';
+}
+
+async function handleLbHeroImgFile(input) {
+  if (!input.files || !input.files[0]) return;
+  const dataUrl = await compressImageFile(input.files[0]);
+  if (dataUrl) {
+    document.getElementById('lbHeroImgUrl').value = dataUrl;
+    previewLbHeroImg(dataUrl);
+  }
+}
+
+function previewLbHeroImg(src) {
+  const preview = document.getElementById('lbHeroImgPreview');
+  const wrap = document.getElementById('lbHeroImgPreviewWrap');
+  if (src && preview && wrap) {
+    preview.src = src;
+    wrap.style.display = 'block';
+  }
+}
+
+async function saveLbItem() {
+  const sectionId = document.getElementById('lbItemSectionId').value;
+  const itemId = document.getElementById('lbItemEditId').value;
+  const get = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+
+  const image = get('lbItemImgUrl');
+  if (!image) { showToast('⚠️ Please provide an image'); return; }
+
+  const payload = {
+    title: get('lbItemTitle'),
+    category: get('lbItemCategory'),
+    image,
+    product_id: get('lbItemProductId') || null,
+    badge: get('lbItemBadge') || null,
+    span: get('lbItemSpan') || 'normal',
+    hotspot_x: get('lbItemHotspotX') ? Number(get('lbItemHotspotX')) : null,
+    hotspot_y: get('lbItemHotspotY') ? Number(get('lbItemHotspotY')) : null,
+  };
+
+  let resp;
+  if (itemId) {
+    resp = await apiPut(`/admin/lookbook/sections/${sectionId}/items/${itemId}`, payload);
+  } else {
+    resp = await apiPost(`/admin/lookbook/sections/${sectionId}/items`, payload);
+  }
+
+  if (resp && !resp.error) {
+    showToast(itemId ? '✅ Image updated' : '✅ Image added to lookbook');
+    closeLbItemModal();
+    loadAdminLookbook();
+    loadLookbook();
+  } else {
+    showToast('⚠️ ' + (resp?.error || 'Save failed'));
+  }
+}
+
+async function deleteLbItem(sectionId, itemId) {
+  if (!confirm('Remove this image from the lookbook?')) return;
+  const resp = await apiDelete(`/admin/lookbook/sections/${sectionId}/items/${itemId}`);
+  if (resp && !resp.error) {
+    showToast('🗑 Image removed');
+    loadAdminLookbook();
+    loadLookbook();
+  } else {
+    showToast('⚠️ ' + (resp?.error || 'Delete failed'));
+  }
+}
+
+
 </script>
 <!-- ATELIER SIZE GUIDE MODAL -->
 <div class="modal-overlay" id="sizeGuideModal" onclick="closeSizeGuide()">

@@ -9,24 +9,25 @@ module.exports = () => {
     const uid = decoded.uid;
     const email = String(decoded.email || profile.email || '').trim().toLowerCase();
     const adminEmail = String(process.env.ADMIN_EMAIL || 'admin@marinanixon.com').trim().toLowerCase();
-    const isAdmin = email === adminEmail;
+    const userRef = db.collection('users').doc(uid);
+    const snap = await userRef.get();
+    const existingData = snap.exists ? snap.data() : {};
+    const isAdmin = email === adminEmail || existingData.role === 'admin' || decoded.role === 'admin';
 
     const first_name = String(profile.first_name || decoded.name || '').trim().split(' ')[0] || (isAdmin ? 'Marina' : 'User');
     const last_name = String(profile.last_name || decoded.name || '').trim().split(' ').slice(1).join(' ') || (isAdmin ? 'Nixon' : '');
-    const userRef = db.collection('users').doc(uid);
-    const snap = await userRef.get();
 
     const baseUser = {
       first_name,
       last_name,
       email,
-      phone: profile.phone || decoded.phone_number || snap.data()?.phone || null,
-      address: profile.address || snap.data()?.address || null,
-      city: profile.city || snap.data()?.city || null,
-      region: profile.region || snap.data()?.region || null,
-      role: isAdmin ? 'admin' : (snap.data()?.role || 'customer'),
+      phone: profile.phone || decoded.phone_number || existingData.phone || null,
+      address: profile.address || existingData.address || null,
+      city: profile.city || existingData.city || null,
+      region: profile.region || existingData.region || null,
+      role: isAdmin ? 'admin' : (existingData.role || 'customer'),
       is_verified: Boolean(decoded.email_verified),
-      created_at: snap.data()?.created_at || new Date().toISOString(),
+      created_at: existingData.created_at || new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
 
@@ -110,11 +111,10 @@ module.exports = () => {
     try {
       const decoded = await resolveToken(token);
       const db = getDb();
-      const snap = await db.collection('users').doc(String(decoded.uid)).get();
-      const email = String(decoded.email || '').trim().toLowerCase();
-      const adminEmail = String(process.env.ADMIN_EMAIL || 'admin@marinanixon.com').trim().toLowerCase();
-      const isAdmin = email === adminEmail;
       const userData = snap.exists ? snap.data() : {};
+      const email = String(decoded.email || userData.email || '').trim().toLowerCase();
+      const adminEmail = String(process.env.ADMIN_EMAIL || 'admin@marinanixon.com').trim().toLowerCase();
+      const isAdmin = email === adminEmail || userData.role === 'admin' || decoded.role === 'admin';
       res.json({ valid: true, user: { uid: decoded.uid, ...userData, role: isAdmin ? 'admin' : (userData.role || 'customer') } });
     } catch (err) {
       res.status(401).json({ valid: false, error: 'Invalid token' });
@@ -138,7 +138,7 @@ module.exports = () => {
       const user = snap.data();
       const email = String(decoded.email || user.email || '').trim().toLowerCase();
       const adminEmail = String(process.env.ADMIN_EMAIL || 'admin@marinanixon.com').trim().toLowerCase();
-      const isAdmin = email === adminEmail;
+      const isAdmin = email === adminEmail || user.role === 'admin' || decoded.role === 'admin';
 
       res.json({
         id: snap.id,

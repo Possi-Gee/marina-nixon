@@ -37,22 +37,24 @@ module.exports = () => {
     return Array.from(byId.values());
   };
 
-  // Get all products with filtering
+  // Get all products — Firestore is the source of truth.
+  // DEFAULT_PRODUCTS are ONLY used when Firestore itself throws (true 503 fallback).
   router.get('/', async (req, res) => {
     const { category, sort } = req.query;
     let rows = [];
+    let firestoreFailed = false;
 
     try {
       const db = getDb();
       const snap = await db.collection('products').get();
-      rows = mergeCatalog(snap.docs.map(toProduct));
+      rows = snap.docs.map(toProduct);
     } catch (err) {
-      console.warn('GET /api/products Firestore read warning:', err.message);
-      const { DEFAULT_PRODUCTS } = require('../bootstrap');
-      rows = [...DEFAULT_PRODUCTS];
+      console.warn('GET /api/products Firestore error, using fallback:', err.message);
+      firestoreFailed = true;
     }
 
-    if (!rows || rows.length === 0) {
+    // Last-resort fallback: only when Firestore itself errors out
+    if (firestoreFailed) {
       const { DEFAULT_PRODUCTS } = require('../bootstrap');
       rows = [...DEFAULT_PRODUCTS];
     }
@@ -83,14 +85,9 @@ module.exports = () => {
     try {
       const db = getDb();
       const snap = await db.collection('products').get();
-      rows = mergeCatalog(snap.docs.map(toProduct));
+      rows = snap.docs.map(toProduct);
     } catch (err) {
-      console.warn('GET /api/products/search Firestore read warning:', err.message);
-      const { DEFAULT_PRODUCTS } = require('../bootstrap');
-      rows = [...DEFAULT_PRODUCTS];
-    }
-
-    if (!rows || rows.length === 0) {
+      console.warn('GET /api/products/search Firestore error, using fallback:', err.message);
       const { DEFAULT_PRODUCTS } = require('../bootstrap');
       rows = [...DEFAULT_PRODUCTS];
     }

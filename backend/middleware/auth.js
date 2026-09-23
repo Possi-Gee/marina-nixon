@@ -69,7 +69,7 @@ const authMiddleware = async (req, res, next) => {
     req.user = { 
       ...decoded, 
       ...userData, 
-      role: isAdmin ? 'admin' : (userData.role || 'customer'), 
+      role: (isAdmin || userData.role === 'admin') ? 'admin' : (userData.role || 'customer'), 
       id: decoded.uid 
     };
     next();

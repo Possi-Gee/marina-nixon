@@ -124,10 +124,10 @@ module.exports = () => {
       if (method === 'pickup') {
         shippingFee = 0;
       } else if (method === 'express') {
-        shippingFee = 50;
+        shippingFee = 60;
       } else {
-        // Standard delivery: free over GH₵ 1,000 or if promo is FREESHIP
-        if (subtotal >= 1000 || (promoInfo && promoInfo.code === 'FREESHIP')) {
+        // Standard delivery: free over GH₵ 500 or if promo is FREESHIP
+        if (subtotal >= 500 || (promoInfo && promoInfo.code === 'FREESHIP')) {
           shippingFee = 0;
         }
       }

@@ -277,6 +277,38 @@ app.get('/api/settings', async (req, res) => {
   }
 });
 
+// Public lookbook endpoint — no auth required (storefront reads this)
+app.get('/api/lookbook', async (req, res) => {
+  try {
+    const { getDb } = require('./lib/firebase');
+    const db = getDb();
+    const [heroSnap, sectionsSnap] = await Promise.all([
+      db.collection('site_settings').doc('lookbook_hero').get(),
+      db.collection('lookbook_sections').orderBy('order', 'asc').get(),
+    ]);
+
+    const hero = heroSnap.exists ? heroSnap.data() : {};
+    const sections = await Promise.all(
+      sectionsSnap.docs.map(async (secDoc) => {
+        const secData = { id: secDoc.id, ...secDoc.data() };
+        const itemsSnap = await db
+          .collection('lookbook_sections')
+          .doc(secDoc.id)
+          .collection('items')
+          .orderBy('order', 'asc')
+          .get();
+        secData.items = itemsSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        return secData;
+      })
+    );
+
+    res.json({ hero, sections });
+  } catch (err) {
+    console.error('Failed to get public lookbook:', err);
+    res.status(500).json({ error: err.message, hero: {}, sections: [] });
+  }
+});
+
 
 app.use('/images', express.static(path.join(__dirname, '..', 'images'), {
   maxAge: production ? '1y' : 0,
