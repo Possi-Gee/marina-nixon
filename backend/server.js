@@ -265,49 +265,70 @@ app.use('/api/admin', require('./routes/admin')());
 
 app.get('/api/settings', async (req, res) => {
   try {
-    const { getDb } = require('./lib/firebase');
-    const db = getDb();
-    const doc = await db.collection('site_settings').doc('main').get();
-    if (doc.exists) {
-      return res.json(doc.data());
+    const { getDb, isFirestoreAvailable } = require('./lib/firebase');
+    const localdb = require('./lib/localdb');
+
+    if (await isFirestoreAvailable()) {
+      try {
+        const db = getDb();
+        const docPromise = db.collection('site_settings').doc('main').get();
+        const doc = await Promise.race([
+          docPromise,
+          new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 1500)),
+        ]);
+        if (doc && doc.exists) {
+          return res.json({ ...localdb.getSettings(), ...doc.data() });
+        }
+      } catch (_) {}
     }
-    return res.json({});
+    return res.json(localdb.getSettings());
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    const localdb = require('./lib/localdb');
+    return res.json(localdb.getSettings());
   }
 });
 
 // Public lookbook endpoint — no auth required (storefront reads this)
 app.get('/api/lookbook', async (req, res) => {
   try {
-    const { getDb } = require('./lib/firebase');
+    const { getDb, isFirestoreAvailable } = require('./lib/firebase');
+    if (!await isFirestoreAvailable()) {
+      return res.json({ hero: {}, sections: [] });
+    }
     const db = getDb();
-    const [heroSnap, sectionsSnap] = await Promise.all([
-      db.collection('site_settings').doc('lookbook_hero').get(),
-      db.collection('lookbook_sections').orderBy('order', 'asc').get(),
+    const [heroSnap, sectionsSnap] = await Promise.race([
+      Promise.all([
+        db.collection('site_settings').doc('lookbook_hero').get(),
+        db.collection('lookbook_sections').orderBy('order', 'asc').get(),
+      ]),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 2000)),
     ]);
 
-    const hero = heroSnap.exists ? heroSnap.data() : {};
+    const hero = heroSnap && heroSnap.exists ? heroSnap.data() : {};
     const sections = await Promise.all(
-      sectionsSnap.docs.map(async (secDoc) => {
+      (sectionsSnap ? sectionsSnap.docs : []).map(async (secDoc) => {
         const secData = { id: secDoc.id, ...secDoc.data() };
-        const itemsSnap = await db
-          .collection('lookbook_sections')
-          .doc(secDoc.id)
-          .collection('items')
-          .orderBy('order', 'asc')
-          .get();
-        secData.items = itemsSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        try {
+          const itemsSnap = await db
+            .collection('lookbook_sections')
+            .doc(secDoc.id)
+            .collection('items')
+            .orderBy('order', 'asc')
+            .get();
+          secData.items = itemsSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        } catch {
+          secData.items = [];
+        }
         return secData;
       })
     );
 
     res.json({ hero, sections });
   } catch (err) {
-    console.error('Failed to get public lookbook:', err);
-    res.status(500).json({ error: err.message, hero: {}, sections: [] });
+    res.json({ hero: {}, sections: [] });
   }
 });
+
 
 
 app.use('/images', express.static(path.join(__dirname, '..', 'images'), {
@@ -351,6 +372,10 @@ if (require.main === module) {
     process.exitCode = 1;
   });
 }
+
+process.on('unhandledRejection', (reason) => {
+  console.warn('[Resilient Server Notice] Unhandled rejection caught:', reason?.message || reason);
+});
 
 module.exports = { app, start };
 

@@ -1595,18 +1595,28 @@ html, body {
 }
 
 .pm.active-pm {
-  border: 1.5px solid var(--ca);
-  background: linear-gradient(135deg, rgba(30, 24, 20, 0.96) 0%, rgba(46, 32, 21, 0.98) 100%);
-  box-shadow: 0 6px 20px rgba(30, 24, 20, 0.15);
+  border: 2px solid var(--ca) !important;
+  background: #FFFDF9 !important;
+  box-shadow: 0 4px 18px rgba(201, 169, 110, 0.22) !important;
 }
 
 .pm.active-pm span,
-.pm.active-pm p {
-  color: #FAF6F0 !important;
+.pm.active-pm strong,
+.pm.active-pm div,
+.pm.active-pm p,
+.pm.active-pm h3,
+.pm.active-pm h4 {
+  color: var(--cbd) !important;
 }
 
-.pm.active-pm p {
-  color: rgba(245, 230, 200, 0.8) !important;
+.pm.active-pm p,
+.pm.active-pm .pm-subtext {
+  color: #4A3E31 !important;
+}
+
+.pm.active-pm .pm-label-muted {
+  color: #7A6953 !important;
+  font-weight: 600 !important;
 }
 
 .pm-radio-disc {
@@ -2030,6 +2040,21 @@ html, body {
 }
 .status-badge.s-cancelled::before {
   background: #9B3A3A;
+}
+
+.status-badge.s-pending_verification,
+.status-badge.s-awaiting_screenshot,
+.status-badge.s-proof_submitted {
+  background: rgba(230, 81, 0, 0.12) !important;
+  color: #E65100 !important;
+  border: 1px solid rgba(230, 81, 0, 0.35) !important;
+}
+.status-badge.s-pending_verification::before,
+.status-badge.s-awaiting_screenshot::before,
+.status-badge.s-proof_submitted::before {
+  background: #E65100;
+  box-shadow: 0 0 6px rgba(230, 81, 0, 0.6);
+  animation: pulseDotSmall 1.8s infinite ease-in-out;
 }
 
 @keyframes pulseDotSmall {
@@ -3018,9 +3043,19 @@ html, body {
 
 .pm-options-list .pm.active-pm {
   border-color: var(--ca) !important;
-  background: #FAF6EE !important;
-  box-shadow: 0 4px 16px rgba(201, 169, 110, 0.18) !important;
+  background: #FFFDF9 !important;
+  box-shadow: 0 4px 16px rgba(201, 169, 110, 0.22) !important;
 }
+
+/* Force text dark on selected payment card */
+.pm-options-list .pm.active-pm span,
+.pm-options-list .pm.active-pm strong,
+.pm-options-list .pm.active-pm p,
+.pm-options-list .pm.active-pm div,
+.pm-options-list .pm.active-pm label {
+  color: var(--cbd) !important;
+}
+
 
 .pm-options-list .pm .pm-radio-disc {
   width: 22px !important;
@@ -4752,6 +4787,51 @@ nav {
   .qv-info{overflow-y:visible;padding:1.5rem 1rem 6rem}
 }
 
+/* Quick View floating close button */
+.qv-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 9999;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.97);
+  color: #1A1209;
+  border: 1px solid rgba(201, 169, 110, 0.4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: all .2s ease;
+}
+.qv-close-btn:hover {
+  background: #1A1209;
+  color: #F5E6C8;
+  border-color: #1A1209;
+  transform: scale(1.08);
+}
+@media(max-width:640px) {
+  .qv-close-btn {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 99999;
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+    background: #FFFFFF;
+    color: #1A1209;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+    border: 1.5px solid rgba(201, 169, 110, 0.5);
+  }
+}
+
+
 /* ============================================================
    PREMIUM LUXURY POLISH — global design-system layer
 ============================================================ */
@@ -5346,7 +5426,7 @@ footer::before {
 .order-summary h3{font-family:var(--serif)}
 .os-thumb{border-radius:4px}
 .pm{border-radius:4px;letter-spacing:1.5px;transition:all .25s ease}
-.pm.active-pm{background:var(--cbd);color:var(--cw);border-color:var(--cbd)}
+/* .pm.active-pm handled in full ruleset above — no override here */
 
 /* Account */
 .account-grid{background:var(--cw)}
@@ -7524,22 +7604,40 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
       <div id="chkStep3" class="form-section" style="display:none">
         <h3 style="font-size:16px;letter-spacing:2px;text-transform:uppercase;color:var(--cbd);margin-bottom:1.2rem;font-weight:400">Select Payment Method</h3>
         
-        <!-- Streamlined 2 Luxury Options -->
         <div class="pm-options-list">
           
-          <!-- Option 1: Mobile Money & Card (Paystack) -->
-          <div class="pm active-pm" id="pm-paystack" data-method="paystack" onclick="selPM(this)">
-            <div>
+          <!-- Option 1: Direct Mobile Money & WhatsApp Confirmation -->
+          <div class="pm active-pm" id="pm-momo" data-method="momo" onclick="selPM(this)">
+            <div style="flex:1">
               <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-                <span style="font-size:14px;font-weight:700;color:var(--cbd);letter-spacing:0.5px">💳 Mobile Money &amp; Card</span>
-                <span style="background:var(--ca);color:#1A1209;font-size:8.5px;font-weight:700;padding:2px 7px;border-radius:10px;letter-spacing:1px">INSTANT</span>
+                <span style="font-size:14px;font-weight:700;color:var(--cbd);letter-spacing:0.5px">📱 Direct Mobile Money (WhatsApp Confirmation)</span>
+                <span style="background:var(--ca);color:#1A1209;font-size:8.5px;font-weight:700;padding:2px 7px;border-radius:10px;letter-spacing:1px">DIRECT TO ATELIER</span>
               </div>
-              <p style="font-family:'Jost',Arial,sans-serif;font-size:12px;color:var(--cbl);margin:0">Pay instantly with MTN MoMo, Telecel Cash, Visa, or Mastercard via Paystack.</p>
-              <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
-                <span style="background:#FFCC00;color:#000;font-size:9px;padding:2px 8px;border-radius:4px;font-weight:800">MTN MoMo</span>
-                <span style="background:#E60000;color:#FFF;font-size:9px;padding:2px 8px;border-radius:4px;font-weight:800">Telecel Cash</span>
-                <span style="background:#1A1F71;color:#fff;font-size:9px;padding:2px 8px;border-radius:4px;font-weight:700">Visa</span>
-                <span style="background:#EB001B;color:#fff;font-size:9px;padding:2px 8px;border-radius:4px;font-weight:700">Mastercard</span>
+              <p style="font-family:'Jost',Arial,sans-serif;font-size:12px;color:var(--cbl);margin:0 0 10px">Send payment directly to our administrator's MoMo number, take a screenshot, and send to our WhatsApp concierge for instant confirmation.</p>
+
+              <!-- Dynamic MoMo Details Card -->
+              <div style="background:#FAF7F2;border:1px solid #E5DFD3;border-radius:8px;padding:12px 14px;margin-top:8px">
+                <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:8px;font-family:'Jost',Arial,sans-serif;font-size:12px">
+                  <div>
+                    <span style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--cbl);display:block">Network:</span>
+                    <strong id="chkDisplayMomoNetwork" style="color:var(--cbd)">MTN Mobile Money</strong>
+                  </div>
+                  <div>
+                    <span style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--cbl);display:block">Account Name:</span>
+                    <strong id="chkDisplayMomoName" style="color:var(--cbd)">Marina Nixon Atelier</strong>
+                  </div>
+                  <div style="grid-column: 1 / -1;display:flex;align-items:center;justify-content:space-between;background:#FFF;border:1px dashed #C9A96E;border-radius:6px;padding:8px 12px;margin-top:4px">
+                    <div>
+                      <span style="font-size:9.5px;letter-spacing:1px;text-transform:uppercase;color:var(--ca);display:block">Admin MoMo Number</span>
+                      <strong id="chkDisplayMomoNumber" style="font-size:16px;letter-spacing:1.5px;color:var(--cbd)">0592785320</strong>
+                    </div>
+                    <button type="button" class="btn-dark" onclick="copyMomoNumber(this)" style="padding:6px 12px;font-size:10px;letter-spacing:1px;text-transform:uppercase">Copy Number</button>
+                  </div>
+                </div>
+                <div style="margin-top:10px;font-size:11px;color:var(--cbl);line-height:1.5">
+                  <i class="ti ti-info-circle" style="color:var(--ca);margin-right:4px"></i>
+                  <span id="chkDisplayMomoInstructions">Transfer to our official MoMo number, use your Order Number as reference, and share the screenshot on WhatsApp for instant confirmation.</span>
+                </div>
               </div>
             </div>
             <div class="pm-radio-disc"><div class="pm-radio-dot"></div></div>
@@ -7559,32 +7657,56 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
 
         </div>
 
-        <div style="margin:1.2rem 0;padding:1rem 1.25rem;background:rgba(201,169,110,0.08);border-left:3px solid var(--ca);border-radius:6px">
-          <p style="font-family:'Jost',Arial,sans-serif;font-size:11px;color:var(--cbl);line-height:1.6;margin:0">
-            <i class="ti ti-shield-lock" style="font-size:14px;vertical-align:-2px;margin-right:5px;color:var(--ca)" aria-hidden="true"></i>
-            Transactions are secured with 256-bit bank-grade encryption via Paystack. Prompt appears on your phone automatically.
-          </p>
-        </div>
-        
-        <button id="chkCompleteBtn" class="btn-solid" style="width:100%;margin-top:.5rem;padding:15px;letter-spacing:2px;font-weight:600" onclick="nextStep(4)">PROCEED TO SECURE PAYMENT</button>
+        <button id="chkCompleteBtn" class="btn-solid" style="width:100%;margin-top:1.2rem;padding:15px;letter-spacing:2px;font-weight:600" onclick="nextStep(4)">PLACE ORDER</button>
       </div>
 
       <div id="chkStep4" class="form-section" style="display:none">
-        <div style="text-align:center;padding:2.5rem 1rem">
-          <div style="width:64px;height:64px;border-radius:50%;background:rgba(46,125,50,0.1);color:var(--csuc);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 1.2rem">✓</div>
-          <p style="font-family:'Jost',Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ca);margin-bottom:.5rem">Thank You For Your Patronage</p>
-          <h4 style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:var(--cbd);font-weight:400;margin-bottom:.8rem">Order Confirmed</h4>
-          <p style="font-family:'Jost',Arial,sans-serif;font-size:13px;color:var(--cbl);line-height:1.7;max-width:480px;margin:0 auto 1.8rem">Your bespoke piece is being prepared at our Accra atelier. An invoice receipt has been dispatched to your email address.</p>
+        <div style="text-align:center;padding:2rem 1rem">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(201,169,110,0.15);color:var(--ca);display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 1.2rem">✓</div>
+          <p style="font-family:'Jost',Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ca);margin-bottom:.5rem" id="chkStep4Subtitle">Thank You For Your Patronage</p>
+          <h4 style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:var(--cbd);font-weight:400;margin-bottom:.8rem" id="chkStep4Title">Order Placed</h4>
           
-          <div style="background:var(--cr);border:1px solid #DDD5C4;padding:1.2rem 2rem;margin:0 auto 2rem;display:inline-block;border-radius:6px;min-width:260px">
+          <div style="background:var(--cr);border:1px solid #DDD5C4;padding:1.2rem 2rem;margin:0 auto 1.5rem;display:inline-block;border-radius:6px;min-width:280px">
             <p style="font-family:'Jost',Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--cbl);margin-bottom:4px">Order Reference Number</p>
-            <p style="font-size:20px;letter-spacing:3px;color:var(--cbd);font-weight:600" id="orderRef">MN-2026-0042</p>
+            <p style="font-size:22px;letter-spacing:3px;color:var(--cbd);font-weight:700" id="orderRef">MN-2026-0042</p>
+            <p style="font-family:'Jost',Arial,sans-serif;font-size:13px;color:var(--ca);font-weight:600;margin-top:4px" id="orderTotalDisplay">Total: GH₵ 0.00</p>
           </div>
-          
+
+          <!-- MoMo Instructions & WhatsApp Action -->
+          <div id="chkMomoActionWrap" style="max-width:540px;margin:0 auto 2rem;text-align:left;background:#FFFDF9;border:1px solid #E8DFD0;border-radius:8px;padding:1.5rem">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+              <span style="background:#25D366;color:#FFF;width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:14px"><i class="ti ti-brand-whatsapp"></i></span>
+              <strong style="color:var(--cbd);font-size:14px;letter-spacing:.5px">Step 2: Confirm Payment on WhatsApp</strong>
+            </div>
+            
+            <p style="font-family:'Jost',Arial,sans-serif;font-size:13px;color:var(--cbl);line-height:1.6;margin-bottom:14px">
+              Please transfer <strong id="chkMomoTotalPayable" style="color:var(--cbd)">GH₵ 0.00</strong> to admin at <strong id="chkMomoNumberStep4" style="color:var(--cbd)">0592785320</strong> (<span id="chkMomoNameStep4">Marina Nixon Atelier</span>). Then take a screenshot of your payment receipt and tap below to send it to the admin on WhatsApp:
+            </p>
+
+            <button type="button" id="chkWaSendBtn" class="btn-solid" onclick="sendOrderScreenshotWA()" style="width:100%;padding:14px;background:#25D366;border-color:#25D366;color:#FFF;letter-spacing:1px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;cursor:pointer">
+              <i class="ti ti-brand-whatsapp" style="font-size:18px"></i> Send Screenshot to Admin on WhatsApp
+            </button>
+
+            <!-- On-Page Screenshot Upload Option -->
+            <div style="margin-top:1.5rem;padding-top:1.2rem;border-top:1px dashed #DDD5C4">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                <span style="font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--cbd)">📎 Or Attach Screenshot Here (Optional):</span>
+                <span style="font-size:10px;color:var(--cbl)">Direct to atelier file</span>
+              </div>
+              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                <input type="file" id="chkProofFileInput" accept="image/*" style="font-size:11px;font-family:'Jost',Arial,sans-serif;flex:1" onchange="previewChkProofFile(this)">
+                <button type="button" id="chkProofUploadBtn" class="btn-dark" onclick="uploadOrderProof()" style="padding:8px 14px;font-size:10px;letter-spacing:1px;text-transform:uppercase">Submit Screenshot</button>
+              </div>
+              <div id="chkProofPreviewBox" style="display:none;margin-top:10px;align-items:center;gap:10px">
+                <img id="chkProofPreviewImg" src="" alt="Proof Preview" style="width:48px;height:48px;object-fit:cover;border-radius:4px;border:1px solid #CCC">
+                <span id="chkProofStatusText" style="font-family:'Jost',Arial,sans-serif;font-size:11px;color:#2E7D32">Ready to upload</span>
+              </div>
+            </div>
+          </div>
+
           <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
             <button class="btn-dark" onclick="window.print()" style="padding:12px 24px"><i class="ti ti-receipt" style="margin-right:6px"></i> Print Receipt</button>
-            <button class="btn-dark" onclick="openWA()" style="padding:12px 24px"><i class="ti ti-brand-whatsapp" style="margin-right:6px"></i> WhatsApp Concierge</button>
-            <button class="btn-solid" onclick="go('account');showAccSec('orders')" style="padding:12px 28px">Track Order</button>
+            <button class="btn-solid" onclick="go('account');showAccSec('orders')" style="padding:12px 28px">Track in My Orders</button>
           </div>
         </div>
       </div>
@@ -8685,6 +8807,45 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
               <div class="fg">
                 <label>Store Checkout Delivery Notice (Optional)</label>
                 <input type="text" id="adminDeliveryNotice" placeholder="e.g. Free express delivery in Greater Accra this week!">
+              </div>
+            </div>
+
+            <!-- SECTION 4: Direct Mobile Money & WhatsApp Concierge Settings -->
+            <div style="margin-top:2rem;border-top:1px solid #EDE8DF;padding-top:1.5rem">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                <h4 style="font-family:'Playfair Display',serif;font-size:16px;color:var(--cbd)">4. Direct Mobile Money &amp; WhatsApp Settings (Payment Flow)</h4>
+                <label style="display:flex;align-items:center;gap:8px;font-size:12px;font-family:'Jost',Arial,sans-serif;cursor:pointer;font-weight:600">
+                  <input type="checkbox" id="adminCodActive" checked style="width:16px;height:16px;accent-color:var(--ca)">
+                  Allow Cash on Delivery
+                </label>
+              </div>
+              <p style="font-family:'Jost',Arial,sans-serif;font-size:11.5px;color:var(--cbl);margin-bottom:12px">Configure the administrator's payment phone number, recipient account name, and WhatsApp concierge number for receiving payment screenshots.</p>
+              
+              <div class="fg-row">
+                <div class="fg">
+                  <label>Admin Mobile Money Number *</label>
+                  <input type="text" id="adminMomoNumber" placeholder="0592785320">
+                </div>
+                <div class="fg">
+                  <label>Mobile Money Network Provider</label>
+                  <input type="text" id="adminMomoNetwork" placeholder="MTN Mobile Money">
+                </div>
+              </div>
+
+              <div class="fg-row">
+                <div class="fg">
+                  <label>MoMo Registered Account Name</label>
+                  <input type="text" id="adminMomoName" placeholder="Marina Nixon Atelier">
+                </div>
+                <div class="fg">
+                  <label>Admin WhatsApp Number (For Screenshots &amp; Chat) *</label>
+                  <input type="text" id="adminWhatsappNumber" placeholder="233592785320">
+                </div>
+              </div>
+
+              <div class="fg">
+                <label>Customer Payment &amp; Transfer Guidance</label>
+                <textarea id="adminMomoInstructions" rows="2" placeholder="Transfer to our official MoMo number, use your Order Number as reference, and share the screenshot on WhatsApp for instant confirmation."></textarea>
               </div>
             </div>
 
@@ -10233,134 +10394,201 @@ async function nextStep(s) {
     }
 
     const pm = document.querySelector('.pm.active-pm');
-    const pmText = (pm?.dataset?.method || pm?.textContent || 'cash').toLowerCase().replace(/\s+/g, '');
-    const pmMap  = { momo: 'momo', mtn: 'mtn', mtnmoney: 'mtn', telecel: 'telecel', vodafone: 'telecel', visa: 'visa', visacard: 'visa', card: 'visa', cash: 'cash', cashondelivery: 'cash' };
-    checkoutData.payment_method = pmMap[pmText] || pmText || 'cash';
+    const pmText = (pm?.dataset?.method || pm?.textContent || 'momo').toLowerCase().replace(/\s+/g, '');
+    const isCash = pmText === 'cash';
+    checkoutData.payment_method = isCash ? 'cash' : 'momo';
     checkoutData.payment_phone = document.querySelector('#chkStep3 input[type="tel"]')?.value?.trim() || document.getElementById('chkPhone')?.value?.trim() || null;
 
-    {
-      const btn = document.querySelector('#chkStep3 .btn-solid');
-      if (btn) { btn.disabled = true; btn.textContent = 'Placing order...'; }
+    const btn = document.querySelector('#chkStep3 .btn-solid') || document.getElementById('chkCompleteBtn');
+    if (btn) { btn.disabled = true; btn.textContent = 'Placing order...'; }
 
-      const subtotal = cartSubtotal();
-      const delMethod = getSelectedDeliveryMethod().toLowerCase();
-      const shipping = getDeliveryCost(delMethod);
+    const subtotal = cartSubtotal();
+    const delMethod = getSelectedDeliveryMethod().toLowerCase();
+    const shipping = getDeliveryCost(delMethod);
+    const finalTotal = Math.max(0, subtotal + shipping - calcPromoAmount(subtotal));
 
-      const orderPayload = {
-        items: cart.map(p => ({
-          product_id: Number(p.id) || p.id,
-          quantity: p.qty || 1,
-          price: parseFloat(p.price || p.base_price || 0),
-          size: p.size || 'M'
-        })),
-        total: subtotal + shipping - calcPromoAmount(subtotal),
-        shipping_cost: shipping,
-        discount: calcPromoAmount(subtotal),
-        promo_code: promoCode || null,
-        payment_method: checkoutData.payment_method,
-        delivery_method: delMethod,
-        address: checkoutData.address || {
-          street: document.getElementById('chkShipStreet')?.value?.trim() || '',
-          city: document.getElementById('chkShipCity')?.value?.trim() || 'Accra',
-          region: document.getElementById('chkShipRegion')?.value || 'Greater Accra',
-          notes: document.getElementById('chkShipNotes')?.value?.trim() || ''
-        },
-        payment_phone: checkoutData.payment_phone
-      };
+    const orderPayload = {
+      items: cart.map(p => ({
+        product_id: Number(p.id) || p.id,
+        quantity: p.qty || 1,
+        price: parseFloat(p.price || p.base_price || 0),
+        size: p.size || 'M'
+      })),
+      total: finalTotal,
+      shipping_cost: shipping,
+      discount: calcPromoAmount(subtotal),
+      promo_code: promoCode || null,
+      payment_method: checkoutData.payment_method,
+      delivery_method: delMethod,
+      address: checkoutData.address || {
+        street: document.getElementById('chkShipStreet')?.value?.trim() || '',
+        city: document.getElementById('chkShipCity')?.value?.trim() || 'Accra',
+        region: document.getElementById('chkShipRegion')?.value || 'Greater Accra',
+        notes: document.getElementById('chkShipNotes')?.value?.trim() || ''
+      },
+      payment_phone: checkoutData.payment_phone
+    };
 
-      const orderData = await apiPost('/orders', orderPayload);
-
-      if (btn) { btn.disabled = false; btn.textContent = 'Complete Order'; }
-
-      if (orderData && orderData.order_id) {
-        const isCash = checkoutData.payment_method === 'cash';
-        const online = ['visa', 'momo', 'mtn', 'telecel', 'vodafone', 'paystack', 'card'].includes(checkoutData.payment_method);
-
-        if (isCash) {
-          document.getElementById('orderRef').textContent = orderData.order_number || 'MN-' + orderData.order_id;
-        } else if (online) {
-          if (btn) { btn.disabled = true; btn.textContent = 'Connecting payment...'; }
-          const initData = await apiPost('/payments/initialize', {
-            order_id: orderData.order_id,
-            amount: orderPayload.total,
-            payment_method: checkoutData.payment_method,
-            phone: checkoutData.payment_phone,
-            email: document.getElementById('chkEmail')?.value?.trim() || currentUser?.email || ''
-          });
-
-          if (btn) { btn.disabled = false; btn.textContent = 'Complete Order'; }
-
-          if (!initData || !initData.reference) {
-            showToast(initData?.error || 'Could not start Paystack payment.');
-            return;
-          }
-
-          const Done = () => {
-            cart = []; localStorage.removeItem('mn_cart'); updateCartBadge(); promoDiscount = 0; promoFixedAmount = 0; promoCode = '';
-            document.getElementById('orderRef').textContent = orderData.order_number || 'MN-' + orderData.order_id;
-            setChkStep(4);
-            renderChkOrder();
-          };
-          const Fail = (msg) => {
-            if (btn) { btn.disabled = false; btn.textContent = 'Complete Order'; }
-            showToast(msg);
-          };
-          const Verify = (ref) => apiGet('/payments/verify/' + encodeURIComponent(ref)).then(r => {
-            if (r && (r.paid === true || r.success === true || r.status === 'success' || r.status === 'paid')) { Done(); }
-            else { Fail('Payment not confirmed yet. If you were charged, please contact us.'); }
-          }).catch(() => Fail('Could not verify payment. If you were charged, please contact us.'));
-
-          const customerEmail = document.getElementById('chkEmail')?.value?.trim() || currentUser?.email || 'customer@marinanixon.com';
-          const channels = ['mobile_money', 'card'];
-          const paystackKey = (window.MN_PAYSTACK_PUB || '').trim();
-
-          if (typeof PaystackPop !== 'undefined' && PaystackPop.setup) {
-            const handler = PaystackPop.setup({
-              key: paystackKey,
-              email: customerEmail,
-              amount: Math.round(orderPayload.total * 100),
-              currency: 'GHS',
-              ref: initData.reference,
-              channels: channels,
-              callback: function(response) {
-                Verify(response.reference || initData.reference);
-              },
-              onClose: function() {
-                Fail('Payment window closed. You can retry payment anytime.');
-                setChkStep(3);
-              }
-            });
-            handler.openIframe();
-            return;
-          } else if (initData.authorization_url) {
-            window.location.href = initData.authorization_url;
-            return;
-          } else {
-            Done();
-            return;
-          }
-        } else {
-          showToast('Unknown payment method.');
-          return;
-        }
-      } else {
-        if (orderData?.error && (orderData.error.toLowerCase().includes('token') || orderData.error.toLowerCase().includes('auth'))) {
-          showToast('Your session has expired. Please sign in to place your order.');
-          checkoutData.pendingCheckout = true;
-          go('account');
-          showAccSec('login');
-          return;
-        }
-        showToast(orderData?.message || orderData?.error || 'Order could not be placed. Please try again.');
-        return;
-      }
+    let orderData = null;
+    try {
+      orderData = await apiPost('/orders', orderPayload);
+    } catch (err) {
+      if (btn) { btn.disabled = false; btn.textContent = 'PLACE ORDER'; }
+      showToast('Connection error. Please check your network and retry.');
+      return;
     }
 
-    cart = []; localStorage.removeItem('mn_cart'); updateCartBadge(); promoDiscount = 0; promoFixedAmount = 0; promoCode = '';
-    s = 4;
+    if (btn) { btn.disabled = false; btn.textContent = 'PLACE ORDER'; }
+
+    if (orderData && orderData.order_id) {
+      currentPlacedOrder = {
+        id: orderData.order_id,
+        order_number: orderData.order_number || 'MN-' + orderData.order_id,
+        total: orderData.total ?? finalTotal,
+        payment_method: checkoutData.payment_method
+      };
+
+      cart = [];
+      localStorage.removeItem('mn_cart');
+      updateCartBadge();
+      promoDiscount = 0;
+      promoFixedAmount = 0;
+      promoCode = '';
+
+      renderStep4OrderConfirmation(currentPlacedOrder);
+      setChkStep(4);
+      renderChkOrder();
+      return;
+    } else {
+      if (orderData?.error && (orderData.error.toLowerCase().includes('token') || orderData.error.toLowerCase().includes('auth'))) {
+        showToast('Your session has expired. Please sign in to place your order.');
+        checkoutData.pendingCheckout = true;
+        go('account');
+        showAccSec('login');
+        return;
+      }
+      showToast(orderData?.message || orderData?.error || 'Order could not be placed. Please try again.');
+      return;
+    }
   }
+
   setChkStep(s);
   renderChkOrder();
+}
+
+let currentPlacedOrder = null;
+let chkProofBase64 = null;
+
+function renderStep4OrderConfirmation(order) {
+  if (!order) return;
+  const refEl = document.getElementById('orderRef');
+  if (refEl) refEl.textContent = order.order_number || order.id;
+
+  const totalEl = document.getElementById('orderTotalDisplay');
+  if (totalEl) totalEl.textContent = 'Total: ' + fmtPrice(order.total || 0);
+
+  const titleEl = document.getElementById('chkStep4Title');
+  const subEl = document.getElementById('chkStep4Subtitle');
+  const momoWrap = document.getElementById('chkMomoActionWrap');
+
+  if (order.payment_method === 'cash') {
+    if (titleEl) titleEl.textContent = 'Order Confirmed';
+    if (subEl) subEl.textContent = 'Cash on Delivery · Atelier Dispatch';
+    if (momoWrap) momoWrap.style.display = 'none';
+  } else {
+    if (titleEl) titleEl.textContent = 'Order Placed — Send Payment Screenshot';
+    if (subEl) subEl.textContent = 'Direct Mobile Money Transfer';
+    if (momoWrap) momoWrap.style.display = 'block';
+
+    const payTotal = document.getElementById('chkMomoTotalPayable');
+    if (payTotal) payTotal.textContent = fmtPrice(order.total || 0);
+
+    const numStep4 = document.getElementById('chkMomoNumberStep4');
+    if (numStep4) numStep4.textContent = siteSettings.momo_number || '0592785320';
+
+    const nameStep4 = document.getElementById('chkMomoNameStep4');
+    if (nameStep4) nameStep4.textContent = siteSettings.momo_name || 'Marina Nixon Atelier';
+  }
+}
+
+function copyMomoNumber(btn) {
+  const num = (siteSettings.momo_number || '0592785320').replace(/\s+/g, '');
+  navigator.clipboard.writeText(num).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = 'Copied! ✓';
+    btn.style.background = '#2E7D32';
+    btn.style.borderColor = '#2E7D32';
+    setTimeout(() => {
+      btn.textContent = orig;
+      btn.style.background = '';
+      btn.style.borderColor = '';
+    }, 2000);
+  }).catch(() => {
+    showToast('MoMo Number: ' + num);
+  });
+}
+
+function sendOrderScreenshotWA() {
+  if (!currentPlacedOrder) return;
+  const waNum = (siteSettings.whatsapp_number || '233592785320').replace(/\+/g, '').replace(/\s+/g, '');
+  const ref = currentPlacedOrder.order_number || currentPlacedOrder.id;
+  const total = fmtPrice(currentPlacedOrder.total || 0);
+  const msg = `Hello Marina Nixon Concierge! I have placed order ${ref} for ${total}. I am attaching my Mobile Money payment screenshot here for confirmation.`;
+  window.open(`https://wa.me/${waNum}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+function previewChkProofFile(input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  const previewBox = document.getElementById('chkProofPreviewBox');
+  const previewImg = document.getElementById('chkProofPreviewImg');
+  const statusText = document.getElementById('chkProofStatusText');
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    chkProofBase64 = e.target.result;
+    if (previewImg) previewImg.src = chkProofBase64;
+    if (previewBox) previewBox.style.display = 'flex';
+    if (statusText) {
+      statusText.textContent = `Selected: ${file.name} (${Math.round(file.size / 1024)} KB)`;
+      statusText.style.color = 'var(--cbd)';
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+async function uploadOrderProof() {
+  if (!currentPlacedOrder || !currentPlacedOrder.id) {
+    showToast('No active order reference found.');
+    return;
+  }
+  if (!chkProofBase64) {
+    showToast('Please select a payment screenshot image first.');
+    return;
+  }
+  const btn = document.getElementById('chkProofUploadBtn');
+  const origText = btn ? btn.textContent : '';
+  if (btn) { btn.disabled = true; btn.textContent = 'Uploading...'; }
+
+  try {
+    const res = await apiPost(`/orders/${currentPlacedOrder.id}/payment-proof`, {
+      proof_image: chkProofBase64
+    });
+    if (res && !res.error) {
+      showToast('✓ Screenshot attached to your order successfully!');
+      const statusText = document.getElementById('chkProofStatusText');
+      if (statusText) {
+        statusText.textContent = '✓ Screenshot attached. The administrator is verifying.';
+        statusText.style.color = '#2E7D32';
+      }
+      if (btn) { btn.textContent = 'Uploaded ✓'; }
+    } else {
+      showToast(res?.error || 'Could not upload screenshot. Please send directly on WhatsApp.');
+      if (btn) { btn.disabled = false; btn.textContent = origText; }
+    }
+  } catch (err) {
+    showToast('Upload error. Please send your screenshot directly on WhatsApp.');
+    if (btn) { btn.disabled = false; btn.textContent = origText; }
+  }
 }
 
 async function applyPromo() {
@@ -10948,8 +11176,8 @@ function adminStatCard(icon, value, label, trend, bg) {
 }
 
 function adminStatusOptions(status) {
-  const items = ['processing', 'paid', 'shipped', 'delivered', 'cancelled'];
-  return items.map(s => `<option value="${s}" ${s === status ? 'selected' : ''}>${s}</option>`).join('');
+  const items = ['pending_verification', 'processing', 'paid', 'shipped', 'delivered', 'cancelled'];
+  return items.map(s => `<option value="${s}" ${s === status ? 'selected' : ''}>${s.replace(/_/g, ' ')}</option>`).join('');
 }
 
 function readFileAsDataURL(file) {
@@ -11027,6 +11255,13 @@ let siteSettings = {
   feature_3_desc: "Tailored to your measurements",
   feature_4_title: "Concierge Order",
   feature_4_desc: "24/7 VIP WhatsApp support",
+  // Direct Mobile Money & WhatsApp Concierge Settings (Admin Editable)
+  momo_number: "0592785320",
+  momo_name: "Marina Nixon Atelier",
+  momo_network: "MTN Mobile Money",
+  momo_instructions: "Transfer to our official MoMo number, use your Order Number as reference, and share the screenshot on WhatsApp for instant confirmation.",
+  whatsapp_number: "233592785320",
+  cod_active: true,
   // Delivery & Shipping Zones Control
   delivery_regions: ["Greater Accra","Ashanti","Western","Western North","Central","Eastern","Volta","Oti","Northern","Savannah","North East","Upper East","Upper West","Bono","Bono East","Ahafo"],
   standard_shipping_fee: 30,
@@ -11554,6 +11789,18 @@ function applySiteSettingsToDOM() {
 
   // 5. Dynamically Apply Delivery Regions & Shipping Options to Checkout
   updateCheckoutDeliveryFromSettings();
+
+  // 6. Direct Mobile Money & WhatsApp Checkout Elements
+  const chkNum = document.getElementById('chkDisplayMomoNumber');
+  if (chkNum) chkNum.textContent = siteSettings.momo_number || '0592785320';
+  const chkNet = document.getElementById('chkDisplayMomoNetwork');
+  if (chkNet) chkNet.textContent = siteSettings.momo_network || 'MTN Mobile Money';
+  const chkName = document.getElementById('chkDisplayMomoName');
+  if (chkName) chkName.textContent = siteSettings.momo_name || 'Marina Nixon Atelier';
+  const chkInst = document.getElementById('chkDisplayMomoInstructions');
+  if (chkInst) chkInst.textContent = siteSettings.momo_instructions || 'Transfer to our official MoMo number, use your Order Number as reference, and share the screenshot on WhatsApp for instant confirmation.';
+  const pmCash = document.getElementById('pm-cash');
+  if (pmCash) pmCash.style.display = (siteSettings.cod_active === false) ? 'none' : 'flex';
 }
 
 function updateCheckoutDeliveryFromSettings() {
@@ -11712,6 +11959,20 @@ function populateAdminSettingsForm() {
   document.querySelectorAll('.admin-region-chk').forEach(chk => {
     chk.checked = activeRegions.includes(chk.value);
   });
+
+  // Mobile Money & WhatsApp Settings Populate
+  const mMomNum = document.getElementById('adminMomoNumber');
+  if (mMomNum) mMomNum.value = siteSettings.momo_number || '0592785320';
+  const mMomNet = document.getElementById('adminMomoNetwork');
+  if (mMomNet) mMomNet.value = siteSettings.momo_network || 'MTN Mobile Money';
+  const mMomName = document.getElementById('adminMomoName');
+  if (mMomName) mMomName.value = siteSettings.momo_name || 'Marina Nixon Atelier';
+  const mWaNum = document.getElementById('adminWhatsappNumber');
+  if (mWaNum) mWaNum.value = siteSettings.whatsapp_number || '233592785320';
+  const mMomInst = document.getElementById('adminMomoInstructions');
+  if (mMomInst) mMomInst.value = siteSettings.momo_instructions || 'Transfer to our official MoMo number, use your Order Number as reference, and share the screenshot on WhatsApp for instant confirmation.';
+  const mCodAct = document.getElementById('adminCodActive');
+  if (mCodAct) mCodAct.checked = siteSettings.cod_active !== false;
 }
 
 async function saveAdminSettings(btn) {
@@ -11755,6 +12016,13 @@ async function saveAdminSettings(btn) {
     pickup_active: document.getElementById('adminPickupActive')?.checked ?? true,
     custom_neighborhoods: document.getElementById('adminCustomNeighborhoods')?.value || '',
     delivery_notice: document.getElementById('adminDeliveryNotice')?.value || '',
+    // Direct Mobile Money & WhatsApp Concierge
+    momo_number: document.getElementById('adminMomoNumber')?.value?.trim() || siteSettings.momo_number || '0592785320',
+    momo_network: document.getElementById('adminMomoNetwork')?.value?.trim() || siteSettings.momo_network || 'MTN Mobile Money',
+    momo_name: document.getElementById('adminMomoName')?.value?.trim() || siteSettings.momo_name || 'Marina Nixon Atelier',
+    whatsapp_number: document.getElementById('adminWhatsappNumber')?.value?.trim() || siteSettings.whatsapp_number || '233592785320',
+    momo_instructions: document.getElementById('adminMomoInstructions')?.value?.trim() || siteSettings.momo_instructions || '',
+    cod_active: document.getElementById('adminCodActive')?.checked ?? true,
     updated_at: new Date().toISOString()
   };
 
@@ -12640,11 +12908,19 @@ async function renderAdminDashboard() {
         const rows = Array.isArray(orders) ? orders : [];
         body.innerHTML = rows.length ? rows.map((o, idx) => {
           const sid = `adminStatus_${o.id}_${idx}`;
+          const isPendingMomo = (o.status === 'pending_verification' || o.payment_status === 'awaiting_screenshot' || o.payment_status === 'proof_submitted');
+          const hasProof = !!(o.payment_proof?.image || o.payment_status === 'proof_submitted');
           return `<tr>
-            <td><a onclick="viewAdminOrderDetails('${o.id}')" style="cursor:pointer;color:var(--ca);text-decoration:underline;font-weight:600">${escapeHtml(o.order_number || o.reference || o.id)}</a></td>
+            <td>
+              <a onclick="viewAdminOrderDetails('${o.id}')" style="cursor:pointer;color:var(--ca);text-decoration:underline;font-weight:600">${escapeHtml(o.order_number || o.reference || o.id)}</a>
+              ${hasProof ? `<span title="Payment Screenshot Uploaded" style="font-size:11px;margin-left:4px">📎</span>` : ''}
+            </td>
             <td>${escapeHtml((o.first_name || '') + ' ' + (o.last_name || ''))}<br><span style="font-family:'Jost',Arial,sans-serif;font-size:10px;color:var(--cbl)">${escapeHtml(o.email || '')}</span></td>
             <td>${fmtPrice(o.total || 0)}</td>
-            <td><span class="status-badge s-${(o.status || 'processing').toLowerCase()}">${escapeHtml(o.status || 'processing')}</span></td>
+            <td>
+              <span class="status-badge s-${(o.status || 'processing').toLowerCase()}">${escapeHtml((o.status || 'processing').replace(/_/g, ' '))}</span>
+              ${isPendingMomo ? `<div style="font-size:9.5px;color:#E65100;font-weight:600;margin-top:2px">MoMo Verification</div>` : ''}
+            </td>
             <td style="font-family:'Jost',Arial,sans-serif;font-size:11px;color:var(--cbl)">${escapeHtml((o.created_at || '').slice(0, 10))}</td>
             <td>
               <div style="display:flex;gap:.4rem;align-items:center;flex-wrap:wrap">
@@ -12695,7 +12971,6 @@ async function viewAdminOrderDetails(orderId) {
   const pmLabel = pmRaw.includes('momo') || pmRaw.includes('mobile') ? '📱 Mobile Money'
     : pmRaw.includes('card') ? '💳 Card'
     : pmRaw.includes('cash') ? '💵 Cash on Delivery'
-    : pmRaw.includes('paystack') ? '🔐 Paystack'
     : pmRaw ? order.payment_method : '—';
   const pmBg = pmRaw.includes('momo') || pmRaw.includes('mobile') ? '#E8F5E9'
     : pmRaw.includes('card') ? '#E3F2FD'
@@ -12708,6 +12983,10 @@ async function viewAdminOrderDetails(orderId) {
 
   const payStatusBadge = payStatus === 'paid'
     ? '<span style="display:inline-block;background:#E8F5E9;color:#2E7D32;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600">✓ Paid</span>'
+    : payStatus === 'proof_submitted'
+    ? '<span style="display:inline-block;background:#FFF3E0;color:#E65100;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600">📎 Screenshot Attached</span>'
+    : payStatus === 'awaiting_screenshot'
+    ? '<span style="display:inline-block;background:#FFF3E0;color:#E65100;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600">⏳ Awaiting Screenshot</span>'
     : '<span style="display:inline-block;background:#FFF3E0;color:#E65100;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600">⏳ Unpaid</span>';
 
   const fullAddress = [shipping.street, shipping.city, shipping.region].filter(Boolean).join(', ') || '—';
@@ -12737,18 +13016,41 @@ async function viewAdminOrderDetails(orderId) {
     ? order.items.reduce((s, i) => s + Number(i.price || 0) * Number(i.quantity || 1), 0)
     : 0;
 
+  const proofHtml = order.payment_proof?.image ? `
+    <div style="margin-top:10px;padding:8px 10px;background:#FFF;border:1px dashed #C9A96E;border-radius:6px">
+      <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--ca);margin-bottom:6px">📎 Customer Payment Screenshot:</div>
+      <a href="${order.payment_proof.image}" target="_blank" title="Click to view full image" style="display:block;cursor:zoom-in">
+        <img src="${order.payment_proof.image}" alt="Proof" style="max-width:100%;max-height:140px;object-fit:contain;border-radius:4px;border:1px solid #EEE">
+      </a>
+      <div style="font-size:9.5px;color:var(--cbl);margin-top:4px">Uploaded: ${order.payment_proof.uploaded_at ? new Date(order.payment_proof.uploaded_at).toLocaleTimeString() : 'Recently'}</div>
+    </div>
+  ` : '';
+
   body.innerHTML = `
     <!-- Header strip -->
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;background:var(--cr);border-radius:8px;padding:1rem 1.2rem;margin-bottom:1.5rem">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;background:var(--cr);border-radius:8px;padding:1rem 1.2rem;margin-bottom:1rem">
       <div>
         <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--cbl)">Order Reference</div>
         <div style="font-size:16px;font-weight:700;color:var(--cbd);letter-spacing:.5px">${order.order_number || order.id}</div>
         <div style="font-size:11px;color:var(--cbl);margin-top:2px">Placed: ${dateStr}</div>
       </div>
       <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
-        <span class="status-badge s-${status}" style="position:static;padding:4px 12px;font-size:11px">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
+        <span class="status-badge s-${status}" style="position:static;padding:4px 12px;font-size:11px">${status.replace(/_/g, ' ').toUpperCase()}</span>
         ${payStatusBadge}
       </div>
+    </div>
+
+    <!-- Quick Admin Action Bar -->
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:1.2rem;background:#F9F6F0;border:1px solid #E8DFD0;border-radius:8px;padding:10px 14px">
+      <span style="font-size:11px;font-weight:700;color:var(--cbd);text-transform:uppercase;letter-spacing:1px">Admin Actions:</span>
+      ${payStatus !== 'paid' ? `
+        <button class="btn-solid" onclick="adminConfirmPayment('${order.id}')" style="padding:7px 14px;font-size:11px;background:#2E7D32;border-color:#2E7D32">✓ Confirm Payment &amp; Mark Processing</button>
+      ` : `
+        <span style="font-size:11px;color:#2E7D32;font-weight:600">✓ Payment Confirmed</span>
+      `}
+      ${(order.phone || order.payment_phone) ? `
+        <button class="btn-dark" onclick="adminChatCustomerWA('${escapeHtml(order.phone || order.payment_phone)}', '${escapeHtml(order.order_number || order.id)}')" style="padding:7px 14px;font-size:11px;display:inline-flex;align-items:center;gap:5px"><i class="ti ti-brand-whatsapp"></i> Chat Customer on WhatsApp</button>
+      ` : ''}
     </div>
 
     <!-- 3-column info grid -->
@@ -12768,7 +13070,7 @@ async function viewAdminOrderDetails(orderId) {
         <div style="display:inline-block;background:${pmBg};color:${pmColor};padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;margin-bottom:.5rem">${pmLabel}</div>
         <div style="font-size:11px;color:var(--cbl)">Status: ${payStatusBadge}</div>
         ${order.payment_phone ? `<div style="font-size:11px;color:var(--cbl);margin-top:.3rem">MoMo No: <strong>${order.payment_phone}</strong></div>` : ''}
-        ${order.reference ? `<div style="font-size:10px;color:var(--cbl);margin-top:.3rem;word-break:break-all">Ref: ${order.reference}</div>` : ''}
+        ${proofHtml}
       </div>
 
       <!-- Delivery -->
@@ -12821,6 +13123,29 @@ async function viewAdminOrderDetails(orderId) {
   `;
 }
 
+async function adminConfirmPayment(orderId) {
+  if (!confirm('Confirm that you have received payment for this order? This will mark it as Paid and Processing.')) return;
+  const res = await apiPatch(`/admin/orders/${orderId}/status`, {
+    status: 'processing',
+    payment_status: 'paid'
+  });
+  if (res && !res.error) {
+    showToast('✓ Payment confirmed! Order is now processing.');
+    viewAdminOrderDetails(orderId);
+    renderAdminDashboard();
+  } else {
+    showToast(res?.error || 'Failed to update payment status');
+  }
+}
+
+function adminChatCustomerWA(phone, ref) {
+  if (!phone) { showToast('Customer did not provide a phone number'); return; }
+  const clean = phone.replace(/\D/g, '');
+  const finalNum = clean.startsWith('0') ? '233' + clean.slice(1) : clean;
+  const msg = `Hello from Marina Nixon Atelier! Regarding your order ${ref}:`;
+  window.open(`https://wa.me/${finalNum}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
 function closeAdminOrderModal() {
   const modal = document.getElementById('adminOrderModal');
   if (modal) modal.classList.remove('show');
@@ -12829,9 +13154,10 @@ function closeAdminOrderModal() {
 
 // ── Order tracking ─────────────────────────────────────────────
 function contactDispatchWA() {
+  const waNum = (siteSettings.whatsapp_number || '233592785320').replace(/\+/g, '').replace(/\s+/g, '');
   const ref = (document.getElementById('trackRef')?.value || 'MN-Order').trim();
   const text = encodeURIComponent(`Hello Marina Nixon Concierge, I would like to check on my order ${ref}.`);
-  window.open(`https://wa.me/233592785320?text=${text}`, '_blank');
+  window.open(`https://wa.me/${waNum}?text=${text}`, '_blank');
 }
 
 async function trackOrderAPI() {
@@ -12992,6 +13318,7 @@ function quickView(id) {
   const waUrl   = `https://wa.me/233592785320?text=${waText}`;
 
   box.innerHTML = `
+    <button type="button" class="qv-close-btn" onclick="closeModal()" aria-label="Close Product View">&#x2715;</button>
     <div class="qv-img ${imgSrc?'':'c1'}" style="position:relative;background:#FAF7F2;display:flex;align-items:center;justify-content:center;overflow:hidden">
       ${imgSrc
         ? `<img src="${imgSrc}" alt="${escapeHtml(p.name)}" style="width:100%;height:100%;object-fit:cover;transition:transform .5s ease">`
@@ -13107,9 +13434,7 @@ function quickView(id) {
           <button class="btn-solid" style="flex:1;padding:.85rem;font-size:.85rem;letter-spacing:2px;text-transform:uppercase" onclick="modalAddToCart('${p.id}')">Add to Bag</button>
           <button class="btn-qv-wl ${inWL?'picked':''}" style="padding:0 1.25rem;border:1px solid #D6CCB8;border-radius:6px;background:none;font-size:1.2rem;cursor:pointer" onclick="toggleWL(event,'${p.id}');this.classList.toggle('picked')" title="Wishlist">♡</button>
         </div>
-        <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="qv-concierge-btn">
-          <span>📱 Order with WhatsApp Concierge</span>
-        </a>
+        <button type="button" onclick="closeModal()" style="width:100%;padding:11px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;background:none;border:1px solid #D6CCB8;border-radius:4px;color:#6A5E4E;font-family:'Jost',Arial,sans-serif;margin-top:2px">✕ Close Product View</button>
       </div>
     </div>`;
 
@@ -13758,10 +14083,11 @@ document.addEventListener('click', function(e) {
 });
 
 function openWA(productName = '') {
+  const waNum = (siteSettings.whatsapp_number || '233592785320').replace(/\+/g, '').replace(/\s+/g, '');
   const msg = productName
     ? `Hello Marina Nixon Concierge, I would like to inquire about ${productName}.`
     : "Hello Marina Nixon Concierge! I would like to enquire about your bespoke fashion collection.";
-  window.open('https://wa.me/233592785320?text=' + encodeURIComponent(msg), '_blank');
+  window.open(`https://wa.me/${waNum}?text=` + encodeURIComponent(msg), '_blank');
 }
 
 // ── Hamburger menu ────────────────────────────────────────────
@@ -14487,7 +14813,9 @@ async function deleteLbItem(sectionId, itemId) {
 </div>
 
 <div class="modal-overlay" id="qvModal" onclick="closeModal()">
-  <div class="modal-box qv" id="qvBox" onclick="event.stopPropagation()"></div>
+  <div class="modal-box qv" id="qvBox" onclick="event.stopPropagation()">
+    <button type="button" class="qv-close-btn" onclick="closeModal()" aria-label="Close Product View">&#x2715;</button>
+  </div>
 </div>
 
 <div class="modal-overlay" id="infoModal" onclick="closeInfoModal()">

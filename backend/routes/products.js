@@ -1,6 +1,7 @@
 const express = require('express');
 const { authMiddleware } = require('../middleware/auth');
-const { getDb } = require('../lib/firebase');
+const { getDb, isFirestoreAvailable } = require('../lib/firebase');
+
 
 module.exports = () => {
   const router = express.Router();
@@ -165,10 +166,16 @@ module.exports = () => {
 
   // Get product reviews
   router.get('/:id/reviews', async (req, res) => {
-    const db = getDb();
-    const productId = String(req.params.id);
     try {
-      const snap = await db.collection('reviews').where('product_id', '==', productId).get();
+      if (!await isFirestoreAvailable()) {
+        return res.json({ reviews: [], count: 0, avg_rating: 5.0 });
+      }
+      const db = getDb();
+      const productId = String(req.params.id);
+      const snap = await Promise.race([
+        db.collection('reviews').where('product_id', '==', productId).get(),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 1500)),
+      ]);
       const reviews = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))
         .sort((a, b) => String(b.created_at || '').localeCompare(String(a.created_at || '')));
 
@@ -179,8 +186,7 @@ module.exports = () => {
 
       res.json({ reviews, count, avg_rating: avg });
     } catch (err) {
-      console.error('Error fetching reviews:', err);
-      res.status(500).json({ error: 'Failed to fetch reviews', reviews: [], count: 0, avg_rating: 5.0 });
+      res.json({ reviews: [], count: 0, avg_rating: 5.0 });
     }
   });
 

@@ -17,6 +17,9 @@ backend/*-firebase-adminsdk-*.json
 *.sqlite
 backend/*.db
 backend/*.backup.*.db
+backend/data/*.json
+!backend/data/.gitkeep
+
 
 # Logs
 *.log

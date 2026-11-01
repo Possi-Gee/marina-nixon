@@ -70,4 +70,21 @@ function getDb() {
   return admin.firestore();
 }
 
-module.exports = { admin, initFirebase, getDb };
+let _firestoreAvailable = null;
+async function isFirestoreAvailable() {
+  if (_firestoreAvailable !== null) return _firestoreAvailable;
+  try {
+    const db = getDb();
+    await Promise.race([
+      db.collection('_ping').doc('test').get(),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 1500)),
+    ]);
+    _firestoreAvailable = true;
+  } catch {
+    _firestoreAvailable = false;
+  }
+  return _firestoreAvailable;
+}
+
+module.exports = { admin, initFirebase, getDb, isFirestoreAvailable };
+
