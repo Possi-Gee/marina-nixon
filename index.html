@@ -11593,6 +11593,14 @@ function togglePwdEye(id, btn) {
 }
 
 async function socialLogin(providerName) {
+  if (window.location.protocol === 'file:') {
+    showToast('⚠️ Google Sign-In requires http://localhost:5000. Redirecting...');
+    setTimeout(() => {
+      window.location.href = 'http://localhost:5000#acc-sec';
+    }, 1000);
+    return;
+  }
+
   const sdk = window.MN_FIREBASE_SDK;
   const auth = window.MN_FIREBASE_AUTH;
   if (!auth || !sdk) { 
@@ -11628,8 +11636,9 @@ async function socialLogin(providerName) {
     try {
       cred = await sdk.signInWithPopup(auth, provider);
     } catch (popupErr) {
-      if (popupErr.code === 'auth/popup-blocked' && sdk.signInWithRedirect) {
-        showToast('Opening Google sign in...');
+      console.warn('Popup attempt result:', popupErr);
+      if (sdk.signInWithRedirect && (popupErr.code === 'auth/popup-blocked' || popupErr.code === 'auth/popup-closed-by-user' || popupErr.code === 'auth/cancelled-popup-request')) {
+        showToast('Popup closed or blocked. Redirecting to Google...');
         await sdk.signInWithRedirect(auth, provider);
         return;
       }
