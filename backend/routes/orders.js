@@ -74,7 +74,8 @@ module.exports = () => {
       price: parseFloat(item.price || 0),
       quantity: Math.max(1, parseInt(item.quantity || item.qty, 10) || 1),
       size: item.size || null,
-      image: item.image || null,
+      image: item.image || item.img || null,
+      img: item.img || item.image || item.primary_image || null,
     }));
 
     let subtotal = verifiedItems.reduce((sum, i) => sum + i.price * i.quantity, 0);
