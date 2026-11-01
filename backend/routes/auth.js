@@ -134,9 +134,14 @@ module.exports = () => {
       const decoded = await resolveToken(token);
       const db = getDb();
       const snap = await db.collection('users').doc(String(decoded.uid)).get();
-      if (!snap.exists) return res.status(404).json({ error: 'User not found' });
+      let user;
+      if (!snap.exists) {
+        user = await syncUserFromToken(decoded, {});
+        return res.json(user);
+      } else {
+        user = snap.data();
+      }
 
-      const user = snap.data();
       const email = String(decoded.email || user.email || '').trim().toLowerCase();
       const adminEmail = String(process.env.ADMIN_EMAIL || 'admin@marinanixon.com').trim().toLowerCase();
       const isAdmin = email === adminEmail || user.role === 'admin' || decoded.role === 'admin';

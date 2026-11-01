@@ -11632,20 +11632,15 @@ async function socialLogin(providerName) {
   }
 
   try {
-    let cred;
-    try {
-      cred = await sdk.signInWithPopup(auth, provider);
-    } catch (popupErr) {
-      console.warn('Popup attempt result:', popupErr);
-      if (sdk.signInWithRedirect && (popupErr.code === 'auth/popup-blocked' || popupErr.code === 'auth/popup-closed-by-user' || popupErr.code === 'auth/cancelled-popup-request')) {
-        showToast('Popup closed or blocked. Redirecting to Google...');
-        await sdk.signInWithRedirect(auth, provider);
-        return;
-      }
-      throw popupErr;
+    showToast('Connecting to Google...');
+    if (sdk.signInWithRedirect) {
+      await sdk.signInWithRedirect(auth, provider);
+      return;
     }
 
+    let cred = await sdk.signInWithPopup(auth, provider);
     if (!cred || !cred.user) return;
+
 
     const token = await cred.user.getIdToken();
     const displayName = cred.user.displayName || '';
@@ -11853,6 +11848,26 @@ async function restoreSession() {
     const data = await apiGet('/auth/me');
     if (data && data.id) {
       currentUser = { ...data, full_name: userDisplayName(data) };
+      localStorage.setItem('mn_user', JSON.stringify(currentUser));
+      updateAuthUI();
+      resumePendingCheckout();
+    } else {
+      const displayName = user.displayName || '';
+      const nameParts = displayName.trim().split(' ');
+      const first_name = nameParts[0] || user.email?.split('@')[0] || 'Member';
+      const last_name = nameParts.slice(1).join(' ') || '';
+      const email = user.email || '';
+      const isAdminEmail = email.trim().toLowerCase() === 'admin@marinanixon.com';
+      const backend = await apiPost('/auth/login', { first_name, last_name, email, token });
+      currentUser = (backend && backend.user) ? backend.user : {
+        id: user.uid,
+        email,
+        first_name,
+        last_name,
+        role: isAdminEmail ? 'admin' : 'customer'
+      };
+      if (isAdminEmail || backend?.user?.role === 'admin') currentUser.role = 'admin';
+      currentUser.full_name = userDisplayName(currentUser);
       localStorage.setItem('mn_user', JSON.stringify(currentUser));
       updateAuthUI();
       resumePendingCheckout();
