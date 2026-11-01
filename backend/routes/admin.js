@@ -766,5 +766,141 @@ module.exports = () => {
     }
   });
 
+  // ── USER MANAGEMENT ─────────────────────────────────────────────────────────
+
+  // GET /admin/users — List all users (paginated)
+  router.get('/users', authMiddleware, adminMiddleware, async (req, res) => {
+    try {
+      const db = getDb();
+      const { role, limit: qLimit, offset: qOffset } = req.query;
+      const pageLimit = Math.min(Number(qLimit) || 50, 200);
+      const pageOffset = Number(qOffset) || 0;
+
+      let query = db.collection('users').orderBy('created_at', 'desc');
+      if (role) query = query.where('role', '==', role);
+
+      const snap = await query.get();
+      const all = snap.docs.map((doc) => {
+        const d = doc.data();
+        return {
+          id: doc.id,
+          first_name: d.first_name || '',
+          last_name: d.last_name || '',
+          email: d.email || '',
+          phone: d.phone || null,
+          role: d.role || 'customer',
+          is_verified: d.is_verified || false,
+          created_at: d.created_at || null,
+        };
+      });
+
+      const paginated = all.slice(pageOffset, pageOffset + pageLimit);
+      res.json({ total: all.length, users: paginated });
+    } catch (err) {
+      console.error('GET /admin/users error:', err);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // GET /admin/users/:uid — Single user detail
+  router.get('/users/:uid', authMiddleware, adminMiddleware, async (req, res) => {
+    try {
+      const db = getDb();
+      const snap = await db.collection('users').doc(req.params.uid).get();
+      if (!snap.exists) return res.status(404).json({ error: 'User not found' });
+      res.json({ id: snap.id, ...snap.data() });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // POST /admin/users/:uid/promote — Promote a user to admin
+  router.post('/users/:uid/promote', authMiddleware, adminMiddleware, async (req, res) => {
+    try {
+      const { uid } = req.params;
+      const db = getDb();
+      const { admin: adminSdk } = require('../lib/firebase');
+
+      const snap = await db.collection('users').doc(uid).get();
+      if (!snap.exists) return res.status(404).json({ error: 'User not found' });
+
+      // Update Firestore record
+      await db.collection('users').doc(uid).update({
+        role: 'admin',
+        updated_at: new Date().toISOString(),
+      });
+
+      // Set Firebase Auth custom claim so token reflects the role
+      await adminSdk.auth().setCustomUserClaims(uid, { role: 'admin' });
+
+      const updated = snap.data();
+      res.json({
+        message: `${updated.first_name || 'User'} ${updated.last_name || ''} has been promoted to admin.`.trim(),
+        user: { id: uid, ...updated, role: 'admin' },
+      });
+    } catch (err) {
+      console.error('POST /admin/users/:uid/promote error:', err);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // POST /admin/users/:uid/demote — Demote an admin back to customer
+  router.post('/users/:uid/demote', authMiddleware, adminMiddleware, async (req, res) => {
+    try {
+      const { uid } = req.params;
+      const db = getDb();
+      const { admin: adminSdk } = require('../lib/firebase');
+
+      // Prevent self-demotion
+      if (uid === req.user.id) {
+        return res.status(400).json({ error: 'You cannot demote your own account.' });
+      }
+
+      const snap = await db.collection('users').doc(uid).get();
+      if (!snap.exists) return res.status(404).json({ error: 'User not found' });
+
+      await db.collection('users').doc(uid).update({
+        role: 'customer',
+        updated_at: new Date().toISOString(),
+      });
+
+      await adminSdk.auth().setCustomUserClaims(uid, { role: 'customer' });
+
+      const updated = snap.data();
+      res.json({
+        message: `${updated.first_name || 'User'} ${updated.last_name || ''} has been demoted to customer.`.trim(),
+        user: { id: uid, ...updated, role: 'customer' },
+      });
+    } catch (err) {
+      console.error('POST /admin/users/:uid/demote error:', err);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // DELETE /admin/users/:uid — Delete a user account
+  router.delete('/users/:uid', authMiddleware, adminMiddleware, async (req, res) => {
+    try {
+      const { uid } = req.params;
+      const db = getDb();
+      const { admin: adminSdk } = require('../lib/firebase');
+
+      if (uid === req.user.id) {
+        return res.status(400).json({ error: 'You cannot delete your own account.' });
+      }
+
+      const snap = await db.collection('users').doc(uid).get();
+      if (!snap.exists) return res.status(404).json({ error: 'User not found' });
+
+      // Delete from Firestore and Firebase Auth
+      await db.collection('users').doc(uid).delete();
+      await adminSdk.auth().deleteUser(uid).catch(() => {}); // best-effort
+
+      res.json({ message: 'User deleted successfully.' });
+    } catch (err) {
+      console.error('DELETE /admin/users/:uid error:', err);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
   return router;
 };

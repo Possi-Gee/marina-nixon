@@ -9016,6 +9016,9 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
           <button class="admin-tab-btn" id="tab-admin-lookbook" onclick="switchAdminTab('lookbook');loadAdminLookbook()">
             <i class="ti ti-photo"></i> <span>Lookbook</span>
           </button>
+          <button class="admin-tab-btn" id="tab-admin-users" onclick="switchAdminTab('users');loadAdminUsers()">
+            <i class="ti ti-users"></i> <span>Users</span>
+          </button>
         </div>
 
         <!-- Panel 1: Overview & Orders -->
@@ -9688,6 +9691,49 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
             <div id="adminLbSections">
               <div style="text-align:center;padding:3rem;color:var(--cbl);font-family:'Jost',Arial,sans-serif;font-size:13px">Loading lookbook data...</div>
             </div>
+          </div>
+        </div>
+
+        <!-- ADMIN USERS PANEL -->
+        <div id="admin-panel-users" style="display:none">
+          <!-- Header -->
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.25rem">
+            <div>
+              <h3 style="font-size:14px;letter-spacing:2px;text-transform:uppercase;color:var(--cbd);font-weight:700;margin-bottom:3px"><i class="ti ti-users" style="margin-right:6px"></i>User Management</h3>
+              <p style="font-family:'Jost',Arial,sans-serif;font-size:12px;color:var(--cbl)">View all registered accounts. Promote to admin, demote, or delete users.</p>
+            </div>
+            <button class="btn-dark" onclick="loadAdminUsers()"><i class="ti ti-refresh"></i> Refresh</button>
+          </div>
+
+          <!-- Filter + Search bar -->
+          <div style="display:flex;gap:.65rem;flex-wrap:wrap;margin-bottom:1rem;align-items:center">
+            <select id="adminUserRoleFilter" onchange="loadAdminUsers()" style="padding:7px 12px;border:1px solid #D6CCB8;border-radius:6px;font-family:'Jost',Arial,sans-serif;font-size:12px;color:var(--cbd);background:var(--cw);min-width:130px">
+              <option value="">All Roles</option>
+              <option value="admin">Admins only</option>
+              <option value="customer">Customers only</option>
+            </select>
+            <input id="adminUserSearch" type="search" placeholder="Search name or email…" oninput="filterAdminUsersTable()" style="flex:1;min-width:200px;padding:7px 12px;border:1px solid #D6CCB8;border-radius:6px;font-family:'Jost',Arial,sans-serif;font-size:12px;color:var(--cbd)">
+            <span id="adminUserCount" style="font-family:'Jost',Arial,sans-serif;font-size:12px;color:var(--cbl);white-space:nowrap"></span>
+          </div>
+
+          <!-- Table -->
+          <div class="admin-table-wrap" style="overflow-x:auto;background:var(--cw);border:1px solid #EDE8DF;border-radius:10px">
+            <table class="order-table" id="adminUsersTable">
+              <thead>
+                <tr>
+                  <th style="width:36px">#</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Role</th>
+                  <th>Joined</th>
+                  <th style="text-align:center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminUsersBody">
+                <tr><td colspan="7" style="padding:2rem;text-align:center;font-family:'Jost',Arial,sans-serif;color:var(--cbl)">Loading users…</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
@@ -12801,7 +12847,7 @@ async function saveAdminSettings(btn) {
 }
 
 function switchAdminTab(tab) {
-  ['overview', 'catalog', 'inventory', 'product-form', 'banners', 'lookbook'].forEach(t => {
+  ['overview', 'catalog', 'inventory', 'product-form', 'banners', 'lookbook', 'users'].forEach(t => {
     const tabEl = document.getElementById('tab-admin-' + t);
     const panelEl = document.getElementById('admin-panel-' + t);
     if (tabEl) {
@@ -12822,6 +12868,138 @@ function switchAdminTab(tab) {
   if (tab === 'inventory') loadAdminInventory();
   if (tab === 'banners') populateAdminSettingsForm();
   if (tab === 'lookbook') loadAdminLookbook();
+  if (tab === 'users') loadAdminUsers();
+}
+
+// ── User Management ───────────────────────────────────────────
+let _adminUsersCache = [];
+
+async function loadAdminUsers() {
+  const body = document.getElementById('adminUsersBody');
+  const countEl = document.getElementById('adminUserCount');
+  const roleFilter = document.getElementById('adminUserRoleFilter')?.value || '';
+  if (body) body.innerHTML = '<tr><td colspan="7" style="padding:2rem;text-align:center;font-family:\'Jost\',Arial,sans-serif;color:var(--cbl)">Loading users…</td></tr>';
+
+  const endpoint = '/admin/users' + (roleFilter ? '?role=' + encodeURIComponent(roleFilter) : '');
+  const data = await apiGet(endpoint);
+
+  if (data.error || !Array.isArray(data.users)) {
+    if (body) body.innerHTML = `<tr><td colspan="7" style="padding:2rem;text-align:center;color:#C62828;font-family:'Jost',Arial,sans-serif">${data.error || 'Failed to load users.'}</td></tr>`;
+    return;
+  }
+
+  _adminUsersCache = data.users;
+  if (countEl) countEl.textContent = `${data.total} user${data.total !== 1 ? 's' : ''} total`;
+  renderAdminUsersTable(_adminUsersCache);
+}
+
+function filterAdminUsersTable() {
+  const q = (document.getElementById('adminUserSearch')?.value || '').toLowerCase();
+  const filtered = q
+    ? _adminUsersCache.filter(u =>
+        (u.first_name + ' ' + u.last_name).toLowerCase().includes(q) ||
+        (u.email || '').toLowerCase().includes(q)
+      )
+    : _adminUsersCache;
+  renderAdminUsersTable(filtered);
+}
+
+function renderAdminUsersTable(users) {
+  const body = document.getElementById('adminUsersBody');
+  if (!body) return;
+  if (!users.length) {
+    body.innerHTML = '<tr><td colspan="7" style="padding:2rem;text-align:center;font-family:\'Jost\',Arial,sans-serif;color:var(--cbl)">No users found.</td></tr>';
+    return;
+  }
+
+  const isAdminSelf = id => currentUser && (currentUser.id === id || currentUser.uid === id);
+
+  body.innerHTML = users.map((u, idx) => {
+    const name = `${u.first_name || ''} ${u.last_name || ''}`.trim() || '—';
+    const joined = u.created_at ? new Date(u.created_at).toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' }) : '—';
+    const isAdmin = u.role === 'admin';
+    const isSelf = isAdminSelf(u.id);
+    const roleBadge = isAdmin
+      ? `<span style="display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,rgba(201,169,110,0.22),rgba(201,169,110,0.08));border:1px solid rgba(201,169,110,0.55);color:#8a6a1e;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:20px;font-family:'Jost',Arial,sans-serif">👑 Admin</span>`
+      : `<span style="display:inline-flex;align-items:center;gap:4px;background:#F5F5F5;border:1px solid #DDD;color:#666;font-size:10px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;padding:3px 10px;border-radius:20px;font-family:'Jost',Arial,sans-serif">Customer</span>`;
+
+    const selfTag = isSelf ? ' <span style="font-size:9px;color:var(--cbl);font-family:\'Jost\',Arial,sans-serif">(you)</span>' : '';
+
+    const promoteBtn = !isAdmin
+      ? `<button onclick="promoteUser('${u.id}','${name.replace(/'/g,"'")}')" title="Promote to Admin" style="background:linear-gradient(135deg,#C9A96E,#a07c3e);color:#fff;border:none;border-radius:5px;padding:5px 11px;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;font-family:'Jost',Arial,sans-serif;white-space:nowrap">👑 Promote</button>`
+      : '';
+    const demoteBtn = isAdmin && !isSelf
+      ? `<button onclick="demoteUser('${u.id}','${name.replace(/'/g,"'")}')" title="Demote to Customer" style="background:#F5F5F5;color:#555;border:1px solid #CCC;border-radius:5px;padding:5px 11px;font-size:10px;font-weight:600;cursor:pointer;font-family:'Jost',Arial,sans-serif;white-space:nowrap">↓ Demote</button>`
+      : '';
+    const deleteBtn = !isSelf
+      ? `<button onclick="deleteAdminUser('${u.id}','${name.replace(/'/g,"'")}')" title="Delete User" style="background:none;color:#C62828;border:1px solid #C62828;border-radius:5px;padding:5px 11px;font-size:10px;font-weight:600;cursor:pointer;font-family:'Jost',Arial,sans-serif;white-space:nowrap">🗑 Delete</button>`
+      : '';
+
+    return `<tr>
+      <td style="font-family:'Jost',Arial,sans-serif;font-size:12px;color:var(--cbl);text-align:center">${idx + 1}</td>
+      <td style="font-weight:600;font-size:13px;white-space:nowrap">${name}${selfTag}</td>
+      <td style="font-family:'Jost',Arial,sans-serif;font-size:12px;color:var(--cbl)">${u.email || '—'}</td>
+      <td style="font-family:'Jost',Arial,sans-serif;font-size:12px;color:var(--cbl)">${u.phone || '—'}</td>
+      <td>${roleBadge}</td>
+      <td style="font-family:'Jost',Arial,sans-serif;font-size:12px;color:var(--cbl);white-space:nowrap">${joined}</td>
+      <td style="text-align:center">
+        <div style="display:flex;gap:5px;justify-content:center;flex-wrap:wrap">
+          ${promoteBtn}${demoteBtn}${deleteBtn}
+          ${isSelf ? '<span style="font-size:11px;color:var(--cbl);font-family:\'Jost\',Arial,sans-serif">—</span>' : ''}
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+async function promoteUser(uid, name) {
+  if (!confirm(`Promote "${name}" to Admin?\n\nThey will gain full access to the admin panel.`)) return;
+  const btn = event.target;
+  const orig = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '…';
+  const res = await apiPost(`/admin/users/${uid}/promote`);
+  if (res.error) {
+    showToast(res.error || 'Promotion failed.', 'error');
+    btn.disabled = false;
+    btn.innerHTML = orig;
+  } else {
+    showToast(`✓ ${name} is now an Admin.`, 'success');
+    await loadAdminUsers();
+  }
+}
+
+async function demoteUser(uid, name) {
+  if (!confirm(`Demote "${name}" back to Customer?\n\nThey will lose admin access immediately.`)) return;
+  const btn = event.target;
+  const orig = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '…';
+  const res = await apiPost(`/admin/users/${uid}/demote`);
+  if (res.error) {
+    showToast(res.error || 'Demotion failed.', 'error');
+    btn.disabled = false;
+    btn.innerHTML = orig;
+  } else {
+    showToast(`✓ ${name} has been demoted to Customer.`, 'success');
+    await loadAdminUsers();
+  }
+}
+
+async function deleteAdminUser(uid, name) {
+  if (!confirm(`Permanently delete user "${name}"?\n\nThis cannot be undone.`)) return;
+  const btn = event.target;
+  btn.disabled = true;
+  btn.innerHTML = '…';
+  const res = await apiDelete(`/admin/users/${uid}`);
+  if (res.error) {
+    showToast(res.error || 'Delete failed.', 'error');
+    btn.disabled = false;
+    btn.innerHTML = '🗑 Delete';
+  } else {
+    showToast(`✓ User "${name}" deleted.`, 'success');
+    await loadAdminUsers();
+  }
 }
 // old switchAdminTab replaced
 function _oldSwitchAdminTab(tab) {

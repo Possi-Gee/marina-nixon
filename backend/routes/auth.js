@@ -111,6 +111,7 @@ module.exports = () => {
     try {
       const decoded = await resolveToken(token);
       const db = getDb();
+      const snap = await db.collection('users').doc(String(decoded.uid)).get();
       const userData = snap.exists ? snap.data() : {};
       const email = String(decoded.email || userData.email || '').trim().toLowerCase();
       const adminEmail = String(process.env.ADMIN_EMAIL || 'admin@marinanixon.com').trim().toLowerCase();
