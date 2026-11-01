@@ -9952,9 +9952,8 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
 
 // ── Detect environment ────────────────────────────────────────
 const isLocalFile = window.location.protocol === 'file:';
-const isDevServer = ['localhost', '127.0.0.1'].includes(window.location.hostname) && window.location.port !== '5000';
-const IS_LOCAL = isLocalFile || isDevServer;
-const API = (window.MN_API_BASE || localStorage.getItem('mn_api_base') || (IS_LOCAL ? 'http://localhost:5000/api' : '/api')).replace(/\/$/, '');
+const API = (window.MN_API_BASE || localStorage.getItem('mn_api_base') || (isLocalFile ? 'http://localhost:5000/api' : '/api')).replace(/\/$/, '');
+
 
 // ── Embedded product data (always available as fallback) ──────
 const PRODUCTS_EMBEDDED = [
@@ -11836,6 +11835,11 @@ async function restoreSession() {
       }
     } catch (redirectErr) {
       console.warn('Redirect auth check notice:', redirectErr);
+      if (redirectErr.code === 'auth/account-exists-with-different-credential') {
+        showToast('⚠️ An account with this email already exists with a password. Please sign in with your email & password, or use a different Google account.');
+      } else {
+        showToast(redirectErr.message || 'Google sign-in could not be completed');
+      }
     }
   }
 
