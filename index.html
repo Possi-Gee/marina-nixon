@@ -11675,6 +11675,12 @@ async function socialLogin(providerName) {
       showToast('⚠️ Google Sign-In is not enabled in Firebase Console. Go to Authentication > Sign-in method > Enable Google.');
     } else if (err.code === 'auth/popup-closed-by-user') {
       showToast('Google sign-in cancelled');
+    } else if (err.code === 'auth/account-exists-with-different-credentials' || err.code === 'auth/account-exists') {
+      showToast('An account with that email already exists. Please sign in with your existing account.');
+      showAccSec('login');
+    } else if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
+      showToast('No account found with that email. Please create an account to get started.');
+      showAccSec('register');
     } else {
       showToast(err.message || 'Social sign-in failed');
     }
@@ -11682,6 +11688,13 @@ async function socialLogin(providerName) {
 }
 
 async function loginUser() {
+  // Guard: If user is already logged in, redirect to dashboard
+  if (currentUser) {
+    showToast('You are already signed in.');
+    showAccSec(currentUser.role === 'admin' ? 'admin' : 'dashboard');
+    return;
+  }
+
   const email = document.getElementById('loginEmail')?.value?.trim();
   const pass  = document.getElementById('loginPass')?.value;
   if (!email||!pass) { showToast('Enter email and password'); return; }
@@ -11720,13 +11733,35 @@ async function loginUser() {
     showAccSec(currentUser.role === 'admin' ? 'admin' : 'dashboard');
     resumePendingCheckout();
   } catch (err) {
-    showToast(err.message || 'Login failed');
+    // If the user has not signed up yet, redirect them to the register screen
+    const code = err?.code || '';
+    const msg = (err?.message || '').toLowerCase();
+    const isUserNotFound = code.includes('user-not-found') ||
+                          code.includes('auth/user-not-found') ||
+                          code.includes('invalid-credential') ||
+                          msg.includes('no account') ||
+                          msg.includes('user not found') ||
+                          msg.includes('account does not exist') ||
+                          msg.includes('no user record');
+    if (isUserNotFound) {
+      showToast('No account found with that email. Please create an account to get started.');
+      showAccSec('register');
+    } else {
+      showToast(err.message || 'Login failed');
+    }
   } finally {
     if (btn) { btn.disabled=false; btn.textContent='Login'; }
   }
 }
 
 async function registerUser() {
+  // Guard: Prevent already logged-in users from registering a new account
+  if (currentUser) {
+    showToast('You are already signed in with another account. Please log out first if you want to create a new account.');
+    showAccSec(currentUser.role === 'admin' ? 'admin' : 'dashboard');
+    return;
+  }
+
   const first_name = document.getElementById('regName')?.value?.trim()?.split(' ')[0] || '';
   const last_name  = document.getElementById('regName')?.value?.trim()?.split(' ').slice(1).join(' ') || 'User';
   const email      = document.getElementById('regEmail')?.value?.trim();
@@ -11756,7 +11791,22 @@ async function registerUser() {
     updateAuthUI(); showAccSec('dashboard');
     resumePendingCheckout();
   } catch (err) {
-    showToast(err.message || 'Registration failed');
+    // If the user has already signed up with this account, redirect them to login
+    const code = err?.code || '';
+    const msg = (err?.message || '').toLowerCase();
+    const isAlreadyRegistered = code.includes('email-already-in-use') ||
+                               code.includes('auth/email-already-in-use') ||
+                               code.includes('account-exists') ||
+                               code.includes('auth/account-exists') ||
+                               msg.includes('already in use') ||
+                               msg.includes('already registered') ||
+                               msg.includes('account already exists');
+    if (isAlreadyRegistered) {
+      showToast('An account with that email already exists. Please sign in instead.');
+      showAccSec('login');
+    } else {
+      showToast(err.message || 'Registration failed');
+    }
   } finally {
     if (btn) { btn.disabled=false; btn.textContent='Sign Up'; }
   }
@@ -14969,6 +15019,21 @@ function showAccSec(sec) {
   // Guard: Restrict admin section to confirmed admins only
   if (sec === 'admin' && (!currentUser || currentUser.role !== 'admin')) {
     sec = currentUser ? 'dashboard' : 'login';
+  }
+
+  // Guard: If user is already logged in, redirect away from auth screens
+  if (currentUser && (sec === 'login' || sec === 'register')) {
+    // Show toast notification
+    showToast('You are already signed in. Redirecting to your account dashboard.');
+    // Redirect to appropriate screen based on user role
+    sec = currentUser.role === 'admin' ? 'admin' : 'dashboard';
+  }
+
+  // Guard: If user is not logged in but trying to access account screens, redirect to login
+  if (!currentUser && (sec === 'dashboard' || sec === 'profile' || sec === 'orders' || sec === 'wishlist' || sec === 'settings' || sec === 'admin' || sec === 'track')) {
+    // Show toast notification
+    showToast('Please sign in to access your account.');
+    sec = 'login';
   }
 
   document.querySelectorAll('.acc-section').forEach(s => s.classList.remove('acc-show'));
