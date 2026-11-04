@@ -173,6 +173,80 @@ async function testAuthFlow() {
   window.MN_FIREBASE_SDK = originalSignInWithEmailAndPassword ? { signInWithEmailAndPassword: originalSignInWithEmailAndPassword } : {};
   document.getElementById = originalGetElementById;
 
+  // Test 6: Check socialLogin() prevents already logged-in users
+  console.log('\n6. Testing socialLogin() with already logged-in user...');
+  currentUser = {
+    id: 'test123',
+    email: 'test@example.com',
+    first_name: 'Test',
+    last_name: 'User',
+    role: 'customer'
+  };
+
+  calls.length = 0;
+  await socialLogin('google');
+  console.log('Toast:', calls.find(c => c.type === 'showToast')?.message);
+
+  // Test 7: Check socialLogin('google') successful sign-in via popup
+  console.log('\n7. Testing socialLogin() successful popup sign-in...');
+  currentUser = null;
+  calls.length = 0;
+
+  const originalSdk = window.MN_FIREBASE_SDK;
+  const originalAuth = window.MN_FIREBASE_AUTH;
+  const originalGo = window.go;
+
+  window.MN_FIREBASE_AUTH = { currentUser: null };
+  window.MN_FIREBASE_SDK = {
+    GoogleAuthProvider: class {
+      addScope() {}
+      setCustomParameters() {}
+    },
+    signInWithPopup: () => Promise.resolve({
+      user: {
+        uid: 'google-uid-123',
+        email: 'googleuser@example.com',
+        displayName: 'Google User',
+        getIdToken: () => Promise.resolve('mock-google-token')
+      }
+    })
+  };
+  window.apiPost = () => Promise.resolve({
+    user: {
+      id: 'google-uid-123',
+      email: 'googleuser@example.com',
+      first_name: 'Google',
+      last_name: 'User',
+      role: 'customer'
+    }
+  });
+  window.go = (sec) => {
+    calls.push({ type: 'go', section: sec });
+  };
+
+  await socialLogin('google');
+  console.log('Logged in user:', currentUser?.email);
+  console.log('User full name:', currentUser?.full_name);
+  console.log('Navigation:', calls.find(c => c.type === 'go')?.section);
+
+  // Test 8: Check socialLogin() handles popup closed by user
+  console.log('\n8. Testing socialLogin() popup cancelled handling...');
+  currentUser = null;
+  calls.length = 0;
+
+  window.MN_FIREBASE_SDK.signInWithPopup = () => Promise.reject({
+    code: 'auth/popup-closed-by-user',
+    message: 'Popup closed'
+  });
+
+  await socialLogin('google');
+  console.log('Toast on cancel:', calls.find(c => c.type === 'showToast')?.message);
+
+  // Restore mocks
+  window.MN_FIREBASE_SDK = originalSdk;
+  window.MN_FIREBASE_AUTH = originalAuth;
+  window.go = originalGo;
+
   console.log('\nAll tests completed!');
 }
 

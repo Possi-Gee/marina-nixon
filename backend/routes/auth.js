@@ -5,13 +5,27 @@ module.exports = () => {
   const router = express.Router();
 
   const syncUserFromToken = async (decoded, profile = {}) => {
-    const db = getDb();
+    const localdb = require('../lib/localdb');
     const uid = decoded.uid;
     const email = String(decoded.email || profile.email || '').trim().toLowerCase();
     const adminEmail = String(process.env.ADMIN_EMAIL || 'admin@marinanixon.com').trim().toLowerCase();
-    const userRef = db.collection('users').doc(uid);
-    const snap = await userRef.get();
-    const existingData = snap.exists ? snap.data() : {};
+
+    let existingData = {};
+    try {
+      const db = getDb();
+      const userRef = db.collection('users').doc(uid);
+      const snap = await Promise.race([
+        userRef.get(),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Firestore timeout')), 2500))
+      ]);
+      if (snap && snap.exists) {
+        existingData = snap.data() || {};
+      }
+    } catch (e) {
+      console.warn('syncUserFromToken Firestore read non-fatal:', e.message);
+      existingData = localdb.getDoc('users', uid) || {};
+    }
+
     const isAdmin = email === adminEmail || existingData.role === 'admin' || decoded.role === 'admin';
 
     const first_name = String(profile.first_name || decoded.name || '').trim().split(' ')[0] || (isAdmin ? 'Marina' : 'User');
@@ -31,13 +45,35 @@ module.exports = () => {
       updated_at: new Date().toISOString(),
     };
 
-    await userRef.set(baseUser, { merge: true });
+    try {
+      const db = getDb();
+      await Promise.race([
+        db.collection('users').doc(uid).set(baseUser, { merge: true }),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Firestore write timeout')), 2500))
+      ]);
+    } catch (e) {
+      console.warn('syncUserFromToken Firestore write non-fatal:', e.message);
+    }
+
+    try {
+      if (localdb.getDoc('users', uid)) {
+        localdb.updateDoc('users', uid, baseUser);
+      } else {
+        localdb.addDoc('users', { id: uid, ...baseUser });
+      }
+    } catch (_) {}
+
     return { id: uid, ...baseUser };
   };
 
   const resolveToken = async (token) => {
     try {
-      return await admin.auth().verifyIdToken(token);
+      return await Promise.race([
+        admin.auth().verifyIdToken(token),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('verifyIdToken timed out')), 2500)
+        )
+      ]);
     } catch (err) {
       console.warn('resolveToken warning (falling back to JWT payload):', err.message);
       const parts = String(token).split('.');
@@ -132,14 +168,23 @@ module.exports = () => {
 
     try {
       const decoded = await resolveToken(token);
-      const db = getDb();
-      const snap = await db.collection('users').doc(String(decoded.uid)).get();
-      let user;
-      if (!snap.exists) {
+      let user = null;
+      try {
+        const db = getDb();
+        const snap = await Promise.race([
+          db.collection('users').doc(String(decoded.uid)).get(),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Firestore timeout')), 2500))
+        ]);
+        if (snap && snap.exists) {
+          user = snap.data();
+        }
+      } catch (e) {
+        console.warn('GET /me Firestore lookup non-fatal:', e.message);
+      }
+
+      if (!user) {
         user = await syncUserFromToken(decoded, {});
         return res.json(user);
-      } else {
-        user = snap.data();
       }
 
       const email = String(decoded.email || user.email || '').trim().toLowerCase();

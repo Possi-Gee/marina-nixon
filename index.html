@@ -11592,6 +11592,13 @@ function togglePwdEye(id, btn) {
 }
 
 async function socialLogin(providerName) {
+  // Guard: If user is already logged in, redirect to dashboard
+  if (currentUser) {
+    showToast('You are already signed in.');
+    showAccSec(currentUser.role === 'admin' ? 'admin' : 'dashboard');
+    return;
+  }
+
   if (window.location.protocol === 'file:') {
     showToast('⚠️ Google Sign-In requires http://localhost:5000. Redirecting...');
     setTimeout(() => {
@@ -11630,16 +11637,32 @@ async function socialLogin(providerName) {
     }
   }
 
+  const btnSignIn = document.getElementById('btnGoogleSignIn');
+  const btnRegister = document.getElementById('btnGoogleRegister');
+  const activeBtn = (providerName === 'google') ? (btnRegister && btnRegister.offsetParent ? btnRegister : btnSignIn) : null;
+  const originalBtnHtml = activeBtn ? activeBtn.innerHTML : '';
+
+  if (activeBtn) {
+    activeBtn.disabled = true;
+    activeBtn.style.opacity = '0.7';
+    activeBtn.style.cursor = 'wait';
+  }
+
   try {
     showToast('Connecting to Google...');
-    if (sdk.signInWithRedirect) {
-      await sdk.signInWithRedirect(auth, provider);
-      return;
+    let cred;
+    try {
+      cred = await sdk.signInWithPopup(auth, provider);
+    } catch (popupErr) {
+      if (popupErr.code === 'auth/popup-blocked' && sdk.signInWithRedirect) {
+        showToast('Popup was blocked by your browser. Redirecting to Google...');
+        await sdk.signInWithRedirect(auth, provider);
+        return;
+      }
+      throw popupErr;
     }
 
-    let cred = await sdk.signInWithPopup(auth, provider);
     if (!cred || !cred.user) return;
-
 
     const token = await cred.user.getIdToken();
     const displayName = cred.user.displayName || '';
@@ -11647,9 +11670,15 @@ async function socialLogin(providerName) {
     const first_name = nameParts[0] || cred.user.email?.split('@')[0] || 'Member';
     const last_name = nameParts.slice(1).join(' ') || '';
     const email = cred.user.email || '';
+    const phone = cred.user.phoneNumber || '';
 
     const isAdminEmail = email.trim().toLowerCase() === 'admin@marinanixon.com';
-    const backend = await apiPost('/auth/login', { first_name, last_name, email, token });
+    let backend = null;
+    try {
+      backend = await apiPost('/auth/login', { first_name, last_name, email, phone, token });
+    } catch (syncErr) {
+      console.warn('Backend login sync non-fatal:', syncErr);
+    }
 
     currentUser = (backend && backend.user) ? backend.user : {
       id: cred.user.uid,
@@ -11665,6 +11694,7 @@ async function socialLogin(providerName) {
     localStorage.setItem('mn_token', token);
     showToast('Welcome, ' + (currentUser.first_name || 'Member') + '!');
     updateAuthUI();
+    go('account');
     showAccSec(currentUser.role === 'admin' ? 'admin' : 'dashboard');
     resumePendingCheckout();
   } catch (err) {
@@ -11673,16 +11703,23 @@ async function socialLogin(providerName) {
       showToast('⚠️ Domain not authorized in Firebase. Add localhost to Firebase Console > Authentication > Settings > Authorized domains.');
     } else if (err.code === 'auth/operation-not-allowed' || err.code === 'auth/configuration-not-found') {
       showToast('⚠️ Google Sign-In is not enabled in Firebase Console. Go to Authentication > Sign-in method > Enable Google.');
-    } else if (err.code === 'auth/popup-closed-by-user') {
+    } else if (err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') {
       showToast('Google sign-in cancelled');
-    } else if (err.code === 'auth/account-exists-with-different-credentials' || err.code === 'auth/account-exists') {
-      showToast('An account with that email already exists. Please sign in with your existing account.');
+    } else if (err.code === 'auth/account-exists-with-different-credential' || err.code === 'auth/account-exists-with-different-credentials' || err.code === 'auth/account-exists') {
+      showToast('⚠️ An account with this email already exists with a password. Please sign in with your email & password.');
       showAccSec('login');
     } else if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
       showToast('No account found with that email. Please create an account to get started.');
       showAccSec('register');
     } else {
       showToast(err.message || 'Social sign-in failed');
+    }
+  } finally {
+    if (activeBtn) {
+      activeBtn.disabled = false;
+      activeBtn.style.opacity = '1';
+      activeBtn.style.cursor = 'pointer';
+      if (originalBtnHtml) activeBtn.innerHTML = originalBtnHtml;
     }
   }
 }
@@ -11866,7 +11903,12 @@ async function restoreSession() {
         const last_name = nameParts.slice(1).join(' ') || '';
         const email = redirectCred.user.email || '';
         const isAdminEmail = email.trim().toLowerCase() === 'admin@marinanixon.com';
-        const backend = await apiPost('/auth/login', { first_name, last_name, email, token });
+        let backend = null;
+        try {
+          backend = await apiPost('/auth/login', { first_name, last_name, email, token });
+        } catch (syncErr) {
+          console.warn('Backend login sync non-fatal:', syncErr);
+        }
         currentUser = (backend && backend.user) ? backend.user : {
           id: redirectCred.user.uid,
           email,
@@ -11880,6 +11922,7 @@ async function restoreSession() {
         localStorage.setItem('mn_token', token);
         showToast('Welcome, ' + (currentUser.first_name || 'Member') + '!');
         updateAuthUI();
+        go('account');
         showAccSec(currentUser.role === 'admin' ? 'admin' : 'dashboard');
         resumePendingCheckout();
       }
