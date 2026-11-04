@@ -6,6 +6,12 @@
     }
   },
   "routes": [
-    { "src": "/(.*)", "dest": "/api/index.js" }
+    {
+      "src": "/(.*)",
+      "dest": "/api/index.js",
+      "headers": {
+        "Cross-Origin-Opener-Policy": "same-origin-allow-popups"
+      }
+    }
   ]
 }

@@ -42,7 +42,10 @@ validateProductionEnv();
 
 app.disable('x-powered-by');
 app.set('trust proxy', 1);
-app.use(helmet({ contentSecurityPolicy: false }));
+app.use(helmet({
+  contentSecurityPolicy: false,
+  crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
+}));
 app.use(compression());
 app.use(morgan(production ? 'combined' : 'dev'));
 app.use(cors({

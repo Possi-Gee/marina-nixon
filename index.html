@@ -11700,7 +11700,7 @@ async function socialLogin(providerName) {
   } catch (err) {
     console.error('Social login error:', err);
     if (err.code === 'auth/unauthorized-domain') {
-      showToast('⚠️ Domain not authorized in Firebase. Add localhost to Firebase Console > Authentication > Settings > Authorized domains.');
+      showToast('⚠️ Domain not authorized in Firebase. Add ' + (window.location.hostname || 'your domain') + ' to Firebase Console > Authentication > Settings > Authorized domains.');
     } else if (err.code === 'auth/operation-not-allowed' || err.code === 'auth/configuration-not-found') {
       showToast('⚠️ Google Sign-In is not enabled in Firebase Console. Go to Authentication > Sign-in method > Enable Google.');
     } else if (err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') {
