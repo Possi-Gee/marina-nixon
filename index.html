@@ -224,18 +224,42 @@ html, body {
 
   /* Stat cards 2x2 grid */
   .stat-cards {
+    display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 10px !important;
   }
 
   .stat-card {
-    padding: 1rem 0.85rem !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 10px 10px !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+  .stat-card-icon {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    flex-shrink: 0 !important;
+  }
+  .stat-card-info {
+    flex: 1 !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
   }
   .stat-num {
-    font-size: 20px !important;
+    font-size: 18px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
   }
   .stat-lbl {
     font-size: 9px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
   }
 
   /* Profile & Form Rows Stack on Mobile */
@@ -340,16 +364,90 @@ html, body {
   #as-orders .btn-dark {
     align-self: flex-start !important;
   }
-  /* Orders table on mobile */
+  /* Orders table on mobile — render as swipeable label-value cards */
   #as-orders .orders-card-wrapper {
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
     padding: 0 !important;
   }
+  #as-orders .orders-table-container,
   #as-orders .order-table {
+    display: block !important;
     min-width: 0 !important;
     width: 100% !important;
+    border: none !important;
+    overflow: visible !important;
+  }
+  #as-orders .order-table thead,
+  #as-orders .order-table thead tr,
+  #as-orders .order-table thead th {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    overflow: hidden !important;
+  }
+  #as-orders .order-table tbody {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+  #as-orders .order-table tbody tr {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    background: #FFFDF9 !important;
+    border: 1px solid rgba(201, 169, 110, 0.28) !important;
+    border-radius: 12px !important;
+    padding: 12px 14px !important;
+    box-shadow: 0 2px 10px rgba(42, 30, 20, 0.04) !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+  }
+  #as-orders .order-table tbody td {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 4px 0 !important;
+    border: none !important;
+    font-size: 12px !important;
+    background: transparent !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    text-align: right !important;
+  }
+  #as-orders .order-table tbody td::before {
+    content: attr(data-label);
+    font-family: 'Jost', Arial, sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--cbl);
+    text-align: left;
+    margin-right: 8px;
+    flex-shrink: 0;
+  }
+  #as-orders .order-table tbody td:first-child {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: var(--cbd) !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
+    border-bottom: 1px solid rgba(201, 169, 110, 0.15) !important;
+    padding-bottom: 8px !important;
+    margin-bottom: 2px !important;
+  }
+  #as-orders .order-table tbody td:first-child::before {
+    display: none !important;
+  }
+  #as-orders .order-table tbody td[colspan] {
+    justify-content: center !important;
+    text-align: center !important;
+  }
+  #as-orders .order-table tbody td[colspan]::before {
+    display: none !important;
   }
 
   /* ── Wishlist Section ── */
@@ -2847,28 +2945,73 @@ html, body {
 
 @media (max-width: 768px) {
   .admin-command-bar {
-    padding: 10px 12px;
-    margin-bottom: 8px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .admin-brand-badge {
+    gap: 10px;
+  }
+  .admin-brand-badge img {
+    height: 32px !important;
   }
   .admin-brand-title {
-    font-size: 13.5px;
+    font-size: 14px;
   }
   .admin-brand-sub {
     display: none;
   }
-  .btn-admin-switch span {
-    display: none;
+  .admin-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-left: auto;
   }
   .btn-admin-switch {
-    padding: 6px 9px;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding: 7px 12px !important;
+    min-height: 36px !important;
+    border-radius: 20px !important;
+    background: rgba(201, 169, 110, 0.16) !important;
+    border: 1px solid rgba(201, 169, 110, 0.45) !important;
+    color: #FAF5EA !important;
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+  }
+  .btn-admin-switch span {
+    display: inline !important;
+  }
+  .btn-admin-switch i {
+    font-size: 13px !important;
+    color: var(--ca) !important;
+  }
+  .btn-admin-logout {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    font-size: 14px !important;
   }
   .admin-tab-nav {
-    gap: 5px;
-    margin-bottom: 10px;
+    gap: 6px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
   }
   .admin-tab-btn {
-    padding: 6px 11px;
-    font-size: 10.5px;
+    padding: 8px 14px;
+    font-size: 11.5px;
+    min-height: 38px;
+    scroll-snap-align: start;
+    white-space: nowrap;
+  }
+  .admin-tab-btn i {
+    font-size: 13px;
   }
 }
 
@@ -4726,7 +4869,6 @@ nav {
 
   /* ACCOUNT */
   .stat-cards{grid-template-columns:1fr 1fr}
-  .order-table th:nth-child(3),.order-table td:nth-child(3){display:none}
 
   /* DASHBOARD GRID */
   #as-dashboard > div[style*="grid-template-columns:1.6fr"]{grid-template-columns:1fr !important}
@@ -5773,6 +5915,14 @@ footer::before {
     width: 290px;
     right: 0;
   }
+}
+
+/* Hide floating concierge when Admin Command Workspace is active to avoid covering admin action buttons */
+#as-admin.acc-show ~ .concierge-widget-wrap,
+#as-admin.acc-show ~ #conciergeWidgetWrap,
+body:has(#as-admin.acc-show) .concierge-widget-wrap,
+body:has(#as-admin.acc-show) #conciergeWidgetWrap {
+  display: none !important;
 }
 
 
@@ -7358,12 +7508,19 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    padding: 10px 14px !important;
-    font-size: 10px !important;
+    padding: 12px 18px !important;
+    min-height: 42px !important;
+    font-size: 11px !important;
     letter-spacing: 1.5px !important;
-    font-weight: 500 !important;
+    font-weight: 700 !important;
     margin: 0 !important;
     white-space: normal !important;
+    background: linear-gradient(135deg, #C9A96E 0%, #B8975A 100%) !important;
+    color: #18120D !important;
+    border: none !important;
+    border-radius: 6px !important;
+    box-shadow: 0 4px 14px rgba(201, 169, 110, 0.3) !important;
+    cursor: pointer !important;
   }
 
   /* ── Dashboard: Stat Cards (2x2 Grid) ── */
@@ -7374,6 +7531,7 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
     margin-bottom: 1rem !important;
     width: 100% !important;
     box-sizing: border-box !important;
+    max-width: 100% !important;
   }
   .stat-card {
     display: flex !important;
@@ -7384,6 +7542,7 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
     border-radius: 10px !important;
     box-sizing: border-box !important;
     min-width: 0 !important;
+    width: 100% !important;
     background: var(--cw) !important;
     border: 1px solid rgba(201, 169, 110, 0.22) !important;
     box-shadow: 0 2px 8px rgba(42, 30, 20, 0.04) !important;
@@ -7453,22 +7612,26 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
     box-shadow: none !important;
     padding: 0 !important;
   }
-  .order-table {
+  #as-orders .order-table,
+  .recent-orders-table-container .order-table {
     display: block !important;
     width: 100% !important;
     min-width: 0 !important;
     border: none !important;
   }
-  .order-table thead {
+  #as-orders .order-table thead,
+  .recent-orders-table-container .order-table thead {
     display: none !important;
   }
-  .order-table tbody {
+  #as-orders .order-table tbody,
+  .recent-orders-table-container .order-table tbody {
     display: flex !important;
     flex-direction: column !important;
     gap: 10px !important;
     width: 100% !important;
   }
-  .order-table tbody tr {
+  #as-orders .order-table tbody tr,
+  .recent-orders-table-container .order-table tbody tr {
     display: flex !important;
     flex-direction: column !important;
     gap: 7px !important;
@@ -7480,11 +7643,12 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
     box-sizing: border-box !important;
     width: 100% !important;
   }
-  .order-table tbody td {
+  #as-orders .order-table tbody td,
+  .recent-orders-table-container .order-table tbody td {
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
-    padding: 4px 0 !important;
+    padding: 5px 0 !important;
     border: none !important;
     font-size: 12px !important;
     background: transparent !important;
@@ -7492,7 +7656,8 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
     width: 100% !important;
     text-align: right !important;
   }
-  .order-table tbody td::before {
+  #as-orders .order-table tbody td::before,
+  .recent-orders-table-container .order-table tbody td::before {
     content: attr(data-label);
     font-family: 'Jost', Arial, sans-serif;
     font-size: 10px;
@@ -7505,7 +7670,8 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
     flex-shrink: 0;
   }
   /* First row in card (Order Ref) */
-  .order-table tbody td:first-child {
+  #as-orders .order-table tbody td:first-child,
+  .recent-orders-table-container .order-table tbody td:first-child {
     border-bottom: 1px solid rgba(201, 169, 110, 0.15) !important;
     padding-bottom: 8px !important;
     margin-bottom: 2px !important;
@@ -7514,14 +7680,97 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
     color: var(--cbd) !important;
   }
   /* Empty state or loading message row */
-  .order-table tbody td[colspan] {
+  #as-orders .order-table tbody td[colspan],
+  .recent-orders-table-container .order-table tbody td[colspan] {
     display: block !important;
     text-align: center !important;
     padding: 2.5rem 1rem !important;
     border: none !important;
   }
-  .order-table tbody td[colspan]::before {
+  #as-orders .order-table tbody td[colspan]::before,
+  .recent-orders-table-container .order-table tbody td[colspan]::before {
     display: none !important;
+  }
+
+  /* ── Dedicated Mobile Admin Table Styling (Full Table View with Horizontal Touch-Scroll) ── */
+  .admin-table-wrap {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    border: 1px solid #EDE8DF !important;
+    border-radius: 10px !important;
+    background: #FFFFFF !important;
+    margin-bottom: 1.25rem !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.03) !important;
+  }
+  .admin-table-wrap table,
+  .admin-table-wrap table.order-table {
+    display: table !important;
+    width: 100% !important;
+    min-width: 650px !important;
+    border-collapse: collapse !important;
+    margin: 0 !important;
+  }
+  .admin-table-wrap thead {
+    display: table-header-group !important;
+  }
+  .admin-table-wrap thead tr {
+    display: table-row !important;
+  }
+  .admin-table-wrap thead th {
+    display: table-cell !important;
+    padding: 10px 12px !important;
+    font-size: 10.5px !important;
+    font-family: 'Jost', Arial, sans-serif !important;
+    font-weight: 600 !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase !important;
+    background: #18120D !important;
+    color: #FAF5EA !important;
+    border-bottom: 1px solid #EDE8DF !important;
+    white-space: nowrap !important;
+  }
+  .admin-table-wrap tbody {
+    display: table-row-group !important;
+  }
+  .admin-table-wrap tbody tr {
+    display: table-row !important;
+    background: #FFFFFF !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+  .admin-table-wrap tbody tr:nth-child(even) {
+    background: #FAF8F5 !important;
+  }
+  .admin-table-wrap tbody td {
+    display: table-cell !important;
+    padding: 10px 12px !important;
+    font-size: 12px !important;
+    color: var(--cbd) !important;
+    border-bottom: 1px solid #EDE8DF !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    width: auto !important;
+    text-align: left !important;
+    vertical-align: middle !important;
+    white-space: normal !important;
+  }
+  .admin-table-wrap tbody td::before {
+    display: none !important;
+  }
+  .admin-table-scroll-hint {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    font-family: 'Jost', Arial, sans-serif !important;
+    font-size: 11px !important;
+    color: #A67E3E !important;
+    font-weight: 500 !important;
+    margin-bottom: 8px !important;
+    letter-spacing: 0.3px !important;
   }
 
   /* ── Quick Actions ── */
@@ -8478,6 +8727,11 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
           <i class="ti ti-home" aria-hidden="true"></i>
           <span>Dashboard</span>
         </a>
+        <a onclick="showAccSec('admin')" id="am-admin" class="acc-admin-link" style="display:none">
+          <i class="ti ti-shield-lock" aria-hidden="true"></i>
+          <span>Admin Command</span>
+          <span class="acc-admin-badge-pill">ADMIN</span>
+        </a>
         <a onclick="showAccSec('orders')" id="am-orders">
           <i class="ti ti-shopping-bag" aria-hidden="true"></i>
           <span>My Orders</span>
@@ -8497,12 +8751,6 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
         <a onclick="showAccSec('settings')" id="am-settings">
           <i class="ti ti-settings" aria-hidden="true"></i>
           <span>Settings</span>
-        </a>
-
-        <a onclick="showAccSec('admin')" id="am-admin" class="acc-admin-link" style="display:none">
-          <i class="ti ti-shield-lock" aria-hidden="true"></i>
-          <span>Admin Dashboard</span>
-          <span class="acc-admin-badge-pill">ADMIN</span>
         </a>
 
         <div class="acc-sidebar-divider" style="height:1px;background:rgba(201,169,110,0.12);margin:0.85rem 0"></div>
@@ -8533,6 +8781,20 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
       <!-- DASHBOARD -->
       <div class="acc-section acc-show" id="as-dashboard">
 
+        <!-- Admin Quick Access Card for Admin Users -->
+        <div id="dashAdminQuickBanner" style="display:none;background:linear-gradient(135deg, #18120D 0%, #2A1F16 100%);border:1px solid rgba(201,169,110,0.6);border-radius:12px;padding:12px 16px;margin-bottom:1.25rem;box-shadow:0 4px 18px rgba(0,0,0,0.18)">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <span style="font-size:22px;line-height:1">👑</span>
+              <div>
+                <div style="font-family:'Playfair Display',Georgia,serif;font-size:15px;font-weight:600;color:#FAF5EA;letter-spacing:0.5px">Atelier Admin Control Center</div>
+                <div style="font-family:'Jost',Arial,sans-serif;font-size:11px;color:rgba(201,169,110,0.85);margin-top:2px">Manage product catalog, store orders, and stock levels</div>
+              </div>
+            </div>
+            <button class="btn-solid" onclick="showAccSec('admin')" style="padding:8px 18px;font-size:11px;letter-spacing:1px;white-space:nowrap;background:linear-gradient(135deg, #C9A96E 0%, #B8975A 100%);color:#18120D;font-weight:700;border:none;border-radius:6px;cursor:pointer;box-shadow:0 3px 10px rgba(201,169,110,0.3)">Open Admin Workspace →</button>
+          </div>
+        </div>
+
         <!-- Welcome banner -->
         <div class="dash-welcome" style="background:linear-gradient(135deg,#1C1409 0%,#3A2C1C 50%,#4A3822 100%);border-radius:14px;padding:2rem 2.5rem;margin-bottom:1.75rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.25rem;position:relative;overflow:hidden">
           <div style="position:absolute;top:-30px;right:-30px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(201,169,110,0.12) 0%,transparent 70%);pointer-events:none"></div>
@@ -8545,7 +8807,7 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
               <p style="font-family:'Jost',Arial,sans-serif;font-size:12px;color:rgba(255,255,255,0.35);margin-top:0.4rem;letter-spacing:0.3px">Your personal atelier account overview</p>
             </div>
           </div>
-          <button class="dash-welcome-btn" onclick="go('shop')" style="position:relative;padding:11px 28px;border:1px solid rgba(201,169,110,0.55);color:var(--ca);font-family:'Jost',Arial,sans-serif;font-size:9.5px;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;background:rgba(201,169,110,0.06);transition:all .3s;border-radius:4px" onmouseover="this.style.background='var(--ca)';this.style.color='var(--cbd)'" onmouseout="this.style.background='rgba(201,169,110,0.06)';this.style.color='var(--ca)'">Shop the Collection</button>
+          <button class="dash-welcome-btn" onclick="go('shop')" style="position:relative;padding:11px 24px;border:none;background:linear-gradient(135deg,#C9A96E 0%,#B8975A 100%);color:#18120D;font-family:'Jost',Arial,sans-serif;font-size:10.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .3s;border-radius:6px;box-shadow:0 4px 14px rgba(201,169,110,0.25)" onmouseover="this.style.filter='brightness(1.1)'" onmouseout="this.style.filter='none'">Shop the Collection</button>
         </div>
 
         <!-- Stats cards -->
@@ -9028,6 +9290,7 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
             <p style="font-family:'Jost',Arial,sans-serif;font-size:12px;color:var(--cbl)">View and update all store orders. Click on an Order # to view its purchased items and details.</p>
             <button class="btn-dark" onclick="renderAdminDashboard()">Refresh</button>
           </div>
+          <div class="admin-table-scroll-hint"><i class="ti ti-arrows-horizontal"></i> Swipe table horizontally to view all columns &amp; actions</div>
           <div class="admin-table-wrap" style="overflow-x:auto;background:var(--cw);border:1px solid #EDE8DF;border-radius:10px">
             <table class="order-table" id="adminOrdersTable">
               <thead>
@@ -9068,6 +9331,7 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
               </button>
             </div>
           </div>
+          <div class="admin-table-scroll-hint"><i class="ti ti-arrows-horizontal"></i> Swipe table horizontally to view all columns &amp; actions</div>
           <div class="admin-table-wrap" style="overflow-x:auto;background:var(--cw);border:1px solid #EDE8DF;border-radius:10px">
             <table class="order-table" id="adminCatalogTable">
               <thead>
@@ -9123,6 +9387,7 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
                 <input type="text" id="invSearchInput" placeholder="Search products..." oninput="filterInventoryTable(this.value)" style="height:32px;width:200px;font-size:12px;padding:4px 10px;border:1px solid #DDD5C4;border-radius:6px">
               </div>
             </div>
+            <div class="admin-table-scroll-hint"><i class="ti ti-arrows-horizontal"></i> Swipe table horizontally to view all columns &amp; actions</div>
             <div class="admin-table-wrap" style="overflow-x:auto;background:var(--cw);border:1px solid #EDE8DF;border-radius:10px">
               <table class="order-table" id="adminInventoryTable">
                 <thead>
@@ -9717,6 +9982,7 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
           </div>
 
           <!-- Table -->
+          <div class="admin-table-scroll-hint"><i class="ti ti-arrows-horizontal"></i> Swipe table horizontally to view all columns &amp; actions</div>
           <div class="admin-table-wrap" style="overflow-x:auto;background:var(--cw);border:1px solid #EDE8DF;border-radius:10px">
             <table class="order-table" id="adminUsersTable">
               <thead>
@@ -11649,13 +11915,22 @@ async function socialLogin(providerName) {
   }
 
   try {
-    showToast('Connecting to Google...');
+    // On mobile, popups are unreliable — use redirect flow instead
+    const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+    showToast(isMobile ? 'Redirecting to Google sign-in…' : 'Connecting to Google…');
     let cred;
+    if (isMobile && sdk.signInWithRedirect) {
+      // Store intent so we can complete on return
+      sessionStorage.setItem('mn_google_auth_intent', '1');
+      await sdk.signInWithRedirect(auth, provider);
+      return; // page will reload after redirect
+    }
     try {
       cred = await sdk.signInWithPopup(auth, provider);
     } catch (popupErr) {
-      if (popupErr.code === 'auth/popup-blocked' && sdk.signInWithRedirect) {
-        showToast('Popup was blocked by your browser. Redirecting to Google...');
+      if ((popupErr.code === 'auth/popup-blocked' || popupErr.code === 'auth/popup-closed-by-user' || popupErr.code === 'auth/cancelled-popup-request') && sdk.signInWithRedirect) {
+        showToast('Popup closed or blocked. Redirecting to Google…');
+        sessionStorage.setItem('mn_google_auth_intent', '1');
         await sdk.signInWithRedirect(auth, provider);
         return;
       }
@@ -11903,9 +12178,10 @@ async function restoreSession() {
         const last_name = nameParts.slice(1).join(' ') || '';
         const email = redirectCred.user.email || '';
         const isAdminEmail = email.trim().toLowerCase() === 'admin@marinanixon.com';
+        const phone = redirectCred.user.phoneNumber || '';
         let backend = null;
         try {
-          backend = await apiPost('/auth/login', { first_name, last_name, email, token });
+          backend = await apiPost('/auth/login', { first_name, last_name, email, phone, token });
         } catch (syncErr) {
           console.warn('Backend login sync non-fatal:', syncErr);
         }
@@ -12027,6 +12303,11 @@ function updateAuthUI() {
       }
     }
 
+    const adminBanner = document.getElementById('dashAdminQuickBanner');
+    if (adminBanner) {
+      adminBanner.style.display = (currentUser && currentUser.role === 'admin') ? 'block' : 'none';
+    }
+
     // If currently displaying admin panel but user is not admin, kick back to customer dashboard
     const adminSec = document.getElementById('as-admin');
     if (adminSec && adminSec.classList.contains('acc-show') && currentUser.role !== 'admin') {
@@ -12076,6 +12357,8 @@ function updateAuthUI() {
     if (amRegister) amRegister.style.display = 'inline-flex';
     if (amLogout)   amLogout.style.display   = 'none';
     if (amAdmin)    amAdmin.style.setProperty('display', 'none', 'important');
+    const adminBanner = document.getElementById('dashAdminQuickBanner');
+    if (adminBanner) adminBanner.style.display = 'none';
 
     // If unauthenticated and on admin panel, send to login
     const adminSec = document.getElementById('as-admin');
@@ -15130,6 +15413,18 @@ function showAccSec(sec) {
       accMain.style.boxShadow = ''; 
       accMain.style.padding = ''; 
     }
+  }
+
+  // Toggle floating concierge widget to avoid blocking administrative controls
+  const cWrap = document.querySelector('.concierge-widget-wrap');
+  if (cWrap) {
+    cWrap.style.display = isAdminWorkspace ? 'none' : '';
+  }
+
+  // Ensure Admin Quick Access Banner in dashboard matches state
+  const adminBanner = document.getElementById('dashAdminQuickBanner');
+  if (adminBanner) {
+    adminBanner.style.display = (sec === 'dashboard' && currentUser && currentUser.role === 'admin') ? 'block' : 'none';
   }
 
   const el  = document.getElementById('as-' + sec);
