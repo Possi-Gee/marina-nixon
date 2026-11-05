@@ -3692,6 +3692,7 @@ html, body {
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js';
     import { getAnalytics, isSupported } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js';
@@ -8006,6 +8007,530 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
   color: var(--cbl);
 }
 
+/* ============================================================
+   MOBILE NAV MENU BUTTON (Hamburger replaced by gold pill)
+   ============================================================ */
+.nav-mobile-menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  color: var(--ca);
+  font-size: 22px;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  border-radius: 8px;
+  transition: background 0.18s;
+}
+.nav-mobile-menu-btn:active {
+  background: rgba(201,169,110,0.12);
+}
+@media (max-width: 768px) {
+  .nav-mobile-menu-btn {
+    display: flex;
+  }
+}
+
+/* ============================================================
+   ADMIN MOBILE BOTTOM NAVIGATION BAR
+   ============================================================ */
+.admin-mob-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: #18120D;
+  border-top: 1px solid rgba(201,169,110,0.25);
+  z-index: 995;
+  padding: 0 4px;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.35);
+  align-items: stretch;
+  justify-content: space-around;
+}
+@media (max-width: 768px) {
+  .admin-mob-bottom-nav {
+    display: flex !important;
+  }
+}
+.admin-mob-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: rgba(201,169,110,0.5);
+  font-family: 'Jost', Arial, sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-weight: 500;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 2px;
+  border-radius: 10px;
+  transition: color 0.18s, background 0.18s;
+  min-width: 0;
+  position: relative;
+}
+.admin-mob-nav-item i {
+  font-size: 20px;
+  line-height: 1;
+  transition: transform 0.18s, color 0.18s;
+}
+.admin-mob-nav-item.active {
+  color: #C9A96E;
+}
+.admin-mob-nav-item.active i {
+  transform: scale(1.15);
+  color: #C9A96E;
+}
+.admin-mob-nav-item.active::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 2.5px;
+  border-radius: 2px;
+  background: #C9A96E;
+}
+.admin-mob-nav-item:active {
+  background: rgba(201,169,110,0.1);
+}
+@media (max-width: 768px) {
+  #as-admin.acc-show {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px) + 8px) !important;
+  }
+}
+
+/* ============================================================
+   LUXURY BOTTOM SHEET / DRAWER (Admin More + Customer More)
+   ============================================================ */
+.admin-sheet-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 7, 4, 0.72);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.28s ease;
+}
+.admin-sheet-overlay.open {
+  opacity: 1;
+}
+.admin-bottom-sheet {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #1F1710;
+  border-radius: 20px 20px 0 0;
+  border-top: 1px solid rgba(201,169,110,0.3);
+  z-index: 1001;
+  max-height: 85vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  transform: translateY(100%);
+  transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.admin-bottom-sheet::-webkit-scrollbar { display: none; }
+.admin-bottom-sheet.open {
+  transform: translateY(0);
+}
+.sheet-handle-bar {
+  width: 36px;
+  height: 4px;
+  background: rgba(201,169,110,0.4);
+  border-radius: 2px;
+  margin: 10px auto 0;
+  flex-shrink: 0;
+}
+.sheet-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 14px 20px 12px;
+  border-bottom: 1px solid rgba(201,169,110,0.15);
+}
+.sheet-eyebrow {
+  font-family: 'Jost', Arial, sans-serif;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(201,169,110,0.65);
+  margin-bottom: 2px;
+}
+.sheet-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: #FAF5EA;
+  margin: 0;
+  line-height: 1.2;
+}
+.sheet-close-btn {
+  background: rgba(201,169,110,0.1);
+  border: 1px solid rgba(201,169,110,0.25);
+  color: #C9A96E;
+  font-size: 18px;
+  line-height: 1;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+  transition: background 0.18s;
+}
+.sheet-close-btn:active { background: rgba(201,169,110,0.2); }
+.sheet-body {
+  padding: 16px 16px 20px;
+}
+.sheet-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.customer-sheet-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+.sheet-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(201,169,110,0.2);
+  border-radius: 12px;
+  cursor: pointer;
+  color: #EDE8D8;
+  font-family: 'Jost', Arial, sans-serif;
+  transition: background 0.18s, border-color 0.18s;
+  text-align: left;
+  width: 100%;
+}
+.sheet-card:active {
+  background: rgba(201,169,110,0.12);
+  border-color: rgba(201,169,110,0.5);
+}
+.sheet-card-icon {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 10px;
+  background: rgba(201,169,110,0.15);
+  color: #C9A96E;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.sheet-card-text {
+  min-width: 0;
+  flex: 1;
+}
+.sheet-card-text strong {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #FAF5EA;
+  line-height: 1.2;
+  letter-spacing: 0.2px;
+}
+.sheet-card-text span {
+  display: block;
+  font-size: 9.5px;
+  color: rgba(201,169,110,0.65);
+  margin-top: 1px;
+  line-height: 1.3;
+}
+.sheet-section-divider {
+  height: 1px;
+  background: rgba(201,169,110,0.12);
+  margin: 10px 0;
+}
+.sheet-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.sheet-list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 13px 14px;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  color: #EDE8D8;
+  font-family: 'Jost', Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  transition: background 0.18s;
+}
+.sheet-list-item i:first-child {
+  font-size: 18px;
+  color: #C9A96E;
+  width: 24px;
+  flex-shrink: 0;
+}
+.sheet-list-item span { flex: 1; }
+.sheet-arrow {
+  font-size: 14px;
+  color: rgba(201,169,110,0.4) !important;
+  width: auto !important;
+  flex-shrink: 0;
+}
+.sheet-list-item:active { background: rgba(201,169,110,0.1); }
+.sheet-list-item.sheet-logout {
+  color: #E57373;
+}
+.sheet-list-item.sheet-logout i:first-child { color: #E57373; }
+.sheet-list-item.sheet-whatsapp {
+  color: #25D366;
+}
+.sheet-list-item.sheet-whatsapp i:first-child { color: #25D366; }
+.sheet-list-item.sheet-login {
+  color: #C9A96E;
+}
+.sheet-list-item.sheet-login i:first-child { color: #C9A96E; }
+.sheet-list-item.sheet-admin-cta {
+  background: rgba(201,169,110,0.1);
+  border: 1px solid rgba(201,169,110,0.2);
+  border-radius: 10px;
+  color: #F5E6C8;
+}
+.sheet-list-item.sheet-admin-cta i:first-child { color: #C9A96E; }
+
+/* ============================================================
+   ADMIN PANEL PADDING-BOTTOM ON MOBILE (clear bottom nav)
+   ============================================================ */
+@media (max-width: 768px) {
+  #as-admin {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px) + 16px) !important;
+  }
+  .acc-main {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px) + 16px) !important;
+  }
+  /* When admin bottom nav visible, body gets extra bottom spacing */
+  body.admin-nav-open {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+  }
+  /* Keep regular mob-bottom-nav hidden when admin active */
+  body.admin-active #mobBottomNav {
+    display: none !important;
+  }
+  body.admin-active #adminMobBottomNav {
+    display: flex !important;
+  }
+}
+
+/* ============================================================
+   ADMIN TABLES → MOBILE CARDS (≤768px)
+   ============================================================ */
+@media (max-width: 768px) {
+  /* Admin orders table → cards */
+  #adminOrdersTable,
+  #adminCatalogTable,
+  #adminInventoryTable,
+  #adminUsersTable {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    border: none !important;
+  }
+  #adminOrdersTable thead,
+  #adminCatalogTable thead,
+  #adminInventoryTable thead,
+  #adminUsersTable thead {
+    display: none !important;
+  }
+  #adminOrdersTable tbody,
+  #adminCatalogTable tbody,
+  #adminInventoryTable tbody,
+  #adminUsersTable tbody {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+  #adminOrdersTable tbody tr,
+  #adminCatalogTable tbody tr,
+  #adminInventoryTable tbody tr,
+  #adminUsersTable tbody tr {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    background: #FFFDF9 !important;
+    border: 1px solid rgba(201,169,110,0.25) !important;
+    border-radius: 12px !important;
+    padding: 12px 14px !important;
+    box-shadow: 0 2px 10px rgba(42,30,20,0.04) !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+  }
+  #adminOrdersTable tbody td,
+  #adminCatalogTable tbody td,
+  #adminInventoryTable tbody td,
+  #adminUsersTable tbody td {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 5px 0 !important;
+    border: none !important;
+    border-bottom: 1px dashed rgba(201,169,110,0.1) !important;
+    font-size: 12px !important;
+    color: var(--cbd) !important;
+    background: transparent !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    text-align: right !important;
+    min-height: 0 !important;
+  }
+  #adminOrdersTable tbody td:last-child,
+  #adminCatalogTable tbody td:last-child,
+  #adminInventoryTable tbody td:last-child,
+  #adminUsersTable tbody td:last-child {
+    border-bottom: none !important;
+  }
+  #adminOrdersTable tbody td::before,
+  #adminCatalogTable tbody td::before,
+  #adminInventoryTable tbody td::before,
+  #adminUsersTable tbody td::before {
+    content: attr(data-label);
+    font-family: 'Jost', Arial, sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: #8C7B6B;
+    text-align: left;
+    margin-right: 8px;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  /* First cell = row header / ID, displayed prominently */
+  #adminOrdersTable tbody td:first-child,
+  #adminCatalogTable tbody td:first-child,
+  #adminInventoryTable tbody td:first-child,
+  #adminUsersTable tbody td:first-child {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: var(--cbd) !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
+    border-bottom: 1px solid rgba(201,169,110,0.2) !important;
+    padding-bottom: 8px !important;
+    margin-bottom: 2px !important;
+  }
+  /* colspan rows (empty/loading state) */
+  #adminOrdersTable tbody td[colspan],
+  #adminCatalogTable tbody td[colspan],
+  #adminInventoryTable tbody td[colspan],
+  #adminUsersTable tbody td[colspan] {
+    justify-content: center !important;
+    text-align: center !important;
+    display: block !important;
+    padding: 2rem 1rem !important;
+    border: none !important;
+  }
+  #adminOrdersTable tbody td[colspan]::before,
+  #adminCatalogTable tbody td[colspan]::before,
+  #adminInventoryTable tbody td[colspan]::before,
+  #adminUsersTable tbody td[colspan]::before {
+    display: none !important;
+  }
+  /* Keep admin-table-wrap scroll behavior for desktop tables only */
+  .admin-table-wrap {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  .admin-table-scroll-hint {
+    display: none !important;
+  }
+
+  /* Banners & Lookbook: single column forms */
+  #admin-panel-banners .fg-row,
+  #admin-panel-lookbook .fg-row {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+  #admin-panel-banners img,
+  #admin-panel-lookbook img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+  .fg-row {
+    flex-direction: column !important;
+  }
+
+  /* Full-width CTA buttons in banners/lookbook panels */
+  #admin-panel-banners .btn-solid,
+  #admin-panel-lookbook .btn-solid {
+    width: 100% !important;
+    text-align: center !important;
+    justify-content: center !important;
+  }
+
+  /* Admin catalog filter bar: stack on small screens */
+  .admin-catalog-filter-bar {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  .admin-catalog-filter-bar > div {
+    min-width: 0 !important;
+  }
+  .admin-catalog-filter-bar select {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+}
+
+/* ============================================================
+   PRODUCT IMAGE IN ADMIN CARDS (mobile-friendly thumb)
+   ============================================================ */
+@media (max-width: 768px) {
+  #adminCatalogTable tbody td[data-label="Photo"] {
+    justify-content: flex-start !important;
+  }
+  #adminCatalogTable tbody td[data-label="Photo"]::before {
+    display: none !important;
+  }
+  #adminCatalogTable tbody td[data-label="Photo"] img {
+    width: 72px !important;
+    height: 90px !important;
+    border-radius: 8px !important;
+    object-fit: cover !important;
+  }
+}
+
 </style>
 
 <h2 class="sr-only">Marina Nixon Clothing — Full e-commerce website with shop, cart, checkout, and account</h2>
@@ -8050,6 +8575,9 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
 </div>
 
 <nav>
+  <button type="button" class="nav-mobile-menu-btn" onclick="openCustomerMoreSheet()" aria-label="Open Navigation Menu" title="Menu">
+    <i class="ti ti-menu-2"></i>
+  </button>
   <div class="nav-logo" onclick="go('home')" title="Marina Nixon · Wear Rina · A Signature of Luxury">
     <img src="images/logo.png" alt="Marina Nixon — Wear Rina" class="nav-brand-img">
   </div>
@@ -9286,7 +9814,7 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
         <!-- Panel 1: Overview & Orders -->
         <div id="admin-panel-overview">
           <div id="adminStats" class="stat-cards" style="margin-bottom:1.2rem"></div>
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1rem">
+          <div id="adminOrdersSection" style="display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1rem">
             <p style="font-family:'Jost',Arial,sans-serif;font-size:12px;color:var(--cbl)">View and update all store orders. Click on an Order # to view its purchased items and details.</p>
             <button class="btn-dark" onclick="renderAdminDashboard()">Refresh</button>
           </div>
@@ -9318,6 +9846,17 @@ a:focus-visible,button:focus-visible,.nav-icon:focus-visible,select:focus-visibl
               <button class="btn-dark" onclick="loadAdminCatalog()"><i class="ti ti-refresh"></i> Refresh</button>
               <button class="btn-solid" onclick="switchAdminTab('product-form')" style="padding:8px 16px;font-size:11px"><i class="ti ti-plus"></i> Add Product</button>
             </div>
+          </div>
+          <!-- Product Search & Filter Bar -->
+          <div class="admin-catalog-filter-bar" style="display:flex;gap:.75rem;margin-bottom:1rem;flex-wrap:wrap;align-items:center">
+            <div style="flex:1;min-width:200px;position:relative">
+              <i class="ti ti-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--cbl);font-size:14px"></i>
+              <input type="search" id="adminCatalogSearch" placeholder="Search products by name, tag, category..." oninput="filterAdminCatalog()" style="width:100%;padding:9px 12px 9px 34px;border:1px solid #D6CCB8;border-radius:6px;font-family:'Jost',Arial,sans-serif;font-size:12.5px;color:var(--cbd);background:var(--cw)">
+            </div>
+            <select id="adminCatalogCategoryFilter" onchange="filterAdminCatalog()" style="padding:9px 12px;border:1px solid #D6CCB8;border-radius:6px;font-family:'Jost',Arial,sans-serif;font-size:12px;color:var(--cbd);background:var(--cw);min-width:130px">
+              <option value="">All Categories</option>
+            </select>
+            <span id="adminCatalogCount" style="font-family:'Jost',Arial,sans-serif;font-size:12px;color:var(--cbl);white-space:nowrap"></span>
           </div>
           <!-- Bulk Action Bar -->
           <div id="adminBulkBar" class="bulk-action-bar" style="display:none">
@@ -12157,6 +12696,99 @@ async function logoutUser() {
   go('home');
 }
 
+// ── Mobile Bottom Sheet / Admin Nav Functions ──────────────────
+
+function openAdminMoreSheet() {
+  const overlay = document.getElementById('adminMoreOverlay');
+  const sheet   = document.getElementById('adminMoreSheet');
+  if (!overlay || !sheet) return;
+  overlay.style.display = 'block';
+  sheet.style.display   = 'block';
+  requestAnimationFrame(() => {
+    overlay.classList.add('open');
+    sheet.classList.add('open');
+  });
+  document.body.style.overflow = 'hidden';
+}
+
+function closeAdminMoreSheet() {
+  const overlay = document.getElementById('adminMoreOverlay');
+  const sheet   = document.getElementById('adminMoreSheet');
+  if (!overlay || !sheet) return;
+  overlay.classList.remove('open');
+  sheet.classList.remove('open');
+  setTimeout(() => {
+    overlay.style.display = 'none';
+    sheet.style.display   = 'none';
+    document.body.style.overflow = '';
+  }, 320);
+}
+
+function openCustomerMoreSheet() {
+  const overlay = document.getElementById('customerMoreOverlay');
+  const sheet   = document.getElementById('customerMoreSheet');
+  if (!overlay || !sheet) return;
+  overlay.style.display = 'block';
+  sheet.style.display   = 'block';
+  requestAnimationFrame(() => {
+    overlay.classList.add('open');
+    sheet.classList.add('open');
+  });
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCustomerMoreSheet() {
+  const overlay = document.getElementById('customerMoreOverlay');
+  const sheet   = document.getElementById('customerMoreSheet');
+  if (!overlay || !sheet) return;
+  overlay.classList.remove('open');
+  sheet.classList.remove('open');
+  setTimeout(() => {
+    overlay.style.display = 'none';
+    sheet.style.display   = 'none';
+    document.body.style.overflow = '';
+  }, 320);
+}
+
+function scrollAdminToOrders() {
+  // Switch to overview tab first if needed, then scroll to orders section
+  switchAdminTab('overview');
+  setTimeout(() => {
+    const el = document.getElementById('adminOrdersSection');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Activate the Orders button in admin bottom nav
+    document.querySelectorAll('.admin-mob-nav-item').forEach(b => b.classList.remove('active'));
+    const ordBtn = document.getElementById('ambn-orders');
+    if (ordBtn) ordBtn.classList.add('active');
+  }, 120);
+}
+
+function activateAdminMobNavItem(key) {
+  document.querySelectorAll('.admin-mob-nav-item').forEach(b => b.classList.remove('active'));
+  const keyMap = { 'overview': 'overview', 'catalog': 'products', 'inventory': 'inventory', 'product-form': 'products', 'banners': 'more', 'lookbook': 'more', 'users': 'more' };
+  const id = 'ambn-' + (keyMap[key] || 'overview');
+  const el = document.getElementById(id);
+  if (el) el.classList.add('active');
+}
+
+function showAdminMobNav() {
+  const adminNav = document.getElementById('adminMobBottomNav');
+  const custNav  = document.getElementById('mobBottomNav');
+  if (adminNav) adminNav.style.display = 'flex';
+  if (custNav)  custNav.style.display  = 'none';
+  document.body.classList.add('admin-active');
+}
+
+function hideAdminMobNav() {
+  const adminNav = document.getElementById('adminMobBottomNav');
+  const custNav  = document.getElementById('mobBottomNav');
+  if (adminNav) adminNav.style.display = 'none';
+  if (window.innerWidth <= 768 && custNav) custNav.style.display = 'flex';
+  document.body.classList.remove('admin-active');
+}
+
+
+
 async function restoreSession() {
   const auth = window.MN_FIREBASE_AUTH;
   const sdk = window.MN_FIREBASE_SDK;
@@ -12364,6 +12996,31 @@ function updateAuthUI() {
     const adminSec = document.getElementById('as-admin');
     if (adminSec && adminSec.classList.contains('acc-show')) {
       showAccSec('login');
+    }
+  }
+
+  // ── Update Customer More Sheet auth row ──
+  const customerMoreAdminRow = document.getElementById('customerMoreAdminRow');
+  const customerMoreAuthRow  = document.getElementById('customerMoreAuthRow');
+  if (customerMoreAdminRow) {
+    customerMoreAdminRow.style.display = (currentUser && currentUser.role === 'admin') ? 'block' : 'none';
+  }
+  if (customerMoreAuthRow) {
+    if (currentUser) {
+      const displayFirst = currentUser.first_name || currentUser.email || 'Member';
+      customerMoreAuthRow.innerHTML = `<button type="button" class="sheet-list-item sheet-logout" onclick="logoutUser(); closeCustomerMoreSheet()"><i class="ti ti-logout"></i><span>Sign Out (${escapeHtml(displayFirst)})</span></button>`;
+    } else {
+      customerMoreAuthRow.innerHTML = `<button type="button" class="sheet-list-item sheet-login" onclick="go('account'); showAccSec('login'); closeCustomerMoreSheet()"><i class="ti ti-login"></i><span>Sign In / Create Account</span><i class="ti ti-arrow-right sheet-arrow"></i></button>`;
+    }
+  }
+
+  // ── Ensure correct bottom nav is shown on mobile ──
+  if (window.innerWidth <= 768) {
+    const adminSecActive = document.getElementById('as-admin');
+    if (currentUser && currentUser.role === 'admin' && adminSecActive && adminSecActive.classList.contains('acc-show')) {
+      showAdminMobNav();
+    } else {
+      hideAdminMobNav();
     }
   }
 }
@@ -13267,6 +13924,9 @@ function switchAdminTab(tab) {
     if (panelEl) panelEl.style.display = (t === tab) ? 'block' : 'none';
   });
 
+  // Sync admin mobile bottom nav active state
+  if (typeof activateAdminMobNavItem === 'function') activateAdminMobNavItem(tab);
+
   if (tab === 'overview') renderAdminDashboard();
   if (tab === 'catalog') loadAdminCatalog();
   if (tab === 'inventory') loadAdminInventory();
@@ -13603,60 +14263,96 @@ async function loadAdminCatalog() {
     // Use only real Firestore products in admin (no merge with embedded defaults)
     allAdminProducts = Array.isArray(data) ? data : [];
 
-    if (body) {
-      if (!allAdminProducts.length) {
-        body.innerHTML = '<tr><td colspan="8" style="padding:2rem;text-align:center;font-family:\'Jost\',Arial,sans-serif;color:var(--cbl)">No products in store yet. <button class="btn-dark" onclick="switchAdminTab(\'product-form\')">Add First Product</button></td></tr>';
-        return;
-      }
-
-      body.innerHTML = allAdminProducts.map(p => {
-        const thumb = resolveProductImage(p.img || p.primary_image || '');
-        const imgHtml = thumb
-          ? `<img src="${thumb}" alt="${escapeHtml(p.name || '')}" style="width:40px;height:50px;object-fit:cover;border-radius:6px">`
-          : `<div style="width:40px;height:50px;background:var(--cr);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:rgba(0,0,0,.3)">MN</div>`;
-        const oldPriceText = p.old_price ? `<span style="text-decoration:line-through;color:var(--cbl);font-size:10px;margin-left:5px">${fmtPrice(p.old_price)}</span>` : '';
-        const badgeHtml = p.badge ? `<span class="prod-badge b-${p.badge}" style="position:static;padding:2px 6px;font-size:7px">${p.badge}</span>` : '—';
-        const sizesList = Array.isArray(p.sizes) ? p.sizes.join(', ') : (p.sizes || '—');
-        
-        const stockNum = Number(p.stock ?? 0);
-        let stockColor = '#2E7D32';
-        let stockBadge = '';
-        if (stockNum <= 0) {
-          stockColor = '#C62828';
-          stockBadge = '<span style="font-size:9px;color:#C62828;display:block;font-weight:700">OUT OF STOCK</span>';
-        } else if (stockNum <= 10) {
-          stockColor = '#E65100';
-          stockBadge = '<span style="font-size:9px;color:#E65100;display:block;font-weight:600">LOW STOCK</span>';
-        }
-
-        return `<tr>
-          <td style="text-align:center">
-            <input type="checkbox" class="admin-prod-checkbox" data-id="${p.id}" onchange="updateBulkBar()" style="width:15px;height:15px;accent-color:var(--ca);cursor:pointer">
-          </td>
-          <td style="padding:.5rem 1rem">${imgHtml}</td>
-          <td style="font-weight:600;color:var(--cbd)">
-            ${escapeHtml(p.name)}
-            <div style="font-size:10px;color:var(--cbl);margin-top:2px">Sizes: <strong style="color:var(--ca)">${escapeHtml(sizesList)}</strong></div>
-          </td>
-          <td>${escapeHtml(p.category || '')}${p.label ? `<br><span style="font-size:10px;color:var(--cbl)">${escapeHtml(p.label)}</span>` : ''}</td>
-          <td><strong>${fmtPrice(p.price || 0)}</strong>${oldPriceText}</td>
-          <td>
-            <strong style="color:${stockColor};font-size:13px">${stockNum}</strong>
-            ${stockBadge}
-          </td>
-          <td>${badgeHtml}</td>
-          <td>
-            <div style="display:flex;gap:.4rem">
-              <button class="btn-dark" style="padding:6px 10px;font-size:9px;border-color:var(--ca);color:var(--cbd)" onclick="editAdminProduct('${p.id}')">Edit</button>
-              <button class="btn-dark" style="padding:6px 10px;font-size:9px;border-color:#C62828;color:#C62828" onclick="deleteAdminProduct('${p.id}', this)">Delete</button>
-            </div>
-          </td>
-        </tr>`;
-      }).join('');
+    // Populate category dropdown
+    const catSelect = document.getElementById('adminCatalogCategoryFilter');
+    if (catSelect) {
+      const currentVal = catSelect.value;
+      const categories = Array.from(new Set(allAdminProducts.map(p => p.category).filter(Boolean))).sort();
+      catSelect.innerHTML = '<option value="">All Categories</option>' + categories.map(c => `<option value="${escapeHtml(c)}" ${c === currentVal ? 'selected' : ''}>${escapeHtml(c)}</option>`).join('');
     }
+
+    const countEl = document.getElementById('adminCatalogCount');
+    if (countEl) countEl.textContent = `${allAdminProducts.length} piece${allAdminProducts.length !== 1 ? 's' : ''}`;
+
+    renderAdminCatalogRows(allAdminProducts);
   } catch (err) {
     if (body) body.innerHTML = `<tr><td colspan="8" style="padding:2rem;text-align:center;font-family:\'Jost\',Arial,sans-serif;color:#C62828">⚠️ Could not load catalog. <button class="btn-dark" style="margin-left:10px" onclick="loadAdminCatalog()">Retry</button></td></tr>`;
   }
+}
+
+function filterAdminCatalog() {
+  const q = (document.getElementById('adminCatalogSearch')?.value || '').toLowerCase().trim();
+  const cat = document.getElementById('adminCatalogCategoryFilter')?.value || '';
+  let filtered = allAdminProducts || [];
+  if (q) {
+    filtered = filtered.filter(p =>
+      (p.name && p.name.toLowerCase().includes(q)) ||
+      (p.category && p.category.toLowerCase().includes(q)) ||
+      (p.label && p.label.toLowerCase().includes(q)) ||
+      (p.badge && p.badge.toLowerCase().includes(q))
+    );
+  }
+  if (cat) {
+    filtered = filtered.filter(p => p.category === cat);
+  }
+  const countEl = document.getElementById('adminCatalogCount');
+  if (countEl) countEl.textContent = `${filtered.length} piece${filtered.length !== 1 ? 's' : ''}`;
+  renderAdminCatalogRows(filtered);
+}
+
+function renderAdminCatalogRows(products) {
+  const body = document.getElementById('adminCatalogBody');
+  if (!body) return;
+
+  if (!products.length) {
+    body.innerHTML = '<tr><td colspan="8" style="padding:2.5rem 1rem;text-align:center;font-family:\'Jost\',Arial,sans-serif;color:var(--cbl)">No products match your criteria. <button class="btn-dark" style="margin-left:8px" onclick="document.getElementById(\'adminCatalogSearch\').value=\'\';document.getElementById(\'adminCatalogCategoryFilter\').value=\'\';filterAdminCatalog()">Clear Filter</button></td></tr>';
+    return;
+  }
+
+  body.innerHTML = products.map(p => {
+    const thumb = resolveProductImage(p.img || p.primary_image || '');
+    const imgHtml = thumb
+      ? `<img src="${thumb}" alt="${escapeHtml(p.name || '')}" style="width:50px;height:64px;object-fit:cover;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.06)">`
+      : `<div style="width:50px;height:64px;background:var(--cr);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:rgba(0,0,0,.3)">MN</div>`;
+    const oldPriceText = p.old_price ? `<span style="text-decoration:line-through;color:var(--cbl);font-size:10.5px;margin-left:5px">${fmtPrice(p.old_price)}</span>` : '';
+    const badgeHtml = p.badge ? `<span class="prod-badge b-${p.badge}" style="position:static;padding:3px 8px;font-size:8px;border-radius:12px">${p.badge}</span>` : '—';
+    const sizesList = Array.isArray(p.sizes) ? p.sizes.join(', ') : (p.sizes || '—');
+    
+    const stockNum = Number(p.stock ?? 0);
+    let stockColor = '#2E7D32';
+    let stockBadge = '<span style="font-size:9.5px;color:#2E7D32;display:block;font-weight:600">IN STOCK</span>';
+    if (stockNum <= 0) {
+      stockColor = '#C62828';
+      stockBadge = '<span style="font-size:9.5px;color:#C62828;display:block;font-weight:700">OUT OF STOCK</span>';
+    } else if (stockNum <= 10) {
+      stockColor = '#E65100';
+      stockBadge = '<span style="font-size:9.5px;color:#E65100;display:block;font-weight:600">LOW STOCK</span>';
+    }
+
+    return `<tr>
+      <td data-label="Select" style="text-align:center">
+        <input type="checkbox" class="admin-prod-checkbox" data-id="${p.id}" onchange="updateBulkBar()" style="width:16px;height:16px;accent-color:var(--ca);cursor:pointer">
+      </td>
+      <td data-label="Photo" style="padding:.5rem 1rem">${imgHtml}</td>
+      <td data-label="Name" style="font-weight:600;color:var(--cbd)">
+        <span style="font-size:13.5px">${escapeHtml(p.name)}</span>
+        <div style="font-size:10.5px;color:var(--cbl);margin-top:3px">Sizes: <strong style="color:var(--ca)">${escapeHtml(sizesList)}</strong></div>
+      </td>
+      <td data-label="Category">${escapeHtml(p.category || '—')}${p.label ? `<br><span style="font-size:10px;color:var(--cbl)">${escapeHtml(p.label)}</span>` : ''}</td>
+      <td data-label="Price"><strong>${fmtPrice(p.price || 0)}</strong>${oldPriceText}</td>
+      <td data-label="Stock">
+        <strong style="color:${stockColor};font-size:13px">${stockNum}</strong>
+        ${stockBadge}
+      </td>
+      <td data-label="Badge">${badgeHtml}</td>
+      <td data-label="Actions">
+        <div style="display:flex;gap:.5rem;justify-content:flex-end;flex-wrap:wrap">
+          <button class="btn-dark" style="padding:6px 12px;font-size:10px;border-color:var(--ca);color:var(--cbd);min-height:34px" onclick="editAdminProduct('${p.id}')"><i class="ti ti-pencil"></i> Edit</button>
+          <button class="btn-dark" style="padding:6px 12px;font-size:10px;border-color:#C62828;color:#C62828;min-height:34px" onclick="deleteAdminProduct('${p.id}', this)"><i class="ti ti-trash"></i> Delete</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
 }
 
 // ── Bulk Delete & Selection Helpers ──────────────────────────
@@ -14247,18 +14943,18 @@ async function renderAdminDashboard() {
           const isPendingMomo = (o.status === 'pending_verification' || o.payment_status === 'awaiting_screenshot' || o.payment_status === 'proof_submitted');
           const hasProof = !!(o.payment_proof?.image || o.payment_status === 'proof_submitted');
           return `<tr>
-            <td>
+            <td data-label="Order Ref">
               <a onclick="viewAdminOrderDetails('${o.id}')" style="cursor:pointer;color:var(--ca);text-decoration:underline;font-weight:600">${escapeHtml(o.order_number || o.reference || o.id)}</a>
               ${hasProof ? `<span title="Payment Screenshot Uploaded" style="font-size:11px;margin-left:4px">📎</span>` : ''}
             </td>
-            <td>${escapeHtml((o.first_name || '') + ' ' + (o.last_name || ''))}<br><span style="font-family:'Jost',Arial,sans-serif;font-size:10px;color:var(--cbl)">${escapeHtml(o.email || '')}</span></td>
-            <td>${fmtPrice(o.total || 0)}</td>
-            <td>
+            <td data-label="Customer">${escapeHtml((o.first_name || '') + ' ' + (o.last_name || ''))}<br><span style="font-family:'Jost',Arial,sans-serif;font-size:10px;color:var(--cbl)">${escapeHtml(o.email || '')}</span></td>
+            <td data-label="Total" style="font-weight:700;color:var(--cbd)">${fmtPrice(o.total || 0)}</td>
+            <td data-label="Status">
               <span class="status-badge s-${(o.status || 'processing').toLowerCase()}">${escapeHtml((o.status || 'processing').replace(/_/g, ' '))}</span>
               ${isPendingMomo ? `<div style="font-size:9.5px;color:#E65100;font-weight:600;margin-top:2px">MoMo Verification</div>` : ''}
             </td>
-            <td style="font-family:'Jost',Arial,sans-serif;font-size:11px;color:var(--cbl)">${escapeHtml((o.created_at || '').slice(0, 10))}</td>
-            <td>
+            <td data-label="Date" style="font-family:'Jost',Arial,sans-serif;font-size:11px;color:var(--cbl)">${escapeHtml((o.created_at || '').slice(0, 10))}</td>
+            <td data-label="Actions">
               <div style="display:flex;gap:.4rem;align-items:center;flex-wrap:wrap">
                 <select id="${sid}" style="padding:6px 8px;border:1px solid #DDD;background:#fff;font-family:'Jost',Arial,sans-serif;font-size:11px">
                   ${adminStatusOptions(o.status || 'processing')}
@@ -15313,6 +16009,11 @@ function go(id) {
   // Clear account sub-section when leaving account page
   if (id !== 'account') sessionStorage.removeItem('mn_acc_sec');
 
+  // Hide admin bottom nav when navigating away from account
+  if (id !== 'account' && window.innerWidth <= 768) {
+    hideAdminMobNav();
+  }
+
   window.scrollTo(0,0);
   if (id==='shop')    renderShop();
   if (id==='cart')    renderCart();
@@ -15419,6 +16120,29 @@ function showAccSec(sec) {
   const cWrap = document.querySelector('.concierge-widget-wrap');
   if (cWrap) {
     cWrap.style.display = isAdminWorkspace ? 'none' : '';
+  }
+
+  // Switch between admin bottom nav and customer bottom nav on mobile
+  if (window.innerWidth <= 768) {
+    if (isAdminWorkspace) {
+      showAdminMobNav();
+    } else {
+      hideAdminMobNav();
+    }
+  }
+
+  // Update Customer More Sheet auth/admin rows
+  const customerMoreAdminRow = document.getElementById('customerMoreAdminRow');
+  const customerMoreAuthRow  = document.getElementById('customerMoreAuthRow');
+  if (customerMoreAdminRow) {
+    customerMoreAdminRow.style.display = (currentUser && currentUser.role === 'admin') ? 'block' : 'none';
+  }
+  if (customerMoreAuthRow) {
+    if (currentUser) {
+      customerMoreAuthRow.innerHTML = `<button type="button" class="sheet-list-item sheet-logout" onclick="logoutUser(); closeCustomerMoreSheet()"><i class="ti ti-logout"></i><span>Sign Out (${currentUser.first_name || currentUser.email || 'Member'})</span></button>`;
+    } else {
+      customerMoreAuthRow.innerHTML = `<button type="button" class="sheet-list-item sheet-login" onclick="go('account'); showAccSec('login'); closeCustomerMoreSheet()"><i class="ti ti-login"></i><span>Sign In / Create Account</span><i class="ti ti-arrow-right sheet-arrow"></i></button>`;
+    }
   }
 
   // Ensure Admin Quick Access Banner in dashboard matches state
@@ -16268,29 +16992,196 @@ async function deleteLbItem(sectionId, itemId) {
   </div>
 </div>
 
-<!-- LUXURY MOBILE BOTTOM APP BAR -->
+<!-- LUXURY MOBILE BOTTOM APP BAR (CUSTOMER & STOREFRONT) -->
 <div class="mob-bottom-nav" id="mobBottomNav">
-  <a class="mob-nav-item active" id="mbn-home" onclick="go('home')">
+  <a class="mob-nav-item active" id="mbn-home" onclick="go('home')" title="Storefront Home">
     <i class="ti ti-home" aria-hidden="true"></i>
     <span>Home</span>
   </a>
-  <a class="mob-nav-item" id="mbn-shop" onclick="go('shop')">
+  <a class="mob-nav-item" id="mbn-shop" onclick="go('shop')" title="Shop Collection">
     <i class="ti ti-shopping-bag" aria-hidden="true"></i>
     <span>Shop</span>
   </a>
-  <a class="mob-nav-item" id="mbn-look" onclick="go('lookbook')">
-    <i class="ti ti-diamond" aria-hidden="true"></i>
-    <span>Lookbook</span>
-  </a>
-  <a class="mob-nav-item" id="mbn-wl" onclick="go('wishlist-nav')">
+  <a class="mob-nav-item" id="mbn-wl" onclick="go('wishlist-nav')" title="Saved Pieces">
     <i class="ti ti-heart" aria-hidden="true"></i>
     <span>Wishlist</span>
     <span class="mob-badge" id="mobWlBadge" style="display:none">0</span>
   </a>
-  <a class="mob-nav-item" id="mbn-account" onclick="handleProfileClick()">
+  <a class="mob-nav-item" id="mbn-account" onclick="handleProfileClick()" title="Customer Account">
     <i class="ti ti-user" aria-hidden="true"></i>
     <span>Account</span>
   </a>
+  <a class="mob-nav-item" id="mbn-more" onclick="openCustomerMoreSheet()" title="Atelier Services Menu">
+    <i class="ti ti-menu-2" aria-hidden="true"></i>
+    <span>More</span>
+  </a>
+</div>
+
+<!-- LUXURY ADMIN FIXED MOBILE BOTTOM NAVIGATION -->
+<div class="admin-mob-bottom-nav" id="adminMobBottomNav" style="display:none">
+  <button type="button" class="admin-mob-nav-item active" id="ambn-overview" onclick="switchAdminTab('overview')" title="Admin Dashboard">
+    <i class="ti ti-chart-bar" aria-hidden="true"></i>
+    <span>Overview</span>
+  </button>
+  <button type="button" class="admin-mob-nav-item" id="ambn-orders" onclick="scrollAdminToOrders()" title="Manage Orders">
+    <i class="ti ti-clipboard-list" aria-hidden="true"></i>
+    <span>Orders</span>
+  </button>
+  <button type="button" class="admin-mob-nav-item" id="ambn-products" onclick="switchAdminTab('catalog')" title="Product Catalog">
+    <i class="ti ti-shirt" aria-hidden="true"></i>
+    <span>Products</span>
+  </button>
+  <button type="button" class="admin-mob-nav-item" id="ambn-inventory" onclick="switchAdminTab('inventory')" title="Stock Management">
+    <i class="ti ti-package" aria-hidden="true"></i>
+    <span>Inventory</span>
+  </button>
+  <button type="button" class="admin-mob-nav-item" id="ambn-more" onclick="openAdminMoreSheet()" title="Administrative Sections">
+    <i class="ti ti-dots" aria-hidden="true"></i>
+    <span>More</span>
+  </button>
+</div>
+
+<!-- ADMIN MORE BOTTOM SHEET & BACKDROP -->
+<div class="admin-sheet-overlay" id="adminMoreOverlay" onclick="closeAdminMoreSheet()"></div>
+<div class="admin-bottom-sheet" id="adminMoreSheet">
+  <div class="sheet-handle-bar"></div>
+  <div class="sheet-header">
+    <div class="sheet-title-wrap">
+      <div class="sheet-eyebrow">Marina Nixon · Wear Rina</div>
+      <h3 class="sheet-title">Atelier Admin Command</h3>
+    </div>
+    <button type="button" class="sheet-close-btn" onclick="closeAdminMoreSheet()" aria-label="Close Admin Menu">×</button>
+  </div>
+  <div class="sheet-body">
+    <div class="sheet-grid">
+      <button type="button" class="sheet-card" onclick="switchAdminTab('product-form'); closeAdminMoreSheet()">
+        <div class="sheet-card-icon"><i class="ti ti-plus"></i></div>
+        <div class="sheet-card-text">
+          <strong>Add Product</strong>
+          <span>Create new couture piece</span>
+        </div>
+      </button>
+      <button type="button" class="sheet-card" onclick="switchAdminTab('banners'); closeAdminMoreSheet()">
+        <div class="sheet-card-icon"><i class="ti ti-sparkles"></i></div>
+        <div class="sheet-card-text">
+          <strong>Banners &amp; Content</strong>
+          <span>Hero slides, announcement bar</span>
+        </div>
+      </button>
+      <button type="button" class="sheet-card" onclick="switchAdminTab('lookbook'); closeAdminMoreSheet()">
+        <div class="sheet-card-icon"><i class="ti ti-photo"></i></div>
+        <div class="sheet-card-text">
+          <strong>Lookbook Manager</strong>
+          <span>Editorial campaigns &amp; hotspots</span>
+        </div>
+      </button>
+      <button type="button" class="sheet-card" onclick="switchAdminTab('users'); closeAdminMoreSheet()">
+        <div class="sheet-card-icon"><i class="ti ti-users"></i></div>
+        <div class="sheet-card-text">
+          <strong>User Management</strong>
+          <span>Accounts, admin roles &amp; permissions</span>
+        </div>
+      </button>
+    </div>
+
+    <div class="sheet-section-divider"></div>
+
+    <div class="sheet-list">
+      <button type="button" class="sheet-list-item" onclick="showAccSec('dashboard'); closeAdminMoreSheet()">
+        <i class="ti ti-user"></i>
+        <span>Customer Portal View</span>
+        <i class="ti ti-arrow-right sheet-arrow"></i>
+      </button>
+      <button type="button" class="sheet-list-item" onclick="go('shop'); closeAdminMoreSheet()">
+        <i class="ti ti-building-store"></i>
+        <span>Live Storefront</span>
+        <i class="ti ti-arrow-right sheet-arrow"></i>
+      </button>
+      <button type="button" class="sheet-list-item sheet-logout" onclick="logoutUser(); closeAdminMoreSheet()">
+        <i class="ti ti-logout"></i>
+        <span>Sign Out of Admin</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- CUSTOMER MORE BOTTOM SHEET & BACKDROP -->
+<div class="admin-sheet-overlay" id="customerMoreOverlay" onclick="closeCustomerMoreSheet()"></div>
+<div class="admin-bottom-sheet" id="customerMoreSheet">
+  <div class="sheet-handle-bar"></div>
+  <div class="sheet-header">
+    <div class="sheet-title-wrap">
+      <div class="sheet-eyebrow">Wear Rina · Luxury Atelier Services</div>
+      <h3 class="sheet-title">Atelier Client Menu</h3>
+    </div>
+    <button type="button" class="sheet-close-btn" onclick="closeCustomerMoreSheet()" aria-label="Close Client Menu">×</button>
+  </div>
+  <div class="sheet-body">
+    <div class="sheet-grid customer-sheet-grid">
+      <button type="button" class="sheet-card" onclick="go('account'); showAccSec('orders'); closeCustomerMoreSheet()">
+        <div class="sheet-card-icon"><i class="ti ti-clipboard-list"></i></div>
+        <div class="sheet-card-text">
+          <strong>My Orders</strong>
+          <span>Track purchases &amp; tailoring</span>
+        </div>
+      </button>
+      <button type="button" class="sheet-card" onclick="go('account'); showAccSec('track'); closeCustomerMoreSheet()">
+        <div class="sheet-card-icon"><i class="ti ti-truck"></i></div>
+        <div class="sheet-card-text">
+          <strong>Track Order</strong>
+          <span>Real-time courier progress</span>
+        </div>
+      </button>
+      <button type="button" class="sheet-card" onclick="go('lookbook'); closeCustomerMoreSheet()">
+        <div class="sheet-card-icon"><i class="ti ti-diamond"></i></div>
+        <div class="sheet-card-text">
+          <strong>Lookbook</strong>
+          <span>Curated seasonal editorials</span>
+        </div>
+      </button>
+      <button type="button" class="sheet-card" onclick="go('about'); closeCustomerMoreSheet()">
+        <div class="sheet-card-icon"><i class="ti ti-award"></i></div>
+        <div class="sheet-card-text">
+          <strong>Our Story</strong>
+          <span>Heritage of handcrafted luxury</span>
+        </div>
+      </button>
+    </div>
+
+    <div class="sheet-section-divider"></div>
+
+    <div class="sheet-list">
+      <button type="button" class="sheet-list-item" onclick="go('contact'); closeCustomerMoreSheet()">
+        <i class="ti ti-phone"></i>
+        <span>Contact &amp; Concierge</span>
+        <i class="ti ti-arrow-right sheet-arrow"></i>
+      </button>
+      <button type="button" class="sheet-list-item" onclick="go('account'); showAccSec('settings'); closeCustomerMoreSheet()">
+        <i class="ti ti-settings"></i>
+        <span>Atelier Settings</span>
+        <i class="ti ti-arrow-right sheet-arrow"></i>
+      </button>
+      <a href="https://wa.me/233592785320?text=Hello%20Marina%20Nixon%20Atelier,%20I%20would%20like%20assistance." target="_blank" rel="noopener noreferrer" class="sheet-list-item sheet-whatsapp" onclick="closeCustomerMoreSheet()">
+        <i class="ti ti-brand-whatsapp"></i>
+        <span>VIP WhatsApp Concierge</span>
+        <i class="ti ti-arrow-right sheet-arrow"></i>
+      </a>
+      <div id="customerMoreAdminRow" style="display:none">
+        <button type="button" class="sheet-list-item sheet-admin-cta" onclick="go('account'); showAccSec('admin'); closeCustomerMoreSheet()">
+          <i class="ti ti-shield-lock"></i>
+          <span>👑 Open Atelier Admin Command</span>
+          <i class="ti ti-arrow-right sheet-arrow"></i>
+        </button>
+      </div>
+      <div id="customerMoreAuthRow">
+        <button type="button" class="sheet-list-item sheet-login" onclick="go('account'); showAccSec('login'); closeCustomerMoreSheet()">
+          <i class="ti ti-login"></i>
+          <span>Sign In / Create Account</span>
+          <i class="ti ti-arrow-right sheet-arrow"></i>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 </body>
 </html>
